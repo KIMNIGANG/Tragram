@@ -4,19 +4,19 @@ class InstagramAuthController < ApplicationController
     def index
     end
 
-    # instagram$BG'>Z%\%?%s$r2!$9$HH/F0(B
+    # instagram認証ボタン
     def auth
 
     end
 
-    # instagram$B$K;XDj$9$k%j%@%$%l%/%H@h(B
-    # 4$BCJ3,(B code$B$r(Bparams$B$+$i<h$C$F!":F$S(Bpush
+    # リダイレクト先
+    # もらったcodeをpush
     def auth_pass
       code = params[:code]
 
     end
 
-    # $B%H!<%/%s<u$1<h$j(B
+    # access_tokenもらう
     def auth_get_token
       token = params[:access_token]
       user_id = params[:user_id]
