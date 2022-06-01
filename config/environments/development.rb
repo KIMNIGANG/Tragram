@@ -9,7 +9,7 @@ Rails.application.configure do
   config.cache_classes = false
 
   # https使うためのホスト名追加
-  config.hosts << "f9fb-133-51-117-147.jp.ngrok.io"
+  config.hosts << "6c2c-133-51-117-172.jp.ngrok.io"
 
   # Do not eager load code on boot.
   config.eager_load = false
