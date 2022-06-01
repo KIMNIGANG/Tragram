@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   # logged_in? -> make new project(in the static_page_controller). 
   # just show them. not make
   # get ':user_id/add_project', to: 'users#add_project'
-  get 'project_id' to: 'projects#show'
+  get ':project_id' to: 'projects#show'
 
   # is it ok to use the primary key to the url?
   # same as new project. just show
