@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   #あるユーザーのmypage表示
-  get '/:user_id/mypage', to:'users#mypage'
+  get '/:user_id/show', to:'users#show'
 
   #post追加
   get '/:project_id/add_post', to:'projects#add_post'
