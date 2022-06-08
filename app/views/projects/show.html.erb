@@ -1,7 +1,6 @@
 <h1>Project page/Post一覧</h1>
 <%if logged_in?%>
   <!--一覧表示-->
-  <% @posts = Post.find_by(id: @project.id) %>
   <%@posts.each do |post|%>
       <p>post.caption</p>
       <%= link_to '編集', edit_post_path %>
