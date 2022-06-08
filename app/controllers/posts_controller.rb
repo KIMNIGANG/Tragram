@@ -13,6 +13,14 @@ class PostsController < ApplicationController
 
   def edit
     #編集情報を渡す
+    @post =  Post.find(params["post_id"].to_i)
+  end
+
+  def update
+    #情報を更新
+    @post = Post.find(params["post_id"].to_i)
+    @post = Post.update(post_params)
+    redirect_to posts.referer #リダイレクト先どこがいい?
   end
 
 
