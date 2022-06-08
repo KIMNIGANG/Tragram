@@ -8,7 +8,13 @@ class PostsController < ApplicationController
   end
 
   def destroy
-    #削除
+	  if (post = Post.find(params["post_id"].to_i)) && (current_user.id == projectに所属してる人のユーザーid)
+      post.destroy
+      flash[:success] = '削除しました'
+    else
+      flash[:danger] = '削除に失敗しました'
+    end
+    redirect_to request.referer
   end
 
   def edit
