@@ -1,0 +1,22 @@
+<h1>Project page/Post一覧</h1>
+<%if logged_in?%>
+  <!--一覧表示-->
+  <% @posts = Post.find_by(id: @project.id) %>
+  <%@posts.each do |post|%>
+      <p>post.caption</p>
+      <%= link_to '編集', edit_post_path %>
+      <%= link_to '削除', destroy_post_path %>
+    <hr>
+  <%end%>
+
+  <!--作成フォーム-->
+  <!--いったん保留-->
+  <!--
+  <%= form_for @posts, url: url_for(action: :create) do |f| %>
+    <div>
+      <%= f.label :キャプション%><br>
+      <%= f.text_area :caption, autofocus: true %>
+    </div>
+  <%= f.submit %>
+  -->
+<% end %>
