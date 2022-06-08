@@ -1,0 +1,31 @@
+<h1>User page/Project一覧</h1>
+<%if logged_in?%>
+  <!--一覧表示-->
+  <% @project = Project.find_by(id: current_user.id) %>
+  <%@project.each do |project|%>
+      <p>project.name</p>
+      <p>project.caption</p>
+      <!--<% if project.members.id == current_user.id %>-->
+        <%= link_to '削除', "/projects/#{project.id}", method: :delete %>
+      <!--<% end %>-->
+    <hr>
+  <%end%>
+
+  <!--作成フォーム-->
+  <!--いったん保留-->
+  <!--
+  <%= form_for @project, url: url_for(action: :create) do |f| %>
+    <div>
+      <%= f.label :プロジェクト名%><br>
+      <%= f.text_field :name, autofocus: true %>
+      <%= f.label :キャプション%><br>
+      <%= f.text_area :caption, autofocus: true %>
+    </div>
+    <% @project.members.each_with_index do |member, index| %>
+      <%= f.fields_for member do |f| %>
+        <%= f.text_field :name, name: "member[#{index}][name]" %>
+      <% end %>
+    <% end %>
+  <%= f.submit %>
+  -->
+<% end %>
