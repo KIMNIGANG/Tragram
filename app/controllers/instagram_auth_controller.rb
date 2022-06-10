@@ -21,8 +21,9 @@ class InstagramAuthController < ApplicationController
         "code" => params[:code],
         })    
       Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
-        res = http.request(request)
-      @response = res.body  #この中にaccesstokenが入っている（"{\"access_token\": \"IGQVJW・・・EMXR93\", \"user_id\": 1784・・・3807}")
+        res = http.request(request).body
+      res = JSON.parse(res)
+      @response = res["access_token"] #この中にaccesstokenが入っている（"{\"access_token\": \"IGQVJW・・・EMXR93\", \"user_id\": 1784・・・3807}")
       end
   end
 end
