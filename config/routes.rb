@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   get '/' => 'instagram_auth#index'
-  get '/authpass', to: 'instagram_auth#auth_pass'
+  get '/authpass' => 'instagram_auth#get_token'
   #あるユーザーのmypage表示
   get '/:user_id/show', to:'users#show'
 
