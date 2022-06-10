@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   get 'log_out', to: 'sessions#destroy', as: 'log_out'
 
   resources :sessions, only: %i[create destroy]
-  get '/' => 'instagram_auth#index'
-  get '/authpass', to: 'instagram_auth#auth_pass'
+  get '/instagram_index' => 'instagram_auth#index'
+  get '/authpass' => 'instagram_auth#get_token'
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end
