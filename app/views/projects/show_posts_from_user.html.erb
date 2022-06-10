@@ -1,0 +1,19 @@
+<h1>project page</h1>
+
+<% if logged_in? %>
+
+  <% @posts.each do |post| %>
+    <p>post.name</p>
+    <p>post.caption</p>
+    <%= link_to 'edit', %>
+    <%= link_to 'edit', %>
+  <% end %>
+
+  <%= form_for @post do |f| %>
+    <%= f.text_field :caption %>
+    <%= f.submit %>
+  <% end %>
+
+<% end %>
+
+

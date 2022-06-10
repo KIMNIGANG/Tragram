@@ -3,21 +3,25 @@ class ProjectsController < ApplicationControllera
 
   before_action(only: %i[show destroy edit]){project = Project.find_by(id: params[:project_id])}
 
-  def create()
+#  def create()
     # query = ?members=[id=hoge,id=foo,id=bar]
-    members = params[:members]
-    Rack::Utils.parse_nested_query(members)
-    members.each do |member|
-      id = member.
+    #members = params[:members] Rack::Utils.parse_nested_query(members)
+    #members.each do |member|
+      #id = member.kk
+  #end
 
+
+  def show_projects_from_user()
+    @projects = current_user.projects
+    if @projects == nil then
+      flash[:caution] = 'you have no projects'
+    end
   end
 
-  def show()
-    if project && current_user.id in project.members.id
-      @project = project
-    else
-      redirect_to request.referer, notice: 'you have no access'
-    end
+
+  def show_posts_from_project()
+    @posts = project.posts
+  end
 
 
   def destroy()
