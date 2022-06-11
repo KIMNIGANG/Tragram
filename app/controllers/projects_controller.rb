@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 class ProjectsController < ApplicationControllera
   require 'rack'
 
@@ -60,3 +61,7 @@ class ProjectsController < ApplicationControllera
 
 
 
+=======
+class ProjectsController < ApplicationController
+end
+>>>>>>> main

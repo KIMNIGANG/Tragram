@@ -38,3 +38,9 @@
 /yarn-error.log
 yarn-debug.log*
 .yarn-integrity
+
+# Ignore application configuration
+/config/application.yml
+/Users/nigang/workspace/ruby/tragram/Tragram/config/certs/localhost.pem
+/Users/nigang/workspace/ruby/tragram/Tragram/config/certs/localhost-key.pem
+/config/credentials/development.key
