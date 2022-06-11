@@ -1,8 +1,7 @@
-<<<<<<< HEAD
-class ProjectsController < ApplicationControllera
+class ProjectsController < ApplicationControll
   require 'rack'
 
-  before_action(only: %i[show destroy edit]){project = Project.find_by(id: params[:project_id])}
+  before_action(only: %i[show_posts destroy edit]){project = Project.find_by(id: params[:project_id])}
 
 #  def create()
     # query = ?members=[id=hoge,id=foo,id=bar]
@@ -12,7 +11,7 @@ class ProjectsController < ApplicationControllera
   #end
 
 
-  def show_projects_from_user()
+  def show()
     @projects = current_user.projects
     if @projects == nil then
       flash[:caution] = 'you have no projects'
@@ -20,10 +19,14 @@ class ProjectsController < ApplicationControllera
   end
 
 
-  def show_posts_from_project()
-    @posts = project.posts
+  def show_posts()
+    if project.members.include?(current_user) then
+      @posts = project.posts
+    else
+      flash[:caution] = 'you have no access'
+      redirect_to request.referer
+    end
   end
-
 
   def destroy()
     # need to define "current_user" method
@@ -51,17 +54,3 @@ class ProjectsController < ApplicationControllera
     # redirect to referer
     redirect_to request.referer
   end
-
-  
-
-
-
-  
-
-
-
-
-=======
-class ProjectsController < ApplicationController
-end
->>>>>>> main
