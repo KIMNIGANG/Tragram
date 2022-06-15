@@ -1,8 +1,16 @@
-class UsersController < ApplicationController
+class UsersController < ProjectController
   has_many :projects, through: :user_project
 
   def show
-    #@projects = current_userの所属してるprojects全部
-    @projects = users.projects
   end
+
+  def destroy_project
+    # 親のdestroyを呼び出す
+    public_method(:destroy).super_method.call
+  end
+
+  def new
+    @project = Project.new
+  end
+
 end
