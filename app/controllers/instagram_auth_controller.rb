@@ -26,6 +26,13 @@ class InstagramAuthController < ApplicationController
         @response = res["access_token"] #この中にaccesstokenが入っている（"{\"access_token\": \"IGQVJW・・・EMXR93\", \"user_id\": 1784・・・3807}")
         end
         
+        #accesstokenをファイルに書き込み（次回からはENVから読み込む）
+        File.open("/Users/nigang/workspace/ruby/tragram/Tragram/config/application.yml","a") { |f|
+        f.write "USER_TOKEN: #{@response}\n"
+        }
+
+        #ENVファイルに長期トークンが書けるようになったらここから#############
+        
         #userのidとusernameを取ってくる
         uri = URI("https://graph.instagram.com/me?fields=id,username&access_token=#{@response}")
         resp = Net::HTTP.get_response(uri).body
@@ -43,6 +50,8 @@ class InstagramAuthController < ApplicationController
         resp = Net::HTTP.get_response(uri).body
         resp = JSON.parse(resp)
         @mediaurl = resp["media_url"]
+
+        #ここまで他の関数に変換する######################################
     end
 
 end
