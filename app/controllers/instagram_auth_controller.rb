@@ -20,10 +20,29 @@ class InstagramAuthController < ApplicationController
         "redirect_uri" => "#{ENV['INST_REDIRECT_URI']}",
         "code" => params[:code],
         })    
-      Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
-        res = http.request(request).body
-      res = JSON.parse(res)
-      @response = res["access_token"] #この中にaccesstokenが入っている（"{\"access_token\": \"IGQVJW・・・EMXR93\", \"user_id\": 1784・・・3807}")
-      end
-  end
+        Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
+          res = http.request(request).body
+        res = JSON.parse(res)
+        @response = res["access_token"] #この中にaccesstokenが入っている（"{\"access_token\": \"IGQVJW・・・EMXR93\", \"user_id\": 1784・・・3807}")
+        end
+        
+        #userのidとusernameを取ってくる
+        uri = URI("https://graph.instagram.com/me?fields=id,username&access_token=#{@response}")
+        resp = Net::HTTP.get_response(uri).body
+        resp = JSON.parse(resp)
+        @profile = resp["id"]   #resp["@@"]に変えることでuser@@をとれる (username or id or ...)
+
+        #userのメディアidを取ってくる (写真のid)
+        uri = URI("https://graph.instagram.com/me/media?fields=id,caption&access_token=#{@response}")
+        resp = Net::HTTP.get_response(uri).body
+        resp = JSON.parse(resp)
+        @media = resp["data"][0]["id"] 
+
+        #写真のメディアデータを取ってくる
+        uri = URI("https://graph.instagram.com/#{@media}?fields=id,media_url&access_token=#{@response}")
+        resp = Net::HTTP.get_response(uri).body
+        resp = JSON.parse(resp)
+        @mediaurl = resp["media_url"]
+    end
+
 end
