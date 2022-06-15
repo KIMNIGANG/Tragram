@@ -1,10 +1,8 @@
-class UsersController < ProjectController
-  has_many :projects, through: :user_project
-
+class UsersController < ProjectsController
   def show
   end
 
-  def destroy_project
+  def destroy
     # 親のdestroyを呼び出す
     public_method(:destroy).super_method.call
   end

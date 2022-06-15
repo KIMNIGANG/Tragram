@@ -4,7 +4,7 @@
   <% @user.user_project.each do |user_project|%>
     <p>user_project.project.name</p>
     <p>user_project.project.caption</p>
-    <%= link_to '削除', "/projects/#{user_project.project.id}", method: :delete %>
+    <%= link_to '削除', "/projects/#{user_project.project.id}", method: :destroy %>
   <%end%>
 
   <!--作成フォーム-->
@@ -16,5 +16,6 @@
       <%= f.text_area :caption, autofocus: true %>
     </div>
     <!-- メンバーの追加はここでやる？ -->
-  <%= f.submit %>
+    <%= f.submit %>
+  <%end%>t
 <% end %>
