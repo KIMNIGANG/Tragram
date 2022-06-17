@@ -1,56 +1,51 @@
-class ProjectsController < ApplicationControll
+class ProjectsController < ApplicationController
   require 'rack'
 
-  before_action(only: %i[show_posts destroy edit]){project = Project.find_by(id: params[:project_id])}
-
-#  def create()
-    # query = ?members=[id=hoge,id=foo,id=bar]
-    #members = params[:members] Rack::Utils.parse_nested_query(members)
-    #members.each do |member|
-      #id = member.kk
-  #end
-
-
   def show()
-    @projects = current_user.projects
-    if @projects == nil then
-      flash[:caution] = 'you have no projects'
-    end
-  end
-
-
-  def show_posts()
-    if project.members.include?(current_user) then
-      @posts = project.posts
+    # indexpage
+    # post一覧とメタデータ
+    # member確認未実装
+    project = Project.find_by(id: params[:id])
+    if project then
+      @project = project
     else
-      flash[:caution] = 'you have no access'
+      flash[:caution] = 'project doesnt exist'
       redirect_to request.referer
     end
   end
 
-  def destroy()
-    # need to define "current_user" method
-    # "members" defined in project model
-    if project && current_user.id in project.members.id
-      project.destroy
-      flash[:success] = 'deleted project'
+  # projectのcreate
+  # ユーザー確認 -> 作成 -> リダイレクト
+  def create()
+    if current_user then
+      project = current_user.projects.create(params.require(:project).permit(:name, :caption))
+      redirect_to action: :show, id: project.id
     else
-      flash[:danger] = 'failed to delete project'
+      flash[:caution] = 'no user'
     end
-
-    # redirect to "home"
-    # use command "$ rake routes" to see prefix
-    redirect_to :root_path
   end
 
-  def edit_metadata()
+ # 後で　viewも一緒に
+  def update()
     # need to define "current_user"
     # "members" defined in project model
-    if project && current_user.id in project.members.id
+    project = Project.find_by(id: params[:id])
+    if !project then
+      flash[:caution] = 'no project found'
+    elsif !project.users then
+      flash[:caution] = 'not a member'
+    elsif project.users.include?(current_user) then 
       @name = project.name
       @caption = project.caption
     end
-
-    # redirect to referer
     redirect_to request.referer
   end
+
+  # project削除
+  def destroy()
+    project = Project.find_by(id: params[:id])
+    project.destroy()
+    redirect_to root_path
+  end
+
+end
