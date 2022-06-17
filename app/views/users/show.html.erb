@@ -4,14 +4,13 @@
   <!--一覧表示-->
   プロジェクト名
   キャプション
-  <% @current_user.user_projects.each do |user_project|%>
+  <% @current_user.user_projects.each do |user_project| %>
     <div>
-      <%=user_project.project.name%>
-      <%=user_project.project.caption%>
+      <%= user_project.project.name %>
+      <%= user_project.project.caption %>
     </div>
-  <%end%>
+  <% end %>
   <br>
-
   <!--作成フォーム-->
   <%= form_for(@project, :url => {:controller => :projects, :action => :create }) do |f| %>
     <div>
@@ -22,7 +21,5 @@
     </div>
     <!-- メンバーの追加はここでやる？ -->
     <%= f.submit %>
-  <%end%>
-
-
+  <% end %>
 <% end %>

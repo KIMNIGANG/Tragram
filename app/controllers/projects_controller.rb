@@ -1,5 +1,4 @@
 class ProjectsController < ApplicationController
-
   def create
     project = Project.create(projects_params)
     project.save
@@ -7,8 +6,9 @@ class ProjectsController < ApplicationController
     redirect_to controller: :users, action: :show, id: @current_user.id
   end
 
+private
+
   def projects_params
     params.require(:project).permit(:name,:caption)
   end
-
 end
