@@ -7,10 +7,6 @@ Rails.application.routes.draw do
   get 'auth/failure', to: redirect('/')
   get 'log_out', to: 'sessions#destroy', as: 'log_out'
 
-  # logged_in? -> make new project(in the static_page_controller). 
-  # just show them. not make
-  # get ':user_id/add_project', to: 'users#add_project'
-  get ':project_id', to: 'projects#show'
 
   # is it ok to use the primary key to the url?
   # same as new project. just show
@@ -19,4 +15,10 @@ Rails.application.routes.draw do
   resources :sessions, only: %i[create destroy]
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html'
   #
+  get '/projects/:id', to: 'projects#show'
+  post '/projects/:id', to: 'projects#update'
+  resources :projects, only: %i[destroy]
+
+
+ 
 end
