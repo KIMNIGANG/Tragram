@@ -1,14 +1,19 @@
 class PostsController < ApplicationController
+
+  def show
+    @post = Post.find(params[:id])
+  end
+
   def create
     #formからcaptionを受け取ってレコード作成
     if current_user
-        current_user.posts.create(caption:post_params["caption"])
+        current_user.posts.create(caption:params[:caption])
         redirect_to request.referer
     end
   end
 
   def destroy
-	  if (post = Post.find(params["post_id"].to_i)) && (current_user.id == projectに所属してる人のユーザーid)
+	  if (post = Post.find(params[:id])) && (current_user.id == projectに所属してる人のユーザーid)
       post.destroy
       flash[:success] = '削除しました'
     else
@@ -19,12 +24,12 @@ class PostsController < ApplicationController
 
   def edit
     #編集情報を渡す
-    @post =  Post.find(params["post_id"].to_i)
+    @post =  Post.find(params[:id])
   end
 
   def update
     #情報を更新
-    @post = Post.find(params["post_id"].to_i)
+    @post = Post.find(params[:id])
     @post = Post.update(post_params)
     redirect_to posts.referer #リダイレクト先どこがいい?
   end

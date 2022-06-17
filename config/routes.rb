@@ -9,5 +9,6 @@ Rails.application.routes.draw do
   resources :sessions, only: %i[create destroy]
   get '/instagram_index' => 'instagram_auth#index'
   get '/authpass' => 'instagram_auth#get_token'
+  resources :posts, only: %i[show create edit destroy update]
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end
