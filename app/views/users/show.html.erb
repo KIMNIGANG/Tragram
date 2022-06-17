@@ -1,21 +1,28 @@
 <h1>User page/Project一覧</h1>
+
 <% if logged_in? %>
   <!--一覧表示-->
-  <% @user.user_project.each do |user_project|%>
-    <p>user_project.project.name</p>
-    <p>user_project.project.caption</p>
-    <%= link_to '削除', "/projects/#{user_project.project.id}", method: :destroy %>
+  プロジェクト名
+  キャプション
+  <% @current_user.user_projects.each do |user_project|%>
+    <div>
+      <%=user_project.project.name%>
+      <%=user_project.project.caption%>
+    </div>
   <%end%>
+  <br>
 
   <!--作成フォーム-->
-  <%= form_for(@project, url: {controller: 'projects', action: 'create' }) do |f| %>
+  <%= form_for(@project, :url => {:controller => :projects, :action => :create }) do |f| %>
     <div>
-      <%= f.label :プロジェクト名%><br>
-      <%= f.text_field :name, autofocus: true %>
-      <%= f.label :キャプション%><br>
+      <%= f.label :プロジェクト名を入力%><br>
+      <%= f.text_field :name, autofocus: true %><br>
+      <%= f.label :キャプションを入力%><br>
       <%= f.text_area :caption, autofocus: true %>
     </div>
     <!-- メンバーの追加はここでやる？ -->
     <%= f.submit %>
-  <%end%>t
+  <%end%>
+
+
 <% end %>
