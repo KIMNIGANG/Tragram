@@ -18,8 +18,12 @@ class ProjectsController < ApplicationController
   # ユーザー確認 -> 作成 -> リダイレクト
   def create()
     if current_user then
-      project = current_user.projects.create(params.require(:project).permit(:name, :caption))
+      #project = current_user.projects.create(params.require(:project).permit(:name, :caption))
+      project = Project.create(projects_params)
+      project.save
+      user_project = UserProject.create(user_id: @current_user.id, project_id: project.id)
       redirect_to action: :show, id: project.id
+      #redirect_to controller: :users, action: :show, id: @current_user.id
     else
       flash[:caution] = 'no user'
     end
@@ -34,7 +38,7 @@ class ProjectsController < ApplicationController
       flash[:caution] = 'no project found'
     elsif !project.users then
       flash[:caution] = 'not a member'
-    elsif project.users.include?(current_user) then 
+    elsif project.users.include?(current_user) then
       @name = project.name
       @caption = project.caption
     end
@@ -49,3 +53,10 @@ class ProjectsController < ApplicationController
   end
 
 end
+
+
+private
+
+  def projects_params
+    params.require(:project).permit(:name,:caption)
+  end

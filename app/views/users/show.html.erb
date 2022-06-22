@@ -4,10 +4,10 @@
   <!--一覧表示-->
   プロジェクト名
   キャプション
-  <% @current_user.projects.each do |project| %>
+  <% @current_user.user_projects.each do |user_project| %>
     <div>
-      <%= project.name %>
-      <%= project.caption %>
+      <a href="/projects/<%=user_project.project.id%>"><%= user_project.project.name %></a>
+      <%= user_project.project.caption %>
     </div>
   <% end %>
   <br>
