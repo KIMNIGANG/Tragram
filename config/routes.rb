@@ -21,4 +21,10 @@ Rails.application.routes.draw do
 
 
  
+  resources :users, only: [:show, :new, :destroy, :create]
+  resources :projects, only: [:create]
+  #post 'projects/create',as:"projects"
+  get '/instagram_index' => 'instagram_auth#index'
+  get '/authpass' => 'instagram_auth#get_token'
+  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end
