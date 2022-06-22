@@ -5,11 +5,16 @@
   <%= @refreshed.inspect %>
   <%= @caption.inspect %>
   <%= @mediaurl2.inspect %>
+  <%# <%= image_tag(@mediaurl) %> %>
 
-  <% @mediaurl2.each do |url| %>
-   <%= image_tag(url, :alt => "") %>
+  <% @mediaurl_v.each do |url| %>
+   <%# <%= image_tag(url) %> %>
+   <%= video_tag(url, controls: true, width: '50%')%>
+  <% end  %>  
+
+  <% @mediaurl_i.each do |url| %>
+   <%= image_tag(url, width: '50%') %>
+
   <% end  %>
-  <%= image_tag(@mediaurl, :alt => "") %>
-  <%# <%= image_tag(@mediaurl2, :alt => "") %> %>
   
 </pre>

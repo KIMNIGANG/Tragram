@@ -32,8 +32,8 @@ class InstagramAuthController < ApplicationController
         @token = resp["access_token"] 
 
         #accesstokenをファイルに書き込み（次回からはENVから読み込む）
-        File.open("config/application.yml","a") { |f|
-        f.write "USER_TOKEN: #{@token}\n"
+        File.open("config/application.yml","r+") { |f|
+          f.write "USER_TOKEN: #{@token}"
         }
 
     end
@@ -60,15 +60,21 @@ class InstagramAuthController < ApplicationController
         uri = URI("https://graph.instagram.com/#{@media}/children?access_token=#{ENV['USER_TOKEN']}")
         resp = Net::HTTP.get_response(uri).body
         resp = JSON.parse(resp)
-        @caption = resp["data"][3]["id"]
+        @caption = resp["data"][0]["id"]
         @array_item = resp["data"]
 
-        @mediaurl2 = []
+        @mediaurl_v = []  #videoのurlが入る配列
+        @mediaurl_i = []  #imgのurlが入る配列
         @array_item.each{|t|
           uri = URI("https://graph.instagram.com/#{t["id"]}?fields=id,media_url&access_token=#{ENV['USER_TOKEN']}")
           resp = Net::HTTP.get_response(uri).body
           resp = JSON.parse(resp)
-          @mediaurl2.push(resp["media_url"])  #ここをまずどうするか工夫
+          media_url = resp["media_url"]
+          if media_url[8] == "v"
+            @mediaurl_v.push(resp["media_url"])  
+          else
+            @mediaurl_i.push(resp["media_url"])
+          end
         }
 
         # uri = URI("https://graph.instagram.com/#{@caption}?fields=id,media_url&access_token=#{ENV['USER_TOKEN']}")
@@ -76,13 +82,14 @@ class InstagramAuthController < ApplicationController
         # resp = JSON.parse(resp)
         # @mediaurl2 = resp["media_url"]
 
+        #access tokenの期限を延長する
         # uri = URI("https://graph.instagram.com/refresh_access_token?grant_type=ig_refresh_token&access_token=#{ENV['USER_TOKEN']}")
         # resp = Net::HTTP.get_response(uri).body
         # resp = JSON.parse(resp)
         # @refreshed = resp["access_token"]
         # File.open("config/application.yml","r+") { |f|
         #   f.write "USER_TOKEN: #{@refreshed}"
-        # } #access tokenの期限を延長する
+        # } 
     end
 
 end
