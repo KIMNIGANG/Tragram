@@ -11,5 +11,5 @@ Rails.application.routes.draw do
   get '/authpass' => 'instagram_auth#get_token'
   get '/get_media_test' => 'instagram_auth#get_media_test'
 
-  get '/map' => 'google_map#map_index'
+  get '/map' => 'google_map#index'
 end
