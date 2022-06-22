@@ -1,5 +1,9 @@
 
 <h2>gmap</h2>
+
+<%= @location.inspect %>
+
+
 <div id='map'></div>
 
 <style>
@@ -11,7 +15,6 @@
 
 <script>
 let map
-
 function initMap(){
   geocoder = new google.maps.Geocoder()
 
@@ -25,5 +28,16 @@ function initMap(){
     map: map
   });
 }
+
 </script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBPeJRg78YsYu3-A_PkaV0ovciRzZfRwv0&callback=initMap" async defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=<%= ENV["GOOGLE_MAP_API_KEY"]%>&callback=initMap" async defer></script>
+
+<% @mediaurl_v.each do |url| %>
+  <%= video_tag(url, controls: true, width: '50%')%>
+<% end  %>  
+
+<% @mediaurl_i.each do |url| %>
+  <%= image_tag(url, width: '50%') %>
+
+<% end  %>
+
