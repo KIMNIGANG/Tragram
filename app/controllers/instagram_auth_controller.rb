@@ -71,10 +71,10 @@ class InstagramAuthController < ApplicationController
           @mediaurl2.push(resp["media_url"])  #ここをまずどうするか工夫
         }
 
-        uri = URI("https://graph.instagram.com/#{@caption}?fields=id,media_url&access_token=#{ENV['USER_TOKEN']}")
-        resp = Net::HTTP.get_response(uri).body
-        resp = JSON.parse(resp)
-        @mediaurl2 = resp["media_url"]
+        # uri = URI("https://graph.instagram.com/#{@caption}?fields=id,media_url&access_token=#{ENV['USER_TOKEN']}")
+        # resp = Net::HTTP.get_response(uri).body
+        # resp = JSON.parse(resp)
+        # @mediaurl2 = resp["media_url"]
 
         # uri = URI("https://graph.instagram.com/refresh_access_token?grant_type=ig_refresh_token&access_token=#{ENV['USER_TOKEN']}")
         # resp = Net::HTTP.get_response(uri).body
