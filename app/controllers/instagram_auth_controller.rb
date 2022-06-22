@@ -32,7 +32,7 @@ class InstagramAuthController < ApplicationController
         @token = resp["access_token"] 
 
         #accesstokenをファイルに書き込み（次回からはENVから読み込む）
-        File.open("/Users/nigang/workspace/ruby/tragram/Tragram/config/application.yml","a") { |f|
+        File.open("config/application.yml","a") { |f|
         f.write "USER_TOKEN: #{@token}\n"
         }
 
@@ -49,13 +49,40 @@ class InstagramAuthController < ApplicationController
         uri = URI("https://graph.instagram.com/me/media?fields=id,caption&access_token=#{ENV['USER_TOKEN']}")
         resp = Net::HTTP.get_response(uri).body
         resp = JSON.parse(resp)
-        @media = resp["data"][0]["id"] 
+        @media = resp["data"][1]["id"] 
 
         #写真のメディアデータを取ってくる
         uri = URI("https://graph.instagram.com/#{@media}?fields=id,media_url&access_token=#{ENV['USER_TOKEN']}")
         resp = Net::HTTP.get_response(uri).body
         resp = JSON.parse(resp)
         @mediaurl = resp["media_url"]
+
+        uri = URI("https://graph.instagram.com/#{@media}/children?access_token=#{ENV['USER_TOKEN']}")
+        resp = Net::HTTP.get_response(uri).body
+        resp = JSON.parse(resp)
+        @caption = resp["data"][3]["id"]
+        @array_item = resp["data"]
+
+        @mediaurl2 = []
+        @array_item.each{|t|
+          uri = URI("https://graph.instagram.com/#{t["id"]}?fields=id,media_url&access_token=#{ENV['USER_TOKEN']}")
+          resp = Net::HTTP.get_response(uri).body
+          resp = JSON.parse(resp)
+          @mediaurl2.push(resp["media_url"])  #ここをまずどうするか工夫
+        }
+
+        uri = URI("https://graph.instagram.com/#{@caption}?fields=id,media_url&access_token=#{ENV['USER_TOKEN']}")
+        resp = Net::HTTP.get_response(uri).body
+        resp = JSON.parse(resp)
+        @mediaurl2 = resp["media_url"]
+
+        # uri = URI("https://graph.instagram.com/refresh_access_token?grant_type=ig_refresh_token&access_token=#{ENV['USER_TOKEN']}")
+        # resp = Net::HTTP.get_response(uri).body
+        # resp = JSON.parse(resp)
+        # @refreshed = resp["access_token"]
+        # File.open("config/application.yml","r+") { |f|
+        #   f.write "USER_TOKEN: #{@refreshed}"
+        # } #access tokenの期限を延長する
     end
 
 end
