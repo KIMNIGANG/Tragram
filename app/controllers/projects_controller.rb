@@ -29,27 +29,44 @@ class ProjectsController < ApplicationController
     end
   end
 
+  def edit()
+    @project = Project.find_by(id: params[:id])
+    if !@project.users.include?(current_user) then
+      flash[:danger] = 'only members can edit'
+      redirect_to request.referer
+    end
+  end
+
  # 後で　viewも一緒に
   def update()
-    # need to define "current_user"
-    # "members" defined in project model
+  # params: name, caption
+  # フォーム送信でアクション発火
     project = Project.find_by(id: params[:id])
+    id = params[:id]
+    newname = params[:name]
+    newcaption = params[:caption]
     if !project then
       flash[:caution] = 'no project found'
     elsif !project.users then
       flash[:caution] = 'not a member'
     elsif project.users.include?(current_user) then
-      @name = project.name
-      @caption = project.caption
+      project.update(project_update_params)
     end
-    redirect_to request.referer
+    redirect_to action: :show, id: project.id
   end
 
   # project削除
   def destroy()
-    project = Project.find_by(id: params[:id])
-    project.destroy()
-    redirect_to root_path
+    project = Project.find(params[:id])
+    user_project = UserProject.find_by(project_id: params[:id])
+    if UserProject.exists?(user_id: @current_user.id ,project_id: params[:id])
+      project.destroy
+      user_project.destroy
+      flash[:caution] = 'destroyed project'
+    else
+      flash[:caution] = "coudln't destroy project"
+    end
+    redirect_to controller: :users, action: :show, id: @current_user.id
   end
 
 end
@@ -58,5 +75,9 @@ end
 private
 
   def projects_params
+    params.require(:project).permit(:name,:caption)
+  end
+
+  def project_update_params
     params.require(:project).permit(:name,:caption)
   end

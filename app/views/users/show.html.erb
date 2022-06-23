@@ -6,7 +6,7 @@
   キャプション
   <% @current_user.user_projects.each do |user_project| %>
     <div>
-      <a href="/projects/<%=user_project.project.id%>"><%= user_project.project.name %></a>
+      <a href="/projects/<%= user_project.project.id %>"><%= user_project.project.name %></a>
       <%= user_project.project.caption %>
     </div>
   <% end %>

@@ -17,12 +17,10 @@ Rails.application.routes.draw do
   #
   get '/projects/:id', to: 'projects#show'
   post '/projects/:id', to: 'projects#update'
-  resources :projects, only: %i[destroy]
-
-
- 
+  resources :projects, only: %i[destroy create edit update]
   resources :users, only: [:show, :new, :destroy, :create]
-  resources :projects, only: [:create]
+
+
   #post 'projects/create',as:"projects"
   get '/instagram_index' => 'instagram_auth#index'
   get '/authpass' => 'instagram_auth#get_token'

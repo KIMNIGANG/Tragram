@@ -8,7 +8,9 @@
   <%= @project.caption%>
 
   <!--delete-->
-  <%= link_to project_path(@project.id), method: :destroy, data: {confirm: "削除しますか？"} %>
+  <!--<%= link_to project_path(@project.id), method: :destroy, data: {confirm: "削除しますか？"} %>-->
+  <%= link_to 'Destroy Project', project_path(@project.id), :method => :delete, data: {confirm: "削除しますか？"} %>
+  <%= link_to 'Edit Project', edit_project_path(@project.id) %>
   <!--post一覧表示-->
 
 
@@ -17,16 +19,4 @@
   <!-- redirectto create_post-->
   <%#= button_to "新規作成", controller: 'posts', action: 'create', params: {id: @project.id}, method: "get" %>
 
-  <!-- 編集 -->
-  <%= form_for project_path(@project.id) do |f| %>
-    <%= f.text_field :name %>
-    <%= f.text_field :caption %>
-    <%=  f.submit %>
-  <% end %>
-
-
 <% end %>
-
-
-
-
