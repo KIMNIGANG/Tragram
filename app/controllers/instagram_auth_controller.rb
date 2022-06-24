@@ -19,22 +19,22 @@ class InstagramAuthController < ApplicationController
         "grant_type" => "authorization_code",
         "redirect_uri" => "#{ENV['INST_REDIRECT_URI']}",
         "code" => params[:code],
-        })    
-        Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
-          res = http.request(request).body
+        }) 
+      Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
+        res = http.request(request).body
         res = JSON.parse(res)
         @response = res["access_token"] #この中にaccesstokenが入っている（"{\"access_token\": \"IGQVJW・・・EMXR93\", \"user_id\": 1784・・・3807}")
-        end
-        
-        uri = URI("https://graph.instagram.com/access_token?grant_type=ig_exchange_token&client_secret=#{ENV['INST_CLIENT_SECRET']}&access_token=#{@response}")   #長期トークンに交換
-        resp = Net::HTTP.get_response(uri).body
-        resp = JSON.parse(resp)
-        @token = resp["access_token"] 
+      end
 
-        #accesstokenをファイルに書き込み（次回からはENVから読み込む）
-        File.open("config/application.yml","r+") { |f|
-          f.write "USER_TOKEN: #{@token}"
-        }
+      uri = URI("https://graph.instagram.com/access_token?grant_type=ig_exchange_token&client_secret=#{ENV['INST_CLIENT_SECRET']}&access_token=#{@response}")   #長期トークンに交換
+      resp = Net::HTTP.get_response(uri).body
+      resp = JSON.parse(resp)
+      @token = resp["access_token"] 
+
+      #accesstokenをファイルに書き込み（次回からはENVから読み込む）
+      File.open("config/application.yml","r+") { |f|
+        f.write "USER_TOKEN: #{@token}"
+      }
 
     end
 
@@ -91,5 +91,64 @@ class InstagramAuthController < ApplicationController
         #   f.write "USER_TOKEN: #{@refreshed}"
         # } 
     end
+
+    def get_media_url(media_id)
+      # private method
+      uri = URI("https://graph.instagram.com/#{media_id}?fields=media_url&access_token=#{ENV['USER_TOKEN']}")
+      resp = Net::HTTP.get_response(uri).body
+      resp = JSON.parse(resp)
+      media_url = resp["media_url"]
+      return media_url
+    end
+
+
+    def show_image
+      # userの全mediaのmedia-idのリストを作成
+      @media_urls = []
+      uri = URI("https://graph.instagram.com/me/media?fields=id&access_token=#{ENV['USER_TOKEN']}")
+      resp = Net::HTTP.get_response(uri).body
+      resp = JSON.parse(resp)
+      media = resp["data"]
+      # {data: [{id: hoge}, {id: foo},,,]}
+
+      # userの全メディアloop
+      media.each do |m|
+        uri = URI("https://graph.instagram.com/#{m["id"]}?fields=id,media_url&access_token=#{ENV['USER_TOKEN']}")
+        resp = Net::HTTP.get_response(uri).body
+        resp = JSON.parse(resp)
+
+        # albumの場合は、各写真や動画に応じてurlを取得する必要がある
+        if resp["media_type"] == "CAROUSEL_ALBUM" then
+          uri = URI("https://graph.instagram.com/#{resp["id"]}/children?access_token=#{ENV['USER_TOKEN']}")
+          in_resp = Net::HTTP.get_response(uri).body
+          in_resp = JSON.parse(resp)
+          data = in_resp["data"]
+          data.each do |d|
+            # 同じページで定義してある関数を利用
+            @media_urls.push(get_media_url(d["id"]))
+          end
+        else
+          @media_urls.push(resp["media_url"])
+        end
+
+      end
+    end
+
+
+    # 画像urlをそのpostのテーブルに追加
+    # 画像urlのリストをquerystringとして受け取ることにする(とりあえず)
+    # image-tableへは、show_imageのviewで行うことにする
+    # ここでは、postとimageの関係性を作るだけ
+    def insert_image_to_post
+      image_ids = params[:images]
+      post_id = params[:post]
+      image_ids.each do |i|
+        Image_posts.create(image_id: i, post_id: post_id)
+      end
+      # postへのリダイレクト
+      redirect_to 
+    end
+
+
 
 end
