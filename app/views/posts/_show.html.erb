@@ -1,0 +1,7 @@
+<h1>post一覧</h1>
+<%= link_to 'Create Post', new_post_path(project_id: params[:id]) %>
+<% @posts.each do |post| %>
+    <div>
+      <%= post.caption %>
+    </div>
+<% end %>

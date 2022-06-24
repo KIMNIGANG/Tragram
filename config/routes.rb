@@ -17,8 +17,9 @@ Rails.application.routes.draw do
   #
   get '/projects/:id', to: 'projects#show'
   post '/projects/:id', to: 'projects#update'
-  resources :projects, only: %i[destroy create edit update]
-  resources :users, only: [:show, :new, :destroy, :create]
+  resources :projects, only: %i[destroy create edit update show]
+  resources :users, only: %i[show new destroy create]
+  resources :posts, only: %i[show create destroy edit update new]
 
 
   #post 'projects/create',as:"projects"

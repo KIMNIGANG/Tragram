@@ -8,6 +8,7 @@ class ProjectsController < ApplicationController
     project = Project.find_by(id: params[:id])
     if project then
       @project = project
+      @posts = Post.where(project_id: params[:id])
     else
       flash[:caution] = 'project doesnt exist'
       redirect_to request.referer
