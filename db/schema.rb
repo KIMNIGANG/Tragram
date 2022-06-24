@@ -44,4 +44,12 @@ ActiveRecord::Schema.define(version: 2022_06_10_063913) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "images_post", force: :cascade do |t|
+    t.integer "image_id"
+    t.integer "post_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+
 end
