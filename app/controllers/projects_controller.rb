@@ -43,9 +43,6 @@ class ProjectsController < ApplicationController
   # params: name, caption
   # フォーム送信でアクション発火
     project = Project.find_by(id: params[:id])
-    id = params[:id]
-    newname = params[:name]
-    newcaption = params[:caption]
     if !project then
       flash[:caution] = 'no project found'
     elsif !project.users then
@@ -60,7 +57,7 @@ class ProjectsController < ApplicationController
   def destroy()
     project = Project.find(params[:id])
     user_project = UserProject.find_by(project_id: params[:id])
-    if UserProject.exists?(user_id: @current_user.id ,project_id: params[:id])
+    if UserProject.exists?(user_id: @current_user.id, project_id: params[:id])
       project.destroy
       user_project.destroy
       flash[:caution] = 'destroyed project'

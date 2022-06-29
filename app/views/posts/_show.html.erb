@@ -4,4 +4,6 @@
     <div>
       <%= post.caption %>
     </div>
+    <%= link_to 'Destroy Post', post_path(post.id), :method => :delete, data: {confirm: "削除しますか？"} %>
+    <%= link_to 'Edit Post', edit_post_path(post.id) %>
 <% end %>

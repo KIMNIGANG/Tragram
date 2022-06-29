@@ -1,0 +1,5 @@
+<!-- 編集 -->
+  <%= form_for(@post, :url => {:controller => :posts, :action => :update }) do |f| %>
+    <%= f.text_field :caption %>
+    <%=  f.submit %>
+  <% end %>

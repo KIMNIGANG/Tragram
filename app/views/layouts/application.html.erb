@@ -14,8 +14,8 @@
     <header>
       <% if current_user %>
         <%= current_user.name %>さん
-        <%= link_to "ログアウト", log_out_path %>
-        <%= link_to "マイページ", user_path(@current_user) %>
+        <%= link_to "Log out", log_out_path %>
+        <%= link_to "My page", user_path(@current_user) %>
       <% else  %>
         ゲストさん
         <%= link_to "Googleでログイン", "/auth/google_oauth2", method: :post %>
