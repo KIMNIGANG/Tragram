@@ -1,17 +1,22 @@
-<h1>Project page/Post一覧</h1>
+<!--projectページ-->
 <%if logged_in?%>
   <!--metadata-->
-  name
-  <%= @project.name%>
+  <h1><%= @project.name%></h1>
   <br/>
   caption
   <%= @project.caption%>
   <br>
 
   <!--delete-->
-  <!--<%= link_to project_path(@project.id), method: :destroy, data: {confirm: "削除しますか？"} %>-->
-  <%= link_to 'Destroy Project', project_path(@project.id), :method => :delete, data: {confirm: "削除しますか？"} %>
-  <%= link_to 'Edit Project', edit_project_path(@project.id) %>
+  <%= link_to project_path(@project.id), class: "btn destroy", :method => :delete, data: {confirm: "削除しますか？"} do %>
+    <i class="fa-solid fa-trash-alt"></i>
+  <% end %>
+
+  <%= link_to edit_project_path(@project.id), class: "btn" do %>
+    <i class="fa-solid fa-pen-to-square"></i>
+  <% end %>
+  <br>
+  <br>
   <!--post一覧表示-->
   <%= render 'posts/show' %>
 

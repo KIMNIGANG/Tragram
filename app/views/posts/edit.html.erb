@@ -1,5 +1,5 @@
-<!-- 編集 -->
+<!-- post編集フォーム -->
   <%= form_for(@post, :url => {:controller => :posts, :action => :update }) do |f| %>
     <%= f.text_field :caption %>
-    <%=  f.submit %>
+    <%= f.submit %>
   <% end %>
