@@ -1,6 +1,8 @@
 class InstagramAuthController < ApplicationController
     require 'net/http'
     require 'uri'
+    require 'yaml'
+
     def index
       @redirect_uri=ENV['INST_REDIRECT_URI']
     end
@@ -19,26 +21,39 @@ class InstagramAuthController < ApplicationController
         "grant_type" => "authorization_code",
         "redirect_uri" => "#{ENV['INST_REDIRECT_URI']}",
         "code" => params[:code],
-        }) 
-      Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
-        res = http.request(request).body
-        res = JSON.parse(res)
-        @response = res["access_token"] #この中にaccesstokenが入っている（"{\"access_token\": \"IGQVJW・・・EMXR93\", \"user_id\": 1784・・・3807}")
-      end
+        })
+        # 6/29 これは、一人一回でよさそうだから例外処理いらない？
+        # それとも環境変数に基づいて処理の必要有無を判断するか
+        Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
+          res = http.request(request).body
+          res = JSON.parse(res)
+          @response = res["access_token"]
+          # この中にaccesstokenが入っている
+          #（"{\"access_token\": \"IGQVJW・・・EMXR93\", \"user_id\": 1784・・・3807}")
+          print "res------------"
+          print res
+        end
 
       uri = URI("https://graph.instagram.com/access_token?grant_type=ig_exchange_token&client_secret=#{ENV['INST_CLIENT_SECRET']}&access_token=#{@response}")   #長期トークンに交換
       resp = Net::HTTP.get_response(uri).body
       resp = JSON.parse(resp)
-      @token = resp["access_token"] 
+      @token = resp["access_token"]
 
-      #accesstokenをファイルに書き込み（次回からはENVから読み込む）
-      File.open("config/application.yml","r+") { |f|
-        f.write "USER_TOKEN: #{@token}"
-      }
+
+      begin
+        data = open('config/application.yml', 'r'){|f| YAML.load(f)}
+        data["USER_TOKEN"] = @token
+        YAML.dump(data, File.open('config/application.yml', 'w'))
+      rescue => e
+        e.response
+      end
+
+      print "fin gettoken-------------"
 
     end
 
     def get_media_test
+        print "get_media_test start------------"
         #userのidとusernameを取ってくる
         uri = URI("https://graph.instagram.com/me?fields=id,username&access_token=#{ENV['USER_TOKEN']}")
         resp = Net::HTTP.get_response(uri).body
@@ -47,19 +62,33 @@ class InstagramAuthController < ApplicationController
 
         #userのメディアidを取ってくる (写真のid)
         uri = URI("https://graph.instagram.com/me/media?fields=id,caption&access_token=#{ENV['USER_TOKEN']}")
-        resp = Net::HTTP.get_response(uri).body
-        resp = JSON.parse(resp)
-        @media = resp["data"][1]["id"] 
+        begin
+          resp = Net::HTTP.get_response(uri).body
+          resp = JSON.parse(resp)
+          @media = resp["data"][1]["id"] 
+        rescue => e
+          e.response
+        end
 
         #写真のメディアデータを取ってくる
         uri = URI("https://graph.instagram.com/#{@media}?fields=id,media_url&access_token=#{ENV['USER_TOKEN']}")
-        resp = Net::HTTP.get_response(uri).body
-        resp = JSON.parse(resp)
-        @mediaurl = resp["media_url"]
+        begin
+          resp = Net::HTTP.get_response(uri).body
+          resp = JSON.parse(resp)
+          @mediaurl = resp["media_url"]
+        rescue => e
+          e.response
+        end
 
         uri = URI("https://graph.instagram.com/#{@media}/children?access_token=#{ENV['USER_TOKEN']}")
-        resp = Net::HTTP.get_response(uri).body
-        resp = JSON.parse(resp)
+        begin
+          resp = Net::HTTP.get_response(uri).body
+          resp = JSON.parse(resp)
+        rescue => e
+          e.response
+        end
+        print "------a--------"
+        print resp["data"][0]
         @caption = resp["data"][0]["id"]
         @array_item = resp["data"]
 
@@ -67,9 +96,13 @@ class InstagramAuthController < ApplicationController
         @mediaurl_i = []  #imgのurlが入る配列
         @array_item.each{|t|
           uri = URI("https://graph.instagram.com/#{t["id"]}?fields=id,media_url&access_token=#{ENV['USER_TOKEN']}")
-          resp = Net::HTTP.get_response(uri).body
-          resp = JSON.parse(resp)
-          media_url = resp["media_url"]
+          begin
+            resp = Net::HTTP.get_response(uri).body
+            resp = JSON.parse(resp)
+            media_url = resp["media_url"]
+          rescue => e
+            e.response
+          end
           if media_url[8] == "v"
             @mediaurl_v.push(resp["media_url"])  
           else
@@ -95,14 +128,27 @@ class InstagramAuthController < ApplicationController
     def get_media_url(media_id)
       # private method
       uri = URI("https://graph.instagram.com/#{media_id}?fields=media_url&access_token=#{ENV['USER_TOKEN']}")
-      resp = Net::HTTP.get_response(uri).body
-      resp = JSON.parse(resp)
+      begin
+        resp = Net::HTTP.get_response(uri).body
+        resp = JSON.parse(resp)
+      rescue => e
+        e.response
+      end
       media_url = resp["media_url"]
       return media_url
     end
 
 
     def show_image
+      # project_id をparamsでもらうように
+      project = Project.find_by(id: params[:id])
+      if project then
+        @project = project
+      else
+        flash[:caution] = 'project doesnt exist'
+        redirect_to request.referer
+      end
+      #
       # userの全mediaのmedia-idのリストを作成
       @media_urls = []
       uri = URI("https://graph.instagram.com/me/media?fields=id&access_token=#{ENV['USER_TOKEN']}")
@@ -134,7 +180,6 @@ class InstagramAuthController < ApplicationController
       end
     end
 
-
     # 画像urlをそのpostのテーブルに追加
     # 画像urlのリストをquerystringとして受け取ることにする(とりあえず)
     # image-tableへは、show_imageのviewで行うことにする
@@ -142,6 +187,7 @@ class InstagramAuthController < ApplicationController
     def insert_image_to_post
       image_ids = params[:images]
       post_id = params[:post]
+      # post-image table
       image_ids.each do |i|
         Image_posts.create(image_id: i, post_id: post_id)
       end
