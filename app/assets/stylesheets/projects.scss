@@ -5,4 +5,17 @@
 a {
   color: gray;
   text-decoration: none;
+
+}
+
+
+.project_caption {
+  text-align: center;
+
+}
+
+div {
+  &.project_btns {
+    text-align: center;
+  }
 }

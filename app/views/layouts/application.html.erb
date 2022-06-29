@@ -18,9 +18,14 @@
       <% if current_user %>
         こんにちは、<%= current_user.name %>さん
         <br>
-        <%= link_to log_out_path, class: "btn" do %>
-          Sign Out <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        <%= link_to user_path(@current_user), class: "btn" do %>
+          <i class="fa-solid fa-circle-user"></i> My page
         <% end %>
+
+        <%= link_to log_out_path, class: "btn" do %>
+          <i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out
+        <% end %>
+
       <% else  %>
         ゲストさん
         <%= link_to "Googleでログイン", "/auth/google_oauth2", method: :post %>

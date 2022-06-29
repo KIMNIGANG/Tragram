@@ -1,9 +1,9 @@
 <!--project内にpostをrender-->
 <%= link_to 'Create Post', new_post_path(project_id: params[:id]) %>
 <% @posts.each do |post| %>
-    <div>
-      <%= post.caption %>
-    </div>
-    <%= link_to 'Destroy Post', post_path(post.id), :method => :delete, data: {confirm: "削除しますか？"} %>
-    <%= link_to 'Edit Post', edit_post_path(post.id) %>
+    <p class="post_caption">
+      <%= safe_join(post.caption.split("\n"),tag(:br)) %>
+    </p>
+    <%= link_to '投稿を削除', post_path(post.id), :method => :delete, data: {confirm: "削除しますか？"} %>
+    <%= link_to '投稿を編集', edit_post_path(post.id) %>
 <% end %>

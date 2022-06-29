@@ -1,25 +1,31 @@
-<h1>User page/Project一覧</h1>
+<h1>My Page</h1>
 
 <% if logged_in? %>
-  <!--一覧表示-->
-  プロジェクト名
-  キャプション
+  <!-- 一覧表示 -->
   <% @current_user.user_projects.each do |user_project| %>
-    <div>
-      <a href="/projects/<%= user_project.project.id %>"><%= user_project.project.name %></a>
+    <div class="project">
+      <a class="project_name" href="/projects/<%= user_project.project.id %>"><%= user_project.project.name %></a><br>
       <%= user_project.project.caption %>
     </div>
   <% end %>
   <br>
+
   <!--作成フォーム-->
-  <%= form_for(@project, :url => {:controller => :projects, :action => :create }) do |f| %>
-    <div>
-      <%= f.label :プロジェクト名を入力%><br>
-      <%= f.text_field :name, autofocus: true %><br>
-      <%= f.label :キャプションを入力%><br>
-      <%= f.text_area :caption, autofocus: true %>
+  <div class="create_form_container">
+    <div class="create_form_child">
+    <p>新しく旅行ページを作成する</p>
+      <%= form_for(@project, :url => {:controller => :projects, :action => :create }) do |f| %>
+        <div>
+          <%= f.label :旅行の名前を入力 %><br>
+          <%= f.text_field :name, autofocus: true %>
+          <br>
+          <br>
+          <%= f.label :説明を入力%><br>
+          <%= f.text_area :caption, autofocus: true %>
+        </div>
+        <!-- メンバーの追加はここでやる？ -->
+        <%= f.submit "ページを作成" %>
+      <% end %>
     </div>
-    <!-- メンバーの追加はここでやる？ -->
-    <%= f.submit %>
-  <% end %>
+  </div>
 <% end %>
