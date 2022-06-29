@@ -63,3 +63,5 @@ gem 'figaro'
 
 #localhostのhttps化
 gem 'thin'
+
+gem 'geocoder'

@@ -12,4 +12,5 @@ Rails.application.routes.draw do
   get '/get_media_test' => 'instagram_auth#get_media_test'
 
   get '/map' => 'google_map#index'
+  get '/map_request', to: 'google_map#map', as: 'map_request'
 end
