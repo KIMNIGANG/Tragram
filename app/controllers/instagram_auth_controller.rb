@@ -21,8 +21,9 @@ class InstagramAuthController < ApplicationController
         "grant_type" => "authorization_code",
         "redirect_uri" => "#{ENV['INST_REDIRECT_URI']}",
         "code" => params[:code],
-        })
+      })
         # 6/29 これは、一人一回でよさそうだから例外処理いらない？
+      #   それともスコープの問題か？　respが空でエラーになった
         # それとも環境変数に基づいて処理の必要有無を判断するか
         Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
           res = http.request(request).body
@@ -50,79 +51,6 @@ class InstagramAuthController < ApplicationController
 
       print "fin gettoken-------------"
 
-    end
-
-    def get_media_test
-        print "get_media_test start------------"
-        #userのidとusernameを取ってくる
-        uri = URI("https://graph.instagram.com/me?fields=id,username&access_token=#{ENV['USER_TOKEN']}")
-        resp = Net::HTTP.get_response(uri).body
-        resp = JSON.parse(resp)
-        @profile = resp["id"]   #resp["@@"]に変えることでuser@@をとれる (username or id or ...)
-
-        #userのメディアidを取ってくる (写真のid)
-        uri = URI("https://graph.instagram.com/me/media?fields=id,caption&access_token=#{ENV['USER_TOKEN']}")
-        begin
-          resp = Net::HTTP.get_response(uri).body
-          resp = JSON.parse(resp)
-          @media = resp["data"][1]["id"] 
-        rescue => e
-          e.response
-        end
-
-        #写真のメディアデータを取ってくる
-        uri = URI("https://graph.instagram.com/#{@media}?fields=id,media_url&access_token=#{ENV['USER_TOKEN']}")
-        begin
-          resp = Net::HTTP.get_response(uri).body
-          resp = JSON.parse(resp)
-          @mediaurl = resp["media_url"]
-        rescue => e
-          e.response
-        end
-
-        uri = URI("https://graph.instagram.com/#{@media}/children?access_token=#{ENV['USER_TOKEN']}")
-        begin
-          resp = Net::HTTP.get_response(uri).body
-          resp = JSON.parse(resp)
-        rescue => e
-          e.response
-        end
-        print "------a--------"
-        print resp["data"][0]
-        @caption = resp["data"][0]["id"]
-        @array_item = resp["data"]
-
-        @mediaurl_v = []  #videoのurlが入る配列
-        @mediaurl_i = []  #imgのurlが入る配列
-        @array_item.each{|t|
-          uri = URI("https://graph.instagram.com/#{t["id"]}?fields=id,media_url&access_token=#{ENV['USER_TOKEN']}")
-          begin
-            resp = Net::HTTP.get_response(uri).body
-            resp = JSON.parse(resp)
-            media_url = resp["media_url"]
-          rescue => e
-            e.response
-          end
-          if media_url[8] == "v"
-            @mediaurl_v.push(resp["media_url"])  
-          else
-            @mediaurl_i.push(resp["media_url"])
-          end
-        }
-
-        # uri = URI("https://graph.instagram.com/#{@caption}?fields=id,media_url&access_token=#{ENV['USER_TOKEN']}")
-        # resp = Net::HTTP.get_response(uri).body
-        # resp = JSON.parse(resp)
-        # @mediaurl2 = resp["media_url"]
-
-        #access tokenの期限を延長する
-        # uri = URI("https://graph.instagram.com/refresh_access_token?grant_type=ig_refresh_token&access_token=#{ENV['USER_TOKEN']}")
-        # resp = Net::HTTP.get_response(uri).body
-        # resp = JSON.parse(resp)
-        # @refreshed = resp["access_token"]
-        # File.open("config/application.yml","r+") { |f|
-        #   f.write "USER_TOKEN: #{@refreshed}"
-        # } 
     end
 
     def get_media_url(media_id)
@@ -160,15 +88,25 @@ class InstagramAuthController < ApplicationController
       # userの全メディアloop
       media.each do |m|
         uri = URI("https://graph.instagram.com/#{m["id"]}?fields=id,media_url&access_token=#{ENV['USER_TOKEN']}")
-        resp = Net::HTTP.get_response(uri).body
-        resp = JSON.parse(resp)
+        resp
+        begin
+          resp = Net::HTTP.get_response(uri).body
+          resp = JSON.parse(resp)
+        rescue => e
+          puts e
+        end
 
         # albumの場合は、各写真や動画に応じてurlを取得する必要がある
         if resp["media_type"] == "CAROUSEL_ALBUM" then
           uri = URI("https://graph.instagram.com/#{resp["id"]}/children?access_token=#{ENV['USER_TOKEN']}")
-          in_resp = Net::HTTP.get_response(uri).body
-          in_resp = JSON.parse(resp)
-          data = in_resp["data"]
+          data
+          begin
+            in_resp = Net::HTTP.get_response(uri).body
+            in_resp = JSON.parse(resp)
+            data = in_resp["data"]
+          rescue => e
+            puts e
+          end
           data.each do |d|
             # 同じページで定義してある関数を利用
             @media_urls.push(get_media_url(d["id"]))

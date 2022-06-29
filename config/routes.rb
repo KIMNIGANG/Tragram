@@ -10,4 +10,6 @@ Rails.application.routes.draw do
   get '/instagram_index' => 'instagram_auth#index'
   get '/authpass' => 'instagram_auth#get_token'
   get '/get_media_test' => 'instagram_auth#get_media_test'
+  get '/projects/:id/show_image' => 'instagram_auth#show_image'
+
 end

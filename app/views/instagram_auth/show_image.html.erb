@@ -1,0 +1,12 @@
+<h1>your instagram posts</h1>
+<!--image表示-->
+<%if logged_in?%>
+  <% @media_urls.each do |url| %>
+   <%= image_tag(url, width: '50%') %>
+ <%end%>
+    <!-- check box -->
+
+<!-- 選択したimageをimage-tableに追加するところまでやる -->
+<% end %>
+
+
