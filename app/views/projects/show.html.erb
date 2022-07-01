@@ -1,0 +1,29 @@
+<!--projectページ-->
+<%if logged_in?%>
+  <!--metadata-->
+  <h1 class="project_name"><%= @project.name%></h1>
+  <p class="project_caption"><%= @project.caption%></p>
+
+  <div class="project_btns">
+  <%= link_to edit_project_path(@project.id), class: "btn" do %>
+    <i class="fa-solid fa-pen-to-square"></i>旅行詳細を編集
+  <% end %>
+
+  <%= link_to project_path(@project.id), class: "btn destroy", :method => :delete, data: {confirm: "旅行ページを削除しますか？一度削除すると元に戻すことができません"} do %>
+    <i class="fa-solid fa-trash-alt"></i>旅行ページを削除
+  <% end %>
+  </div>
+
+
+  <br>
+  <br>
+  <!--post一覧表示-->
+  <%= render 'posts/show' %>
+
+
+  <!--作成ボタン-->
+  <!-- 作成してあるページに飛ぶ感じ -->
+  <!-- redirectto create_post-->
+  <%#= button_to "新規作成", controller: 'posts', action: 'create', params: {id: @project.id}, method: "get" %>
+
+<% end %>

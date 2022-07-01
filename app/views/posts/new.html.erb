@@ -1,0 +1,9 @@
+<!--post作成フォーム-->
+<h1>Create Post</h1>
+  <%= form_for(@post) do |f| %>
+    <div>
+      <%= f.label :キャプションを入力%><br>
+      <%= f.text_area :caption, autofocus: true %>
+    </div>
+  <%= f.submit %>
+<% end %>
