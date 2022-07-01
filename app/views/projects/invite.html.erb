@@ -1,0 +1,7 @@
+旅行ページに招待されています
+
+<% if logged_in? %>
+  招待を受け入れる
+<% else %>
+   <%= link_to "Googleでログイン", "/auth/google_oauth2", method: :post %>
+<% end %>

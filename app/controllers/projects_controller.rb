@@ -67,6 +67,10 @@ class ProjectsController < ApplicationController
     redirect_to controller: :users, action: :show, id: @current_user.id
   end
 
+  def invite
+
+  end
+
 end
 
 

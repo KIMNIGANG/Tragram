@@ -1,11 +1,18 @@
 class SessionsController < ApplicationController
   skip_before_action :check_logged_in, only: :create
+  before_action :store_location, only: :create
 
   def create
     if (user = User.find_or_create_from_auth_hash(auth_hash))
       log_in user
     end
-    redirect_to root_path
+    if session[:previous_url].present?
+
+        print session[:previous_url]
+        redirect_to "/users/1"
+    else
+       redirect_to root_path
+    end
   end
 
   def destroy
