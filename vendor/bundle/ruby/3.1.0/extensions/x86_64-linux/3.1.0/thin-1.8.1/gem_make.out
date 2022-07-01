@@ -1,0 +1,23 @@
+current directory: /home/takato/workspace/rails/Tragram/vendor/bundle/ruby/3.1.0/gems/thin-1.8.1/ext/thin_parser
+/home/takato/.rbenv/versions/3.1.2/bin/ruby -I /home/takato/.rbenv/versions/3.1.2/lib/ruby/3.1.0 -r ./siteconf20220611-26923-zthmtk.rb extconf.rb
+checking for main() in -lc... yes
+creating Makefile
+
+current directory: /home/takato/workspace/rails/Tragram/vendor/bundle/ruby/3.1.0/gems/thin-1.8.1/ext/thin_parser
+make DESTDIR\= clean
+
+current directory: /home/takato/workspace/rails/Tragram/vendor/bundle/ruby/3.1.0/gems/thin-1.8.1/ext/thin_parser
+make DESTDIR\=
+compiling parser.c
+parser.c:31:18: warning: ‘http_parser_en_main’ defined but not used [-Wunused-const-variable=]
+   31 | static const int http_parser_en_main = 1;
+      |                  ^~~~~~~~~~~~~~~~~~~
+cc1: warning: unrecognized command line option ‘-Wno-self-assign’
+cc1: warning: unrecognized command line option ‘-Wno-parentheses-equality’
+cc1: warning: unrecognized command line option ‘-Wno-constant-logical-operand’
+compiling thin.c
+linking shared-object thin_parser.so
+
+current directory: /home/takato/workspace/rails/Tragram/vendor/bundle/ruby/3.1.0/gems/thin-1.8.1/ext/thin_parser
+make DESTDIR\= install
+/usr/bin/install -c -m 0755 thin_parser.so ./.gem.20220611-26923-mvs4yj
