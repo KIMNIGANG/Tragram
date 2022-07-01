@@ -13,19 +13,17 @@
   <!--作成フォーム-->
   <div class="create_form_container">
     <div class="create_form_child">
-    <p>新しく旅行ページを作成する</p>
-      <%= form_for(@project, :url => {:controller => :projects, :action => :create }) do |f| %>
-        <div>
-          <%= f.label :旅行の名前を入力 %><br>
+    <details>
+      <summary>新しく旅行ページを作成する</summary>
+        <%= form_for(@project, :url => {:controller => :projects, :action => :create }) do |f| %>
+          <p>旅行の名前を入力</p>
           <%= f.text_field :name, autofocus: true %>
-          <br>
-          <br>
-          <%= f.label :説明を入力%><br>
-          <%= f.text_area :caption, autofocus: true %>
-        </div>
+          <p>旅行の説明を入力</p>
+          <%= f.text_area :caption, autofocus: true %><br>
         <!-- メンバーの追加はここでやる？ -->
         <%= f.submit "ページを作成" %>
       <% end %>
+      </details>
     </div>
   </div>
 <% end %>
