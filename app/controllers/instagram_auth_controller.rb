@@ -46,7 +46,7 @@ class InstagramAuthController < ApplicationController
         data["USER_TOKEN"] = @token
         YAML.dump(data, File.open('config/application.yml', 'w'))
       rescue => e
-        e.response
+        puts e
       end
 
       print "fin gettoken-------------"
@@ -54,7 +54,9 @@ class InstagramAuthController < ApplicationController
     end
 
     def get_media_url(media_id)
+      # ------------------
       # private method
+      # ------------------
       uri = URI("https://graph.instagram.com/#{media_id}?fields=media_url&access_token=#{ENV['USER_TOKEN']}")
       begin
         resp = Net::HTTP.get_response(uri).body
@@ -69,9 +71,9 @@ class InstagramAuthController < ApplicationController
 
     def show_image
       # project_id をparamsでもらうように
-      project = Project.find_by(id: params[:id])
-      if project then
-        @project = project
+      post = Post.find_by(id: params[:id])
+      if post then
+        @post = post
       else
         flash[:caution] = 'project doesnt exist'
         redirect_to request.referer
@@ -80,15 +82,24 @@ class InstagramAuthController < ApplicationController
       # userの全mediaのmedia-idのリストを作成
       @media_urls = []
       uri = URI("https://graph.instagram.com/me/media?fields=id&access_token=#{ENV['USER_TOKEN']}")
-      resp = Net::HTTP.get_response(uri).body
-      resp = JSON.parse(resp)
+      begin
+        resp = Net::HTTP.get_response(uri).body
+        resp = JSON.parse(resp)
+        puts resp
+      rescue => e
+        puts e
+      end
       media = resp["data"]
       # {data: [{id: hoge}, {id: foo},,,]}
+
+      if media == nil then
+        flash[:danger] = 'no media choosen'
+        redirect_to controller: :post, action: :show, id: post.id
+      end
 
       # userの全メディアloop
       media.each do |m|
         uri = URI("https://graph.instagram.com/#{m["id"]}?fields=id,media_url&access_token=#{ENV['USER_TOKEN']}")
-        resp
         begin
           resp = Net::HTTP.get_response(uri).body
           resp = JSON.parse(resp)
@@ -99,7 +110,6 @@ class InstagramAuthController < ApplicationController
         # albumの場合は、各写真や動画に応じてurlを取得する必要がある
         if resp["media_type"] == "CAROUSEL_ALBUM" then
           uri = URI("https://graph.instagram.com/#{resp["id"]}/children?access_token=#{ENV['USER_TOKEN']}")
-          data
           begin
             in_resp = Net::HTTP.get_response(uri).body
             in_resp = JSON.parse(resp)
@@ -123,14 +133,15 @@ class InstagramAuthController < ApplicationController
     # image-tableへは、show_imageのviewで行うことにする
     # ここでは、postとimageの関係性を作るだけ
     def insert_image_to_post
-      image_ids = params[:images]
+      image_urls = params[:images]
       post_id = params[:post]
       # post-image table
-      image_ids.each do |i|
-        Image_posts.create(image_id: i, post_id: post_id)
+      post = Post.find_by(id: post_id)
+      image_urls.each do |i|
+        post.images.create(params.require(:image).permit(:url))
       end
       # postへのリダイレクト
-      redirect_to 
+      redirect_to controller: :post, action: :show, id: post.id
     end
 
 
