@@ -5,7 +5,7 @@
     <ul>
       <% @media_ls.each do |media|%>
         <li>
-        <input type="checkbox" name = "media[]" value = <%= media['media_url'] %>>
+        <input type="checkbox" name = "media[]" value = <%= media['media_url'] + "," + media['media_type'] %>>
 
           <label for="media">
             <% if media['media_type'] == 'IMAGE' then %>

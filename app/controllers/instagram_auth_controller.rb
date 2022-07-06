@@ -173,8 +173,9 @@ class InstagramAuthController < ApplicationController
         return redirect_to root_path
       end
 
-      params[:media].each do |url|
-        img = Image.create(url: url)
+      params[:media].each do |url_type|
+        out = url_type.split(",")
+        img = Image.create(url: out[0], media_type: out[1])
         post.images << img
       end
       #params[:image_list].each do |url, state|

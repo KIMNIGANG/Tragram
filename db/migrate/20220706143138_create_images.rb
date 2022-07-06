@@ -3,6 +3,7 @@ class CreateImages < ActiveRecord::Migration[6.1]
     create_table :images do |t|
 
       t.string :url
+      t.string :media_type
       t.timestamps
     end
   end
