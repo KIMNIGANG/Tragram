@@ -23,9 +23,10 @@ Rails.application.routes.draw do
 
 
   #post 'projects/create',as:"projects"
-  get '/instagram_index' => 'instagram_auth#index'
+  get '/instagram/auth' => 'instagram_auth#auth'
   get '/authpass' => 'instagram_auth#get_token'
-  get '/get_media_test' => 'instagram_auth#get_media_test'
-  get '/projects/:id/show_image' => 'instagram_auth#show_image'
-
+  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+  #
+  get '/show_image' => 'instagram_auth#show_image'
+  post '/posts/:id/insert_image/', to: 'instagram_auth#/insert_image_to_post'
 end

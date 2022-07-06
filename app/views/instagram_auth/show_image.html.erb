@@ -1,12 +1,26 @@
 <h1>your instagram posts</h1>
 <!--image表示-->
 <%if logged_in?%>
-  <% @media_urls.each do |url| %>
-   <%= image_tag(url, width: '50%') %>
- <%end%>
-    <!-- check box -->
+  <%= form_with(url: "posts/#{@post_id}/insert_image", method: :post) do |form| %>
+    <ul>
+      <% @media_ls.each do |media|%>
+        <li>
+          <%= form.check_box name: 'media[]', value: media['id'] %>
+        <label for="media">
+          <% if media['media_type'] == 'IMAGE' then%>
+            <%= image_tag media['media_url']%>
+          <% else %>
+            <video controls autoplay name="media">
+              <source src=<%=media['media_url']%> type="video/mp4">
+            </video>
+          <% end %>
+        </label>
+        </li>
+      <% end %>
+    </ul>
+  <%= form.submit "画像を使う"%>
+  <%end%>
 
-<!-- 選択したimageをimage-tableに追加するところまでやる -->
-<% end %>
 
+<%end%>
 
