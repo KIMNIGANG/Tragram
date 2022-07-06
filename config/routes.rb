@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html'
   #
   get '/projects/:id/invite', to: 'projects#invite'
+  get '/projects/invite_create/:id', to: 'projects#invite_create'
   resources :projects, only: %i[destroy create edit update show]
   resources :users, only: %i[show new destroy create]
   resources :posts, only: %i[show create destroy edit update new]

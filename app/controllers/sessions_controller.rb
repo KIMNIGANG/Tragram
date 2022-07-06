@@ -7,9 +7,9 @@ class SessionsController < ApplicationController
       log_in user
     end
     if session[:previous_url].present?
-
+        print "ここからセッション"
         print session[:previous_url]
-        redirect_to "/users/1"
+        redirect_to "projects/:id/invite"
     else
        redirect_to root_path
     end
