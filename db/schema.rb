@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_07_05_090757) do
+ActiveRecord::Schema.define(version: 2022_07_06_035411) do
 
   create_table "images", force: :cascade do |t|
     t.string "url"
@@ -22,6 +22,13 @@ ActiveRecord::Schema.define(version: 2022_07_05_090757) do
     t.integer "user_id"
     t.string "token"
     t.integer "expires_in"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "post_images", force: :cascade do |t|
+    t.integer "image_id"
+    t.integer "post_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

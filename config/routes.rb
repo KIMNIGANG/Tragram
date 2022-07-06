@@ -28,5 +28,5 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
   #
   get '/show_image' => 'instagram_auth#show_image'
-  post '/posts/:id/insert_image/', to: 'instagram_auth#/insert_image_to_post'
+  get'/posts/:id/insert_image/', to: 'instagram_auth#insert_image_to_post'
 end

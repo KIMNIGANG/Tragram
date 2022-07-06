@@ -1,4 +1,5 @@
 class Post < ApplicationRecord
   belongs_to :project
-  has_many :images
+  has_one :post_image
+  has_many :images, through: :post_image
 end

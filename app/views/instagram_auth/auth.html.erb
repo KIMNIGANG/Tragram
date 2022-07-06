@@ -6,7 +6,7 @@
     <%= link_to "instagram auth", "https://api.instagram.com/oauth/authorize?client_id=#{@client_id}&redirect_uri=#{@redirect_uri}&scope=user_profile,user_media&response_type=code"%>
   <% elsif @expires_in > 1 then %>
     <!-- 仮post_id-->
-    <% post_id = 2 %>
-    <%= link_to "get_photos", controller: "instagram_auth", action: "show_image", id:2%>
+    <% post_id = 1 %>
+    <%= link_to "get_photos", controller: "instagram_auth", action: "show_image", id: post_id %>
   <% end %>
 <%end%>

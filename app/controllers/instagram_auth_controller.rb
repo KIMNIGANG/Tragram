@@ -49,13 +49,9 @@ class InstagramAuthController < ApplicationController
       req = Net::HTTP::Get.new(uri.request_uri)
       res = http.request(req)
       res = JSON.parse(res.body)
-      puts "res --"
-      puts res
       expires_in = res['expires_in']
       long_token = res["access_token"]
-      puts "result----"
-      puts expires_in
-      puts long_token
+      puts "--long term token fetched--"
 
 
       # user tokenの書き換え
@@ -64,11 +60,11 @@ class InstagramAuthController < ApplicationController
         token_instance = Instagramtoken.create(token: long_token, expires_in: expires_in)
         current_user.instagramtoken = token_instance
       else
-        puts "update instagramtoken instance"
+        puts "update instagramtoken instance===="
         current_user.instagramtoken.update(token: long_token, expires_in: expires_in)
       end
 
-      print "fin gettoken-------------"
+      print "-- gettoken fin -"
       redirect_to root_path
 
     end
@@ -121,8 +117,8 @@ class InstagramAuthController < ApplicationController
       # get media urls
       # 完全版は、sliceを消す
       @media_ls = []
-      #media.slice(0,4).each do |m|
-      media.each do |m|
+      media.slice(0,4).each do |m|
+      #media.each do |m|
         uri = URI("https://graph.instagram.com/#{m["id"]}?fields=id,media_url,media_type&access_token=#{token}")
         begin
           res = Net::HTTP.get_response(uri).body
@@ -139,9 +135,7 @@ class InstagramAuthController < ApplicationController
 
       #  end
       #end
-
-      
-
+      #
         # albumの場合は、各写真や動画に応じてurlを取得する必要がある
      #   if res["media_type"] == "CAROUSEL_ALBUM" then
      #     uri = URI("https://graph.instagram.com/#{res["id"]}/children?access_token=#{token}")
@@ -165,15 +159,29 @@ class InstagramAuthController < ApplicationController
     # 画像urlのリストをquerystringとして受け取ることにする(とりあえず)
     # image-tableへは、show_imageのviewで行うことにする
     # ここでは、postとimageの関係性を作るだけ
+
     def insert_image_to_post
-      post = Post.find_by(id: params[:id])
-      params[:image_list].each do |url, state|
-        if state == "1" then
-          post.images.create(url: url)
-        end
+      if !current_user then
+        flash[:danger] = 'no user'
+        return redirect_to root_path
       end
-      # postへのリダイレクト
-      redirect_to controller: :post, action: :show, id: post.id
+
+      post = Post.find_by(id: params[:id].to_i)
+      if !post then
+        flash[:danger] = 'this post doesn\'t exist'
+        return redirect_to root_path
+      end
+
+      params[:media].each do |url|
+        post.images.create(url: url)
+      end
+      #params[:image_list].each do |url, state|
+      #  if state == "1" then
+      #    post.images.create(url: url)
+      #  end
+      #end
+      ## postへのリダイレクト
+      redirect_to "posts/#{post.id}/show"
     end
 
 end
