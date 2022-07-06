@@ -3,5 +3,6 @@
 <% if logged_in? %>
   <%= link_to "招待を受け入れる", controller: "projects", action: "invite_create"%>
 <% else %>
-   <%= link_to "Googleでログイン", "/auth/google_oauth2", method: :post %>
+  <% session[:invite_url] = request.fullpath %>
+  <%= link_to "Googleでログイン", "/auth/google_oauth2", method: :post %>
 <% end %>
