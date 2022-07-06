@@ -18,7 +18,17 @@
   <br>
   <br>
   <!--post一覧表示-->
-  <%= render 'posts/show' %>
+  <%#= render 'posts/show' %>
+
+  <%= link_to 'Create Post', new_post_path(project_id: params[:id]) %>
+  <% @posts.each do |post| %>
+      <p class="post_caption">
+        <%= safe_join(post.caption.split("\n"),tag(:br)) %>
+      </p>
+      <%= link_to '投稿詳細', post_path(post.id) %>
+      <%= link_to '投稿を編集', edit_post_path(post.id) %>
+      <%= link_to '投稿を削除', post_path(post.id), :method => :delete, data: {confirm: "削除しますか？"} %>
+  <% end %>
 
 
   <!--作成ボタン-->
