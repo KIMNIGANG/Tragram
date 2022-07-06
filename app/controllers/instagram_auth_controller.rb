@@ -168,12 +168,14 @@ class InstagramAuthController < ApplicationController
 
       post = Post.find_by(id: params[:id].to_i)
       if !post then
+        puts "no posts"
         flash[:danger] = 'this post doesn\'t exist'
         return redirect_to root_path
       end
 
       params[:media].each do |url|
-        post.images.create(url: url)
+        img = Image.create(url: url)
+        post.images << img
       end
       #params[:image_list].each do |url, state|
       #  if state == "1" then
@@ -181,7 +183,8 @@ class InstagramAuthController < ApplicationController
       #  end
       #end
       ## postへのリダイレクト
-      redirect_to "posts/#{post.id}/show"
+      console
+      redirect_to root_path
     end
 
 end
