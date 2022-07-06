@@ -1,7 +1,7 @@
 <h1>your instagram posts</h1>
 <!--image表示-->
 <%if logged_in?%>
-    <form method="get" action="posts/<%= @post_id %>/insert_image">
+    <form method="get" action="/posts/<%= @post_id %>/insert_image">
     <ul>
       <% @media_ls.each do |media|%>
         <li>
