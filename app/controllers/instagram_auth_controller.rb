@@ -3,6 +3,7 @@ class InstagramAuthController < ApplicationController
     require 'uri'
     require 'yaml'
     require 'time'
+    require 'httpx'
 
     def auth
       # /oauth/へのurlをuserに踏ませる
@@ -13,7 +14,7 @@ class InstagramAuthController < ApplicationController
       end
       token = current_user.instagramtoken
       if token != nil then
-        @expires_in = token.expires_in / 60 * 60 * 24
+        @expires_in = token.expires_in / (60 * 60 * 24)
       end
       @redirect_uri = ENV['INST_REDIRECT_URI']
       @client_id = ENV['INST_CLIENT_ID']
@@ -41,13 +42,18 @@ class InstagramAuthController < ApplicationController
 
       
       # long term
+      puts "--long term start--"
       uri = URI.parse("https://graph.instagram.com/access_token")
       p = {"grant_type" => "ig_exchange_token", "client_secret" => ENV['INST_CLIENT_SECRET'], "access_token" => short_token}
       uri.query = URI.encode_www_form(p)
       http = Net::HTTP.new(uri.host, uri.port)
       http.use_ssl = true
-      req = Net::HTTP::Get.new(uri.request_uri)
-      res = http.request(req)
+      res = Net::HTTP.get_response(uri)
+      if res.code != 200 then
+        puts "http error--"
+        puts res.code
+        puts "------------"
+      end
       res = JSON.parse(res.body)
       expires_in = res['expires_in']
       long_token = res["access_token"]
@@ -66,6 +72,36 @@ class InstagramAuthController < ApplicationController
 
       print "-- gettoken fin -"
       redirect_to root_path
+
+    end
+
+    def token_exchange()
+      if !current_user.instagramtoken then
+        flash[:caution] = 'you dont have a instagramtoken'
+        return redirect_to root_path
+      end
+
+      token = current_user.instagramtoken.token
+
+      uri = URI.parse("https://graph.instagram.com/refresh_access_token")
+      p = {"grant_type" => "ig_refresh_token", "access_token" => token}
+      uri.query = URI.encode_www_form(p)
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
+      res = Net::HTTP.get_response(uri)
+      if res.code != 200 then
+        puts "http error--"
+        puts res.code
+        puts "------------"
+      end
+      res = JSON.parse(res.body)
+      expires_in = res['expires_in']
+      long_token = res["access_token"]
+      puts "--long term token fetched--"
+
+      current_user.instagramtoken.update(token: long_token, expires_in: expires_in)
+      puts "token exchanged--"
+      redirect_to "/instagram/auth"
 
     end
 
@@ -117,14 +153,21 @@ class InstagramAuthController < ApplicationController
       # get media urls
       # 完全版は、sliceを消す
       @media_ls = []
-      media.slice(0,4).each do |m|
-      #media.each do |m|
+      #media.slice(0,4).each do |m|
+      uri_li = []
+      media.each do |m|
         uri = URI("https://graph.instagram.com/#{m["id"]}?fields=id,media_url,media_type&access_token=#{token}")
-        begin
-          res = Net::HTTP.get_response(uri).body
-          @media_ls.push(JSON.parse(res))
-        rescue => e
-          puts e
+        uri_li.push(uri)
+      end
+
+      responses = HTTPX.get(*uri_li)
+      responses.each do |res|
+        if res.status == 200 then
+          @media_ls.push(JSON.parse(res.body))
+        else
+          puts "httpx error----"
+          puts res.status
+          puts "---------------"
         end
       end
       pp @media_ls
@@ -184,7 +227,6 @@ class InstagramAuthController < ApplicationController
       #  end
       #end
       ## postへのリダイレクト
-      console
       redirect_to root_path
     end
 
