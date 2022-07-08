@@ -67,5 +67,8 @@ gem 'figaro'
 #localhostのhttps化
 gem 'thin'
 
+gem 'geocoder'
+
 #fontawesomeの使用
 gem 'font-awesome-sass'
+
