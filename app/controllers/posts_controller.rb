@@ -51,7 +51,7 @@ class PostsController < ApplicationController
 
   def post_params
     #悪意あるユーザからの情報を受け取らないように
-    params.require(:post).permit(:caption)
+    params.require(:post).permit(:caption, :image)
   end
 
   def post_update_params

@@ -66,3 +66,7 @@ gem 'thin'
 
 #fontawesomeの使用
 gem 'font-awesome-sass'
+
+#cloudinary
+gem 'cloudinary'
+gem 'carrierwave'

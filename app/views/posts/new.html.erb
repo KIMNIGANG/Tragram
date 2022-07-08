@@ -4,6 +4,7 @@
     <div>
       <%= f.label :キャプションを入力%><br>
       <%= f.text_area :caption, autofocus: true %>
+      <%= f.file_field :image %>
     </div>
   <%= f.submit %>
 <% end %>
