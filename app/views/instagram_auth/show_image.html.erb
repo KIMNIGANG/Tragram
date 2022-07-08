@@ -1,29 +1,40 @@
 <h1>your instagram posts</h1>
 <!--image表示-->
-<%if logged_in?%>
-    <form method="get" action="/posts/<%= @post_id %>/insert_image">
-    <ul>
-      <% @media_ls.each do |media|%>
-        <li>
-        <input type="checkbox" name = "media[]" value = <%= media['media_url'] + "," + media['media_type'] %>>
+<% if logged_in? %>
 
-          <label for="media">
-            <% if media['media_type'] == 'IMAGE' then %>
-              <img src = <%= media['media_url'] %>>
-            <% else %>
-              <video controls autoplay name="media">
-                <source src=<%=media['media_url']%> type="video/mp4">
-              </video>
-            <% end %>
-          </label>
+<form method="get" action="/posts/<%= @post_id %>/insert_image">
+  <ul><% @albums.each do |album| %>
+      <ul id="album"><% album.each do |media| %>
+      <input type="checkbox" name = "media[]" value = <%= media['url'] + "," + media['media_type'] %>>
+      <li><label for="media">
 
-        </input>
-        </li>
+      <% if media['media_type'] == 'IMAGE' then %>
+        <img src=<%= media['url'] %> height="200">
+      <% else %>
+        <video controls autoplay name="media" height="200">
+        <source src=<%= media['url'] %> type="video/mp4">
+        </video>
       <% end %>
-    </ul>
+
+      </label></li>
+      </input>
+    <% end %></ul>
+  <% end %></ul>
+
   <input type="submit" value="画像を使う"/>
-  </form>
+</form>
+
+<style>
+  ul#album{
+    display: flex;
+    justify-content: center;
+  }
+
+  li {
+    list-style: none;
+  }
+</style>
 
 
-<%end%>
+<% end %>
 
