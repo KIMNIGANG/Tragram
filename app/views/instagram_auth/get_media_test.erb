@@ -1,0 +1,20 @@
+<pre>
+  <%= @profile.inspect %>
+  <%= @media.inspect %>
+  <%= @mediaurl.inspect %>
+  <%= @refreshed.inspect %>
+  <%= @caption.inspect %>
+  <%= @mediaurl2.inspect %>
+  <%# <%= image_tag(@mediaurl) %> %>
+
+  <% @mediaurl_v.each do |url| %>
+   <%# <%= image_tag(url) %> %>
+   <%= video_tag(url, controls: true, width: '50%')%>
+  <% end  %>  
+
+  <% @mediaurl_i.each do |url| %>
+   <%= image_tag(url, width: '50%') %>
+
+  <% end  %>
+  
+</pre>
