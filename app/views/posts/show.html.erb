@@ -1,15 +1,18 @@
 <!--project内にpostをrender-->
+
+<% @post.images.each do |media| %>
+  <% if media.media_type == 'IMAGE' then %>
+    <img src = <%= media.url %>>
+  <% else %>
+    <video controls autoplay name="media">
+      <source src=<%= media.url %> type="video/mp4">
+    </video>
+  <% end %>
+<% end %>
+
 <%= link_to '投稿を編集', edit_post_path(@post.id) %>
 <%= link_to '投稿を削除', post_path(@post.id), :method => :delete, data: {confirm: "削除しますか？"} %>
 
-<% @post.images.each |media| %>
-<% if media.media_type == 'IMAGE' then %>
-  <img src = <%= media.url %>>
-<% else %>
-  <video controls autoplay name="media">
-    <source src=<%= media.url %> type="video/mp4">
-  </video>
-<% end %>
 
 <%= link_to 'get media from instagram', controller: "instagram_auth", action: "show_image", id: @post.id %>
 
