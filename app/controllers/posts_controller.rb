@@ -26,6 +26,11 @@ class PostsController < ApplicationController
     redirect_to controller: :projects, action: :show, id: post.project_id
   end
 
+  def show
+    @post = Post.find_by(id: params[:id])
+    # member check
+  end
+
   def edit()
     @post = Post.find(params[:id])
     #if !@project.users.include?(current_user) then
