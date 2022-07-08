@@ -7,6 +7,7 @@ class SessionsController < ApplicationController
     end
     if session[:invite_url].present?
         redirect_to session[:invite_url]
+        session.delete(:invite_url)
     else
        redirect_to root_path
     end
