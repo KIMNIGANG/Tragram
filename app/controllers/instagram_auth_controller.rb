@@ -105,23 +105,70 @@ class InstagramAuthController < ApplicationController
 
     end
 
-    def get_media_url(media_id, token)
+    def get_media(token, *ids)
       # ------------------
       # private method
       # ------------------
-      uri = URI("https://graph.instagram.com/#{media_id}?fields=media_url&access_token=#{token}")
+      uri_ls = []
+      ids.each do |id|
+        uri_ls.push(URI("https://graph.instagram.com/#{id}?fields=id,media_url,media_type&access_token=#{token}"))
+      end
+      ret = []
       begin
-        resp = Net::HTTP.get_response(uri).body
-        resp = JSON.parse(resp)
+        responses = HTTPX.get(*uri_ls)
+        responses.each do |res|
+          body = JSON.parse(res)
+          ret.push(body)
+        end
       rescue => e
         puts e
       end
-      return resp["media_url"]
+
+      puts "get_media--ret#{ret}"
+      return ret
     end
+
+    def get_album(token, id)
+      # private
+      # I token, media_id(of an album)
+      # O list of media from a album
+      media_ls = []
+      uri = URI("https://graph.instagram.com/#{id}/children?access_token=#{token}")
+      begin
+        res = HTTPX.get(uri)
+        body = JSON.parse(res)
+      rescue => e
+        puts e
+      end
+
+      ids = []
+      body["data"].each do |media|
+        ids.push(media["id"])
+      end
+
+      album = []
+      res = get_media(token, *ids)
+      res.each do |media|
+        case media['media_type']
+        when 'IMAGE' then
+          album.push( { "url" => media['media_url'], "media_type" => "IMAGE" } )
+        when 'VIDEO' then
+          album.push( { "url" => media['media_url'], "media_type" => "VIDEO" } )
+        end
+      end
+      return album
+    end
+
 
     def show_image
       # insert_imageからpostにリダイレクトする用に使用
       # insert actionへのformにこれを仕込む
+      #
+      #
+      # @albums = [
+      #            album [
+      #              media { media_type: hoge, url: hoge }]]
+      #
       if !current_user then
         flash[:caution] = 'not valid user'
         redirect_to root_path
@@ -129,14 +176,12 @@ class InstagramAuthController < ApplicationController
 
       token = current_user.instagramtoken.token
       @post_id = params[:id]
-      @image_urls = Hash.new
-      @video_urls = Hash.new
+      @albums = []
 
-      # get media ids
+      # get ids from "me"
       uri = URI("https://graph.instagram.com/me/media?fields=id&access_token=#{token}")
-      puts "fetching....."
+      puts "fetching from \"me\"....."
       begin
-        "parsing-----"
         res = Net::HTTP.get_response(uri).body
         res = JSON.parse(res)
       rescue => e
@@ -149,53 +194,33 @@ class InstagramAuthController < ApplicationController
         flash[:danger] = 'no media found'
         return redirect_to root_path
       end
+      # get ids from "me" FIN
 
       # get media urls
-      # 完全版は、sliceを消す
-      @media_ls = []
+      ids = []
       #media.slice(0,4).each do |m|
-      uri_li = []
       media.each do |m|
-        uri = URI("https://graph.instagram.com/#{m["id"]}?fields=id,media_url,media_type&access_token=#{token}")
-        uri_li.push(uri)
+        ids.push(m['id'])
       end
 
-      responses = HTTPX.get(*uri_li)
-      responses.each do |res|
-        if res.status == 200 then
-          @media_ls.push(JSON.parse(res.body))
+      all_media = get_media(token, *ids)
+
+
+      all_media.each do |media|
+        if media['media_type'] == 'CAROUSEL_ALBUM' then
+          @albums.push(get_album(token, media["id"]))
         else
-          puts "httpx error----"
-          puts res.status
-          puts "---------------"
+          case media['media_type']
+          when 'IMAGE' then
+            @albums.push( [{ "url" => media['media_url'], "media_type" => "IMAGE" }] )
+          when 'VIDEO' then
+            @albums.push( [{ "url" => media['media_url'], "media_type" => "VIDEO" }] )
+          end
         end
       end
-      pp @media_ls
 
-      # albumはあとで考えよう
-      #media_ls.each do |media|
-      #  if media['media_type'] == 'CAROUSEL_ALBUM' then
-
-      #  end
-      #end
-      #
-        # albumの場合は、各写真や動画に応じてurlを取得する必要がある
-     #   if res["media_type"] == "CAROUSEL_ALBUM" then
-     #     uri = URI("https://graph.instagram.com/#{res["id"]}/children?access_token=#{token}")
-     #     begin
-     #       in_res = Net::HTTP.get_response(uri).body
-     #       in_res = JSON.parse(res)
-     #       data = in_res["data"]
-     #     rescue => e
-     #       puts e
-     #     end
-     #     data.each{|d| @image_urls[res["id"]] = get_media_url(d["id"], token)}
-     #   else
-     #     # non album
-     #     @image_urls[res["id"]] = res["media_url"]
-     #   end
-     # end
-
+      puts "albums----"
+      pp @albums
     end
 
     # 画像urlをそのpostのテーブルに追加
