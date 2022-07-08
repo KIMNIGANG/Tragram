@@ -52,11 +52,27 @@ function initAutocomplete() {
     zoom: 14,
     mapTypeId: "roadmap",
   });
-  document.getElementById("clear-pin").addEventListener("click", () => {
+
+  document.getElementById("set-pin").addEventListener("click", () => {
     // Clear out the old markers.
-    markers.forEach(function (marker) {
-      marker.setMap(null);
+    place_geo.forEach(function (t) {
+      console.log(t.lat);
+      markers.push(
+        new google.maps.Marker({
+          map: map,
+          icon: "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png",
+          title: t.name,
+          position: { lat: t.lat, lng: t.lng },
+          animation: google.maps.Animation.DROP,
+        })
+      );
     });
+  });
+
+  marker.addListener("click", function () {
+    infoWindow.close();
+    infoWindow.setContent(marker.getTitle());
+    infoWindow.open(marker.getMap(), marker);
   });
   // Create the search box and link it to the UI element.
   const input = document.getElementById("pac-input");
@@ -70,6 +86,12 @@ function initAutocomplete() {
   // Listen for the event fired when the user selects a prediction and retrieve
   // more details for that place.
   searchBox.addListener("places_changed", function () {
+    document.getElementById("clear-pin").addEventListener("click", () => {
+      // Clear out the old markers.
+      markers.forEach(function (marker) {
+        marker.setMap(null);
+      });
+    });
     var places = searchBox.getPlaces();
     if (places.length == 0) {
       return;
@@ -83,7 +105,7 @@ function initAutocomplete() {
         return;
       }
       var icon = {
-        url: "https://scontent-nrt1-1.cdninstagram.com/v/t51.29350-15/258823875_270739555103304_3835609014813359582_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=8ae9d6&_nc_ohc=EMPOlnffk1sAX9vd1Ov&_nc_ht=scontent-nrt1-1.cdninstagram.com&edm=ANQ71j8EAAAA&oh=00_AT-crU78purMnEZATrVlk-yCA1IPf6B0J2NOVjKPuUnivA&oe=62C2B1FA",
+        url: place.icon, //ここをinstagramの写真のurlに交換することで、写真をピンとして使える
         size: new google.maps.Size(71, 71),
         origin: new google.maps.Point(0, 0),
         anchor: new google.maps.Point(17, 34),
