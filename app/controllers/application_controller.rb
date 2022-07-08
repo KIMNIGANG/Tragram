@@ -4,7 +4,8 @@ class ApplicationController < ActionController::Base
 
   def check_logged_in
     return if current_user
-
+    return if '/projects/:id/invite'
     redirect_to root_path
   end
+
 end

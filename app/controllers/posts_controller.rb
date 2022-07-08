@@ -34,10 +34,8 @@ class PostsController < ApplicationController
     #end
   end
 
- # 後で　viewも一緒に
+
   def update()
-  # params: name, caption
-  # フォーム送信でアクション発火
     post = Post.find(params[:id])
     if !post then
       flash[:caution] = 'no post found'
