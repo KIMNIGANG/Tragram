@@ -1,4 +1,4 @@
 class Image < ApplicationRecord
-  belongs_to :posts
-  mount_uploader :image, ImageUploader
+  has_many :post_images
+  has_many :posts, through: :post_images
 end

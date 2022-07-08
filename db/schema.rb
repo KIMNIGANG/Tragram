@@ -10,10 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_06_22_144348) do
+ActiveRecord::Schema.define(version: 2022_07_08_083138) do
 
   create_table "images", force: :cascade do |t|
     t.string "url"
+    t.string "media_type"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "instagramtokens", force: :cascade do |t|
+    t.integer "user_id"
+    t.string "token"
+    t.integer "expires_in"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "post_images", force: :cascade do |t|
+    t.integer "image_id"
+    t.integer "post_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -23,6 +39,7 @@ ActiveRecord::Schema.define(version: 2022_06_22_144348) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "project_id"
+    t.string "image"
   end
 
   create_table "projects", force: :cascade do |t|
@@ -32,7 +49,14 @@ ActiveRecord::Schema.define(version: 2022_06_22_144348) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "user_project", force: :cascade do |t|
+  create_table "user_instagramtokens", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "instagramtoken_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "user_projects", force: :cascade do |t|
     t.integer "user_id"
     t.integer "project_id"
     t.datetime "created_at", precision: 6, null: false

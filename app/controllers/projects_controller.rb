@@ -23,6 +23,7 @@ class ProjectsController < ApplicationController
       project = Project.create(projects_params)
       project.save
       user_project = UserProject.create(user_id: @current_user.id, project_id: project.id)
+      user_project.save
       redirect_to action: :show, id: project.id
       #redirect_to controller: :users, action: :show, id: @current_user.id
     else
@@ -65,6 +66,20 @@ class ProjectsController < ApplicationController
       flash[:caution] = "coudln't destroy project"
     end
     redirect_to controller: :users, action: :show, id: @current_user.id
+  end
+
+  def invite
+    @invite = UserProject.new
+  end
+
+  def invite_create
+    if UserProject.exists?(user_id: @current_user.id, project_id: params[:id])
+      redirect_to action: :show, id: params[:id]
+    else
+      invite = UserProject.create(user_id: @current_user.id, project_id: params[:id])
+      invite.save
+      redirect_to action: :show, id: invite.project_id
+    end
   end
 
 end

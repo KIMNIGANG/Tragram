@@ -3,3 +3,9 @@
     <%= f.text_area :caption %>
     <%= f.submit %>
   <% end %>
+  <!--
+    <%# @post.images.each do |image| %>
+      <img src=<%#= image['url'] %> height="300">
+    <%# end %>
+  -->
+    <%= link_to "get media from instagram", controller: "instagram_auth", action: "show_image", id: @post.id %>

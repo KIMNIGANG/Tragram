@@ -15,15 +15,19 @@ Rails.application.routes.draw do
   resources :sessions, only: %i[create destroy]
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html'
   #
-  get '/projects/:id', to: 'projects#show'
-  post '/projects/:id', to: 'projects#update'
+  get '/projects/:id/invite', to: 'projects#invite'
+  get '/projects/invite_create/:id', to: 'projects#invite_create'
   resources :projects, only: %i[destroy create edit update show]
   resources :users, only: %i[show new destroy create]
   resources :posts, only: %i[show create destroy edit update new]
 
 
   #post 'projects/create',as:"projects"
-  get '/instagram_index' => 'instagram_auth#index'
+  get '/instagram/auth' => 'instagram_auth#auth'
   get '/authpass' => 'instagram_auth#get_token'
+  get '/instagram/exchange_token' => 'instagram_auth#token_exchange'
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+  #
+  get '/instagram/show_image' => 'instagram_auth#show_image'
+  get'/posts/:id/insert_image/', to: 'instagram_auth#insert_image_to_post'
 end

@@ -26,6 +26,11 @@ class PostsController < ApplicationController
     redirect_to controller: :projects, action: :show, id: post.project_id
   end
 
+  def show
+    @post = Post.find_by(id: params[:id])
+    # member check
+  end
+
   def edit()
     @post = Post.find(params[:id])
     #if !@project.users.include?(current_user) then
@@ -34,10 +39,8 @@ class PostsController < ApplicationController
     #end
   end
 
- # 後で　viewも一緒に
+
   def update()
-  # params: name, caption
-  # フォーム送信でアクション発火
     post = Post.find(params[:id])
     if !post then
       flash[:caution] = 'no post found'

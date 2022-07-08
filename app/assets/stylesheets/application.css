@@ -22,3 +22,9 @@ header {
   right: 0;
   padding-right: 20px;
 }
+
+.header_btn {
+  position: absolute;
+  right: 0;
+  padding-right: 20px;
+}
