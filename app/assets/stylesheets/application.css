@@ -22,3 +22,9 @@ header {
   right: 0;
   padding-right: 20px;
 }
+
+.btn {
+  position: absolute;
+  right: 0;
+  padding-right: 20px;
+}
