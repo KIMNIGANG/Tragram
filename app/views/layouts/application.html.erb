@@ -18,11 +18,11 @@
       <% if current_user %>
         こんにちは、<%= current_user.name %>さん
         <br>
-        <%= link_to user_path(@current_user), class: "btn" do %>
+        <%= link_to user_path(@current_user), class: "btn header_btn" do %>
           <i class="fa-solid fa-circle-user"></i> My page
         <% end %>
         <br>
-        <%= link_to log_out_path, class: "btn" do %>
+        <%= link_to log_out_path, class: "btn header_btn" do %>
           <i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out
         <% end %>
 
