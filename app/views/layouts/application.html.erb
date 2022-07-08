@@ -1,3 +1,4 @@
+<!--共通部分-->
 <!DOCTYPE html>
 <html>
   <head>
@@ -8,17 +9,28 @@
 
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <script src="https://kit.fontawesome.com/b86936315f.js" crossorigin="anonymous"></script>
   </head>
 
   <body>
     <header>
+      <div>
       <% if current_user %>
-        <%= current_user.name %>さん
-        <%= link_to "ログアウト", log_out_path %>
+        こんにちは、<%= current_user.name %>さん
+        <br>
+        <%= link_to user_path(@current_user), class: "btn header_btn" do %>
+          <i class="fa-solid fa-circle-user"></i> My page
+        <% end %>
+        <br>
+        <%= link_to log_out_path, class: "btn header_btn" do %>
+          <i class="fa-solid fa-arrow-right-from-bracket"></i> Log Out
+        <% end %>
+
       <% else  %>
         ゲストさん
         <%= link_to "Googleでログイン", "/auth/google_oauth2", method: :post %>
       <% end %>
+      </div>
     </header>
     <%= yield %>
   </body>
