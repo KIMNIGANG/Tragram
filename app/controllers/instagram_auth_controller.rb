@@ -1,95 +1,233 @@
 class InstagramAuthController < ApplicationController
     require 'net/http'
     require 'uri'
-    def index
-      @redirect_uri=ENV['INST_REDIRECT_URI']
+    require 'yaml'
+    require 'time'
+    require 'httpx'
+
+    def auth
+      # /oauth/へのurlをuserに踏ませる
+      # token持ってない時は、
+      if !current_user then
+        flash[:caution] = 'user doesnt exist'
+        redirect_to root_path
+      end
+      token = current_user.instagramtoken
+      if token != nil then
+        @expires_in = token.expires_in / (60 * 60 * 24)
+      end
+      @redirect_uri = ENV['INST_REDIRECT_URI']
+      @client_id = ENV['INST_CLIENT_ID']
+
+      # instagram -> get_tokenへとリダイレクトされる
     end
 
-    def create
-      @code = params[:code]
-    end
 
-    def get_token   #最初のアクセストークンをもらってきて、ENVファイルの中に書き込む
+    def get_token
+      # '/authpass'
+      # redirect from instagram with code
+
+      # short term
       uri = URI.parse('https://api.instagram.com/oauth/access_token')
-      http = Net::HTTP.new(uri.host, uri.port)
-      request = Net::HTTP::Post.new(uri.request_uri)
-      request.set_form_data({
-        "client_id" => "#{ENV['INST_CLIENT_ID']}",
-        "client_secret" => "#{ENV['INST_CLIENT_SECRET']}",
+      res = Net::HTTP.post_form(uri,
+      { "client_id" => ENV['INST_CLIENT_ID'],
+        "client_secret" => ENV['INST_CLIENT_SECRET'],
         "grant_type" => "authorization_code",
-        "redirect_uri" => "#{ENV['INST_REDIRECT_URI']}",
-        "code" => params[:code],
-        })    
-        Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
-          res = http.request(request).body
-        res = JSON.parse(res)
-        @response = res["access_token"] #この中にaccesstokenが入っている（"{\"access_token\": \"IGQVJW・・・EMXR93\", \"user_id\": 1784・・・3807}")
-        end
-        
-        uri = URI("https://graph.instagram.com/access_token?grant_type=ig_exchange_token&client_secret=#{ENV['INST_CLIENT_SECRET']}&access_token=#{@response}")   #長期トークンに交換
-        resp = Net::HTTP.get_response(uri).body
-        resp = JSON.parse(resp)
-        @token = resp["access_token"] 
+        "redirect_uri" => ENV['INST_REDIRECT_URI'],
+        "code" => params[:code]
+      })
 
-        #accesstokenをファイルに書き込み（次回からはENVから読み込む）
-        File.open("config/application.yml","r+") { |f|
-          f.write "USER_TOKEN: #{@token}"
-        }
+      res = JSON.parse(res.body)
+      short_token = res["access_token"]
+
+      
+      # long term
+      puts "--long term start--"
+      uri = URI.parse("https://graph.instagram.com/access_token")
+      p = {"grant_type" => "ig_exchange_token", "client_secret" => ENV['INST_CLIENT_SECRET'], "access_token" => short_token}
+      uri.query = URI.encode_www_form(p)
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
+      res = Net::HTTP.get_response(uri)
+      if res.code != 200 then
+        puts "http error--"
+        puts res.code
+        puts "------------"
+      end
+      res = JSON.parse(res.body)
+      expires_in = res['expires_in']
+      long_token = res["access_token"]
+      puts "--long term token fetched--"
+
+
+      # user tokenの書き換え
+      if !current_user.instagramtoken then
+        puts "create new instagramtoken instance=========="
+        token_instance = Instagramtoken.create(token: long_token, expires_in: expires_in)
+        current_user.instagramtoken = token_instance
+      else
+        puts "update instagramtoken instance===="
+        current_user.instagramtoken.update(token: long_token, expires_in: expires_in)
+      end
+
+      print "-- gettoken fin -"
+      redirect_to root_path
 
     end
 
-    def get_media_test
-        #userのidとusernameを取ってくる
-        uri = URI("https://graph.instagram.com/me?fields=id,username&access_token=#{ENV['USER_TOKEN']}")
+    def token_exchange()
+      if !current_user.instagramtoken then
+        flash[:caution] = 'you dont have a instagramtoken'
+        return redirect_to root_path
+      end
+
+      token = current_user.instagramtoken.token
+
+      uri = URI.parse("https://graph.instagram.com/refresh_access_token")
+      p = {"grant_type" => "ig_refresh_token", "access_token" => token}
+      uri.query = URI.encode_www_form(p)
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
+      res = Net::HTTP.get_response(uri)
+      if res.code != 200 then
+        puts "http error--"
+        puts res.code
+        puts "------------"
+      end
+      res = JSON.parse(res.body)
+      expires_in = res['expires_in']
+      long_token = res["access_token"]
+      puts "--long term token fetched--"
+
+      current_user.instagramtoken.update(token: long_token, expires_in: expires_in)
+      puts "token exchanged--"
+      redirect_to "/instagram/auth"
+
+    end
+
+    def get_media_url(media_id, token)
+      # ------------------
+      # private method
+      # ------------------
+      uri = URI("https://graph.instagram.com/#{media_id}?fields=media_url&access_token=#{token}")
+      begin
         resp = Net::HTTP.get_response(uri).body
         resp = JSON.parse(resp)
-        @profile = resp["id"]   #resp["@@"]に変えることでuser@@をとれる (username or id or ...)
+      rescue => e
+        puts e
+      end
+      return resp["media_url"]
+    end
 
-        #userのメディアidを取ってくる (写真のid)
-        uri = URI("https://graph.instagram.com/me/media?fields=id,caption&access_token=#{ENV['USER_TOKEN']}")
-        resp = Net::HTTP.get_response(uri).body
-        resp = JSON.parse(resp)
-        @media = resp["data"][1]["id"] 
+    def show_image
+      # insert_imageからpostにリダイレクトする用に使用
+      # insert actionへのformにこれを仕込む
+      if !current_user then
+        flash[:caution] = 'not valid user'
+        redirect_to root_path
+      end
 
-        #写真のメディアデータを取ってくる
-        uri = URI("https://graph.instagram.com/#{@media}?fields=id,media_url&access_token=#{ENV['USER_TOKEN']}")
-        resp = Net::HTTP.get_response(uri).body
-        resp = JSON.parse(resp)
-        @mediaurl = resp["media_url"]
+      token = current_user.instagramtoken.token
+      @post_id = params[:id]
+      @image_urls = Hash.new
+      @video_urls = Hash.new
 
-        uri = URI("https://graph.instagram.com/#{@media}/children?access_token=#{ENV['USER_TOKEN']}")
-        resp = Net::HTTP.get_response(uri).body
-        resp = JSON.parse(resp)
-        @caption = resp["data"][0]["id"]
-        @array_item = resp["data"]
+      # get media ids
+      uri = URI("https://graph.instagram.com/me/media?fields=id&access_token=#{token}")
+      puts "fetching....."
+      begin
+        "parsing-----"
+        res = Net::HTTP.get_response(uri).body
+        res = JSON.parse(res)
+      rescue => e
+        puts e
+      end
+      media = res["data"]
+      # res = {data: [{id: hoge}, {id: foo},,,]}
 
-        @mediaurl_v = []  #videoのurlが入る配列
-        @mediaurl_i = []  #imgのurlが入る配列
-        @array_item.each{|t|
-          uri = URI("https://graph.instagram.com/#{t["id"]}?fields=id,media_url&access_token=#{ENV['USER_TOKEN']}")
-          resp = Net::HTTP.get_response(uri).body
-          resp = JSON.parse(resp)
-          media_url = resp["media_url"]
-          if media_url[8] == "v"
-            @mediaurl_v.push(resp["media_url"])  
-          else
-            @mediaurl_i.push(resp["media_url"])
-          end
-        }
+      if media == nil then
+        flash[:danger] = 'no media found'
+        return redirect_to root_path
+      end
 
-        # uri = URI("https://graph.instagram.com/#{@caption}?fields=id,media_url&access_token=#{ENV['USER_TOKEN']}")
-        # resp = Net::HTTP.get_response(uri).body
-        # resp = JSON.parse(resp)
-        # @mediaurl2 = resp["media_url"]
+      # get media urls
+      # 完全版は、sliceを消す
+      @media_ls = []
+      #media.slice(0,4).each do |m|
+      uri_li = []
+      media.each do |m|
+        uri = URI("https://graph.instagram.com/#{m["id"]}?fields=id,media_url,media_type&access_token=#{token}")
+        uri_li.push(uri)
+      end
 
-        #access tokenの期限を延長する
-        # uri = URI("https://graph.instagram.com/refresh_access_token?grant_type=ig_refresh_token&access_token=#{ENV['USER_TOKEN']}")
-        # resp = Net::HTTP.get_response(uri).body
-        # resp = JSON.parse(resp)
-        # @refreshed = resp["access_token"]
-        # File.open("config/application.yml","r+") { |f|
-        #   f.write "USER_TOKEN: #{@refreshed}"
-        # } 
+      responses = HTTPX.get(*uri_li)
+      responses.each do |res|
+        if res.status == 200 then
+          @media_ls.push(JSON.parse(res.body))
+        else
+          puts "httpx error----"
+          puts res.status
+          puts "---------------"
+        end
+      end
+      pp @media_ls
+
+      # albumはあとで考えよう
+      #media_ls.each do |media|
+      #  if media['media_type'] == 'CAROUSEL_ALBUM' then
+
+      #  end
+      #end
+      #
+        # albumの場合は、各写真や動画に応じてurlを取得する必要がある
+     #   if res["media_type"] == "CAROUSEL_ALBUM" then
+     #     uri = URI("https://graph.instagram.com/#{res["id"]}/children?access_token=#{token}")
+     #     begin
+     #       in_res = Net::HTTP.get_response(uri).body
+     #       in_res = JSON.parse(res)
+     #       data = in_res["data"]
+     #     rescue => e
+     #       puts e
+     #     end
+     #     data.each{|d| @image_urls[res["id"]] = get_media_url(d["id"], token)}
+     #   else
+     #     # non album
+     #     @image_urls[res["id"]] = res["media_url"]
+     #   end
+     # end
+
+    end
+
+    # 画像urlをそのpostのテーブルに追加
+    # 画像urlのリストをquerystringとして受け取ることにする(とりあえず)
+    # image-tableへは、show_imageのviewで行うことにする
+    # ここでは、postとimageの関係性を作るだけ
+
+    def insert_image_to_post
+      if !current_user then
+        flash[:danger] = 'no user'
+        return redirect_to root_path
+      end
+
+      post = Post.find_by(id: params[:id].to_i)
+      if !post then
+        puts "no posts"
+        flash[:danger] = 'this post doesn\'t exist'
+        return redirect_to root_path
+      end
+
+      params[:media].each do |url_type|
+        out = url_type.split(",")
+        img = Image.create(url: out[0], media_type: out[1])
+        post.images << img
+      end
+      #params[:image_list].each do |url, state|
+      #  if state == "1" then
+      #    post.images.create(url: url)
+      #  end
+      #end
+      ## postへのリダイレクト
+      redirect_to root_path
     end
 
 end

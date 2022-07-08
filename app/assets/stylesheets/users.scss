@@ -1,3 +1,39 @@
 // Place all the styles related to the Users controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: https://sass-lang.com/
+
+h1 {
+  text-align: center;
+}
+
+div {
+  &.project {
+
+    border: solid 1px gray;
+    border-radius: 5px;
+    margin: 50px 400px 0px 400px;
+    padding: 10px;
+
+
+    a {
+      &.project_name {
+        font-size: 30px;
+      }
+    }
+
+  }
+
+  &.create_form_container {
+    display: flex;
+    justify-content: center;
+    border: solid 1px gray;
+    border-radius: 5px;
+    margin: 50px 400px 0px 400px;
+    padding: 20px;
+
+    .create_form_child {
+      text-align: center;
+
+    }
+  }
+}

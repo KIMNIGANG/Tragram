@@ -1,0 +1,45 @@
+<!--projectページ-->
+<%if logged_in?%>
+  <!--metadata-->
+  <h1 class="project_name"><%= @project.name%></h1>
+  <p class="project_caption"><%= @project.caption%></p>
+
+  <div class="project_btns">
+  <%= link_to edit_project_path(@project.id), class: "btn" do %>
+    <i class="fa-solid fa-pen-to-square"></i>旅行詳細を編集
+  <% end %>
+
+  <%= link_to project_path(@project.id), class: "btn destroy", :method => :delete, data: {confirm: "旅行ページを削除しますか？一度削除すると元に戻すことができません"} do %>
+    <i class="fa-solid fa-trash-alt"></i>旅行ページを削除
+  <% end %>
+  </div>
+
+  <details>
+    <summary>招待リンクを表示</summary>
+    <p>https://localhost:3001/projects/<%= params[:id] %>/invite</p>
+  </details>
+
+
+
+  <br>
+  <br>
+  <!--post一覧表示-->
+  <%#= render 'posts/show' %>
+
+  <%= link_to 'Create Post', new_post_path(project_id: params[:id]) %>
+  <% @posts.each do |post| %>
+      <p class="post_caption">
+        <%= safe_join(post.caption.split("\n"),tag(:br)) %>
+      </p>
+      <%= link_to '投稿詳細', post_path(post.id) %>
+      <%#= link_to '投稿を編集', edit_post_path(post.id) %>
+      <%#= link_to '投稿を削除', post_path(post.id), :method => :delete, data: {confirm: "削除しますか？"} %>
+  <% end %>
+
+
+  <!--作成ボタン-->
+  <!-- 作成してあるページに飛ぶ感じ -->
+  <!-- redirectto create_post-->
+  <%#= button_to "新規作成", controller: 'posts', action: 'create', params: {id: @project.id}, method: "get" %>
+
+<% end %>
