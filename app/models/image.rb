@@ -1,3 +1,4 @@
 class Image < ApplicationRecord
-  belongs_to :posts
+  has_many :post_images
+  has_many :posts, through: :post_images
 end
