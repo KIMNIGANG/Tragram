@@ -54,7 +54,6 @@ function initAutocomplete() {
   });
 
   document.getElementById("set-pin").addEventListener("click", () => {
-    // Clear out the old markers.
     place_geo.forEach(function (t) {
       console.log(t.lat);
       markers.push(
