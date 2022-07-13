@@ -44,6 +44,10 @@
   </body>
 </html>
 
+<%= @location.lng %>
+<%= @location.lat %>
+<%= @location.name %>
+
 <%= link_to '投稿を編集', edit_post_path(@post.id) %>
 <%= link_to '投稿を削除', post_path(@post.id), :method => :delete, data: {confirm: "削除しますか？"} %>
 
