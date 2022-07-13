@@ -7,12 +7,22 @@ class PostsController < ApplicationController
   end
 
   def create
+    if !current_user then
+      flash[:danger] = 'register as a user'
+      puts "no user"
+      return redirect_to root_path
+    end
+
     #formからcaptionを受け取ってレコード作成
     project_id = session[:project_id]
     project = Project.find(session[:project_id])
-    post = project.posts.create(post_params)
-    post.save
-    redirect_to controller: :projects, action: :show, id: post.project_id
+    #post = project.posts.create(post_params)
+    post = Post.create(post_params)
+
+    project.posts << post
+    current_user.posts << post
+
+    return redirect_to controller: :projects, action: :show, id: post.project_id
   end
 
   def destroy()
@@ -65,7 +75,11 @@ class PostsController < ApplicationController
 
   def post_params
     #悪意あるユーザからの情報を受け取らないように
+<<<<<<< HEAD
     params.require(:post).permit(:caption, :image)
+=======
+    params.require(:post).permit(:caption, :name)
+>>>>>>> ede59b0 (title追加. userとpostの関係性add)
   end
 
   def post_update_params

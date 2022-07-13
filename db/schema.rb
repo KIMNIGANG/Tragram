@@ -48,10 +48,12 @@ ActiveRecord::Schema.define(version: 2022_07_08_083138) do
   end
 
   create_table "posts", force: :cascade do |t|
+    t.string "name"
     t.text "caption"
+    t.integer "user_id"
+    t.integer "project_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "project_id"
   end
 
   create_table "projects", force: :cascade do |t|
