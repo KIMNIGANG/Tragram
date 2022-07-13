@@ -104,7 +104,7 @@ function initAutocomplete() {
         return;
       }
       var icon = {
-        url: place.icon, //ここをinstagramの写真のurlに交換することで、写真をピンとして使える
+        url: "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png", //ここをinstagramの写真のurlに交換することで、写真をピンとして使える
         size: new google.maps.Size(71, 71),
         origin: new google.maps.Point(0, 0),
         anchor: new google.maps.Point(17, 34),
@@ -137,6 +137,8 @@ function initAutocomplete() {
       i++;
     });
     map.fitBounds(bounds);
+
+    // ここでデータベースの方にplace_geoをアップデートするコードを作成
   });
 }
 window.initAutocomplete = initAutocomplete;
