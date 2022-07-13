@@ -3,48 +3,15 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 
 const place_geo = [];
-let i = 0;
-let j = 0;
-// var markers = [];
-// var map;
 
 document.getElementById("place-btn").onclick = () => {
-  place_geo.forEach(() => {
+  place_geo.forEach((t) => {
     const place_list = document.getElementById("place-list");
     let str = document.createElement("li");
-    str.innerHTML = `lat: ${place_geo[j].lat}, lng: ${place_geo[j].lng}, name: ${place_geo[j].name}`;
+    str.innerHTML = `lat: ${t.lat}, lng: ${t.lng}, name: ${t.name}`;
     place_list.appendChild(str);
-    j++;
   });
 };
-
-// function drop() {
-//   clearMarkers();
-//   for (var i = 0; i < place_geo.length; i++) {
-//     let pos = { lat: place_geo[i].lat, lng: place_geo[i].lng };
-//     console.log(pos);
-//     addMarkerWithTimeout(pos, i * 200);
-//   }
-// }
-
-// function addMarkerWithTimeout(position, timeout) {
-//   window.setTimeout(function () {
-//     markers.push(
-//       new google.maps.Marker({
-//         position: position,
-//         map: map,
-//         animation: google.maps.Animation.DROP,
-//       })
-//     );
-//   }, timeout);
-// }
-
-// function clearMarkers() {
-//   for (var i = 0; i < markers.length; i++) {
-//     markers[i].setMap(null);
-//   }
-//   markers = [];
-// }
 
 function initAutocomplete() {
   const map = new google.maps.Map(document.getElementById("map"), {
@@ -68,12 +35,6 @@ function initAutocomplete() {
     });
   });
 
-  //marker.addListener("click", function () {
-  //  infoWindow.close();
-  //  infoWindow.setContent(marker.getTitle());
-  //  infoWindow.open(marker.getMap(), marker);
-  //});
-  // Create the search box and link it to the UI element.
   const input = document.getElementById("pac-input");
   const searchBox = new google.maps.places.SearchBox(input);
   map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
@@ -128,13 +89,12 @@ function initAutocomplete() {
       }
       // 場所のlat,lngをもらってくる
       console.log(place.geometry["location"].lat());
-      place_geo[i] = {
+      place_geo.push({
         lat: place.geometry["location"].lat(),
         lng: place.geometry["location"].lng(),
         name: place.name,
-      };
+      });
       console.log(place.geometry["location"].lng());
-      i++;
     });
     map.fitBounds(bounds);
 
