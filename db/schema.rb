@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_07_13_034846) do
+ActiveRecord::Schema.define(version: 2022_07_13_062651) do
 
   create_table "images", force: :cascade do |t|
     t.string "url"
@@ -44,10 +44,12 @@ ActiveRecord::Schema.define(version: 2022_07_13_034846) do
   end
 
   create_table "posts", force: :cascade do |t|
+    t.string "name"
     t.text "caption"
+    t.integer "user_id"
+    t.integer "project_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "project_id"
   end
 
   create_table "projects", force: :cascade do |t|
