@@ -1,16 +1,5 @@
 <!--project内にpostをrender-->
 
-<% @post.images.each do |media| %>
-  <% if media.media_type == 'IMAGE' then %>
-    <img src = <%= media.url %>>
-  <% else %>
-    <video controls autoplay name="media">
-      <source src=<%= media.url %> type="video/mp4">
-      <source src=<%= media.url %> type="video/webm">
-    </video>
-  <% end %>
-<% end %>
-
 <html>
   <head>
     <title>Places Search Box</title>
@@ -19,6 +8,16 @@
     <%= stylesheet_link_tag "map_style.css" %>
   </head>
   <body>
+    <% flash.each do |type, mes| %>
+      <div class="notifications">
+        <!--type = "alert" => 削除できません。-->
+        <div class="<%=type%>"><%=mes%></div>
+      </div>
+    <% end %>
+
+    <h2>title <%= @post.name %></h2>
+    <h3>caption <%= @post.caption %></h3>
+
     <input
       id="pac-input"
       class="controls"
@@ -41,16 +40,27 @@
       src="https://maps.googleapis.com/maps/api/js?key=<%=ENV['GOOGLE_MAP_API_KEY']%>&callback=initAutocomplete&libraries=places&v=weekly"
       defer
     ></script>
+    
+
+
+    <% @post.images.each do |media| %>
+      <% if media.media_type == 'IMAGE' then %>
+        <img src = <%= media.url %>>
+      <% else %>
+        <video controls autoplay name="media">
+          <source src=<%= media.url %> type="video/mp4">
+          <source src=<%= media.url %> type="video/webm">
+        </video>
+      <% end %>
+    <% end %>
   </body>
 </html>
 
-<%# <%= @location.lng %> %>
-<%# <%= @location.lat %> %>
-<%# <%= @location.name %> %>
 
 <%= link_to '投稿を編集', edit_post_path(@post.id) %>
 <%= link_to '投稿を削除', post_path(@post.id), :method => :delete, data: {confirm: "削除しますか？"} %>
 
 
 <%= link_to 'get media from instagram', controller: "instagram_auth", action: "show_image", id: @post.id %>
+
 
