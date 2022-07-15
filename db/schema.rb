@@ -11,8 +11,8 @@
 # It's strongly recommended that you check this file into your version control system.
 
 
-ActiveRecord::Schema.define(version: 2022_07_08_083138) do
 
+ActiveRecord::Schema.define(version: 2022_07_08_083138) do
 
 
   create_table "images", force: :cascade do |t|
@@ -26,6 +26,15 @@ ActiveRecord::Schema.define(version: 2022_07_08_083138) do
     t.integer "user_id"
     t.string "token"
     t.integer "expires_in"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "locations", force: :cascade do |t|
+    t.float "lat"
+    t.float "lng"
+    t.string "name"
+    t.integer "post_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
