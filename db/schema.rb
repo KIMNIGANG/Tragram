@@ -12,8 +12,9 @@
 
 
 
-
 ActiveRecord::Schema.define(version: 2022_07_08_083138) do
+
+
 
 
   create_table "images", force: :cascade do |t|
@@ -55,10 +56,15 @@ ActiveRecord::Schema.define(version: 2022_07_08_083138) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
 <<<<<<< HEAD
+<<<<<<< HEAD
     t.integer "project_id"
     t.string "image"
 =======
 >>>>>>> ede59b0 (title追加. userとpostの関係性add)
+=======
+    t.integer "project_id"
+    t.string "image"
+>>>>>>> c3a4087 (rebase)
   end
 
   create_table "projects", force: :cascade do |t|

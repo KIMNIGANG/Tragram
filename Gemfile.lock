@@ -95,8 +95,6 @@ GEM
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
     erubi (1.10.0)
-    ethon (0.15.0)
-      ffi (>= 1.15.0)
     eventmachine (1.2.7)
     faraday (2.3.0)
       faraday-net_http (~> 2.0)
@@ -120,12 +118,15 @@ GEM
     globalid (1.0.0)
       activesupport (>= 5.0)
     hashie (5.0.0)
+<<<<<<< HEAD
     http-2-next (0.5.0)
     http-accept (1.7.0)
     http-cookie (1.0.5)
       domain_name (~> 0.5)
     httpx (0.19.8)
       http-2-next (>= 0.4.1)
+=======
+>>>>>>> c3a4087 (rebase)
     i18n (1.10.0)
       concurrent-ruby (~> 1.0)
     image_processing (1.12.2)
@@ -271,8 +272,6 @@ GEM
     turbolinks (5.2.1)
       turbolinks-source (~> 5.2)
     turbolinks-source (5.2.0)
-    typhoeus (1.4.0)
-      ethon (>= 0.9.0)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
     unf (0.1.4)
@@ -315,7 +314,6 @@ DEPENDENCIES
 
   font-awesome-sass
   geocoder
-  httpx (~> 0.19.5)
   jbuilder (~> 2.7)
   listen (~> 3.3)
   omniauth-google-oauth2
@@ -329,7 +327,6 @@ DEPENDENCIES
   sqlite3 (~> 1.4)
   thin
   turbolinks (~> 5)
-  typhoeus
   tzinfo-data
   web-console (>= 4.1.0)
   webdrivers
