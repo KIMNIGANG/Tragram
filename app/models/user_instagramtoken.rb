@@ -1,2 +1,0 @@
-class UserInstagramtoken < ApplicationRecord
-end

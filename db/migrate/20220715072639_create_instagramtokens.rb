@@ -3,7 +3,7 @@ class CreateInstagramtokens < ActiveRecord::Migration[6.1]
     create_table :instagramtokens do |t|
       t.integer :user_id
       t.string :token
-      t.integer :expires_in
+      t.timestamp :expires_at
 
       t.timestamps
     end
