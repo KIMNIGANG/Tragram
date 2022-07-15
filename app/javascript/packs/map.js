@@ -69,11 +69,11 @@ function initAutocomplete() {
     });
   });
 
-  marker.addListener("click", function () {
-    infoWindow.close();
-    infoWindow.setContent(marker.getTitle());
-    infoWindow.open(marker.getMap(), marker);
-  });
+  //marker.addListener("click", function () {
+  //  infoWindow.close();
+  //  infoWindow.setContent(marker.getTitle());
+  //  infoWindow.open(marker.getMap(), marker);
+  //});
   // Create the search box and link it to the UI element.
   const input = document.getElementById("pac-input");
   const searchBox = new google.maps.places.SearchBox(input);
