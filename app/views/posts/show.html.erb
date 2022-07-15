@@ -1,5 +1,6 @@
 <!--project内にpostをrender-->
 
+
 <html>
   <head>
     <title>Places Search Box</title>
@@ -27,9 +28,9 @@
     <div id="map"></div>
 
       <button type=button id="place-btn">place list</button>  
-      <ol id="place-list">
+      <div id="place-list">      
 
-      </ol>
+      </div>
 
       <button type=button id="set-pin">set pin</button>  
       <button type=button id="clear-pin">clear pin</button>  
@@ -53,14 +54,16 @@
         </video>
       <% end %>
     <% end %>
+
+    <%= link_to '投稿を編集', edit_post_path(@post.id) %>
+    <%= link_to '投稿を削除', post_path(@post.id), :method => :delete, data: {confirm: "削除しますか？"} %>
+    <%= link_to 'get media from instagram', controller: "instagram_auth", action: "show_image", id: @post.id %>
   </body>
 </html>
 
+<%= @location_lng %>
+<%= @location_lat %>
+<%= @location_name %>
 
-<%= link_to '投稿を編集', edit_post_path(@post.id) %>
-<%= link_to '投稿を削除', post_path(@post.id), :method => :delete, data: {confirm: "削除しますか？"} %>
-
-
-<%= link_to 'get media from instagram', controller: "instagram_auth", action: "show_image", id: @post.id %>
 
 
