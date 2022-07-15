@@ -209,7 +209,9 @@ class InstagramAuthController < ApplicationController
       # get ids from "me" FIN
 
       # get media urls
+
       ids = []
+
       #media.slice(0,4).each do |m|
       media.each do |m|
         ids.push(m['id'])
@@ -257,13 +259,9 @@ class InstagramAuthController < ApplicationController
         img = Image.create(url: out[0], media_type: out[1])
         post.images << img
       end
-      #params[:image_list].each do |url, state|
-      #  if state == "1" then
-      #    post.images.create(url: url)
-      #  end
-      #end
+
       ## postへのリダイレクト
-      redirect_to root_path
+      redirect_to post_path(id: post.id)
     end
 
 end
