@@ -28,7 +28,8 @@
 
   <%= link_to 'Create Post', new_post_path(project_id: params[:id]) %>
   <% @posts.each do |post| %>
-      <p class="post_caption">
+    <p class="post_caption">
+        <%= post.name %></br>
         <%= safe_join(post.caption.split("\n"),tag(:br)) %>
       </p>
       <img src="<%= post.image %>">

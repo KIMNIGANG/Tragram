@@ -3,6 +3,9 @@ class User < ApplicationRecord
   has_many :projects, through: :user_projects
   has_one :instagramtoken
 
+  has_many :user_posts, dependent: :destroy
+  has_many :posts, dependent: :destroy
+
   class << self
     def find_or_create_from_auth_hash(auth_hash)
       user_params = user_params_from_auth_hash(auth_hash)
