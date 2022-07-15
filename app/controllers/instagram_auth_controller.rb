@@ -3,7 +3,6 @@ class InstagramAuthController < ApplicationController
     require 'uri'
     require 'yaml'
     require 'time'
-    require 'httpx'
 
     def auth
       # /oauth/へのurlをuserに踏ませる
@@ -109,24 +108,33 @@ class InstagramAuthController < ApplicationController
       # ------------------
       # private method
       # ------------------
-      uri_ls = []
-      ids.each do |id|
-        uri_ls.push(URI("https://graph.instagram.com/#{id}?fields=id,media_url,media_type&access_token=#{token}"))
-      end
+      # input usertoken, media-ids
+      # output response-bodies list
+
       ret = []
-      begin
-        responses = HTTPX.get(*uri_ls)
-        responses.each do |res|
-          body = JSON.parse(res)
-          ret.push(body)
+      ids.each do |id|
+        th = Thread.new do
+          uri = URI("https://graph.instagram.com/#{id}?fields=id,media_url,media_type&access_token=#{token}")
+          begin
+            res = Net::HTTP.get_response(uri)
+            if !res.is_a?(Net::HTTPOK) then
+              puts "http-error in get_media"
+              return redirect_to root_path
+            end
+            body = JSON.parse(res.body)
+            ret.push(body)
+          rescue => e
+            puts "rescue in get_media----"
+            puts e
+          end
         end
-      rescue => e
-        puts e
+        th.join
       end
 
-      puts "get_media--ret#{ret}"
+      puts "fin get_media--"
       return ret
     end
+
 
     def get_album(token, id)
       # private
@@ -135,8 +143,12 @@ class InstagramAuthController < ApplicationController
       media_ls = []
       uri = URI("https://graph.instagram.com/#{id}/children?access_token=#{token}")
       begin
-        res = HTTPX.get(uri)
-        body = JSON.parse(res)
+        res = Net::HTTP.get_response(uri)
+        if !res.is_a?(Net::HTTPOK) then
+          puts "get_aubum http error---"
+          return redirect_to root_path
+        end
+        body = JSON.parse(res.body)
       rescue => e
         puts e
       end
@@ -202,9 +214,8 @@ class InstagramAuthController < ApplicationController
       media.each do |m|
         ids.push(m['id'])
       end
-
+      puts "get_media start"
       all_media = get_media(token, *ids)
-
 
       all_media.each do |media|
         if media['media_type'] == 'CAROUSEL_ALBUM' then
