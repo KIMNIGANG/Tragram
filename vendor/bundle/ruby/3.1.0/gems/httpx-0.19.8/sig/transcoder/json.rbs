@@ -1,0 +1,23 @@
+module HTTPX::Transcoder
+  module JSON
+    JSON_REGEX: Regexp
+
+    def self?.encode: (_ToJson json) -> Encoder
+    def self?.decode: (HTTPX::Response response) -> _Decoder
+
+    class Encoder
+      extend Forwardable
+      include _Encoder
+      include _ToS
+
+      @raw: String
+      @charset: String
+
+      def content_type: () -> String
+
+      private
+
+      def initialize: (_ToJson json) -> untyped
+    end
+  end
+end

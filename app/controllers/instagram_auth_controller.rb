@@ -199,6 +199,11 @@ class InstagramAuthController < ApplicationController
         redirect_to root_path
       end
 
+      if !current_user.instagramtoken then
+        flash[:alert] = 'instagramアカウントを連携していません'
+        redirect_to '/instagram' and return
+      end
+
       token = current_user.instagramtoken.token
       @post_id = params[:id]
       @albums = []

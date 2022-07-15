@@ -1,0 +1,104 @@
+module HTTPX
+  class Connection
+    interface _Parser
+
+      def on: (Symbol) { (*untyped) -> void } -> void
+      def empty?: () -> bool
+      # def exhausted?: () -> bool
+      def close: () -> void
+      def consume: () -> void
+      def <<: (string) -> void
+      # def send: (Request) -> void
+      # def ping: () -> void
+      # def timeout: () -> (Integer | Float)
+
+    end
+
+    extend Forwardable
+    include Loggable
+    include Callbacks
+    include HTTPX::Registry[String, Class]
+
+    BUFFER_SIZE: Integer
+
+    attr_reader origin: URI::Generic
+    attr_reader origins: Array[String]
+    attr_reader state: Symbol
+    attr_reader pending: Array[Request]
+    attr_reader options: Options
+    attr_writer timers: Timers
+
+    @origins: Array[URI::Generic]
+    @window_size: Integer
+    @read_buffer: Buffer
+    @write_buffer: Buffer
+    @inflight: Integer
+    @keep_alive_timeout: Numeric?
+    @total_timeout: Numeric?
+
+    def addresses: () -> Array[ipaddr]?
+
+    def addresses=: (Array[ipaddr]) -> void
+
+    def match?: (URI::Generic, options) -> bool
+
+    def mergeable?: (Connection) -> bool
+
+    def coalescable?: (Connection) -> bool
+
+    def create_idle: (?Hash[Symbol, untyped] options) -> Connection
+
+    def merge: (Connection) -> void
+
+    def purge_pending: () { (Request) -> void } -> void
+
+    def match_altsvcs?: (URI::Generic uri) -> bool
+
+    def connecting?: () -> bool
+
+    def inflight?: () -> boolish
+
+    def interests: () -> io_interests?
+
+    def to_io: () -> IO
+
+    def call: () -> void
+
+    def close: () -> void
+    def reset: () -> void
+
+    def send: (Request) -> void
+
+    def timeout: () -> Numeric?
+
+    def deactivate: () -> void
+    private
+
+    def initialize: (String, URI::Generic, options) -> untyped
+
+    def connect: () -> void
+
+    def exhausted?: () -> boolish
+
+    def consume: () -> void
+
+    def send_pending: () -> void
+
+    def parser: () -> _Parser
+
+    def send_request_to_parser: (Request request) -> void
+
+    def build_parser: () -> _Parser
+                    | (String) -> _Parser
+
+    def set_parser_callbacks: (_Parser) -> void
+
+    def transition: (Symbol) -> void
+
+    def on_error: (HTTPX::TimeoutError | Error | StandardError) -> void
+
+    def handle_error: (StandardError) -> void
+
+    def purge_after_closed: () -> void
+  end
+end

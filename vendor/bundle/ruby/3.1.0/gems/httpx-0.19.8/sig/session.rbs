@@ -1,0 +1,52 @@
+module HTTPX
+  class Session
+    include Loggable
+    include Chainable
+
+    EMPTY_HASH: Hash[untyped, untyped]
+
+    @options: Options
+    @responses: Hash[Request, response]
+    @persistent: bool?
+
+    def self.plugin: (Symbol | Module plugin, ?options? options) ?{ (Class) -> void } -> singleton(Session)
+
+    def self.default_options: -> Options
+
+    def wrap: () { (instance) -> void } -> void
+
+    def close: (*untyped) -> void
+
+    def build_request: (String | verb, generic_uri, ?options) -> Request
+
+    private
+
+    def initialize: (?options) { (self) -> void } -> untyped
+                  | (?options) -> untyped
+
+    def pool: -> Pool
+    def on_response: (Request, response) -> void
+    def on_promise: (untyped, untyped) -> void
+    def fetch_response: (Request request, untyped, untyped) -> response?
+
+    def find_connection: (Request, Array[Connection] connections, Options options) -> Connection
+
+    def set_connection_callbacks: (Connection, Array[Connection], Options) -> void
+
+    def build_altsvc_connection: (Connection, Array[Connection], URI::Generic, String, Hash[String, String], Options) -> Connection?
+
+    def build_requests: (verb | string, uri, options) -> Array[Request]
+                      | (Array[[verb | string, uri, options]], options) -> Array[Request]
+                      | (Array[[verb | string, uri]], options) -> Array[Request]
+                      | (verb | string, _Each[[uri, options]], Options) -> Array[Request]
+                      | (verb | string, _Each[uri], options) -> Array[Request]
+
+    def build_connection: (URI::Generic, Options) -> Connection
+
+    def send_requests: (*Request) -> Array[response]
+
+    def _send_requests: (Array[Request]) -> Array[Connection]
+
+    def receive_requests: (Array[Request], Array[Connection]) -> Array[response]
+  end
+end
