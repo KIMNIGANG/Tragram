@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   # same as new project. just show
 #  get ':project_id/post_id', to: 'project_id/post_id'
 
+
   resources :sessions, only: %i[create destroy]
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html'
   #
