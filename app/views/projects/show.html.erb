@@ -19,10 +19,6 @@
     <p>https://localhost:3001/projects/<%= params[:id] %>/invite</p>
   </details>
 
-
-
-  <br>
-  <br>
   <!--post一覧表示-->
   <%#= render 'posts/show' %>
 
@@ -31,16 +27,14 @@
     <p class="post_caption">
         <%= post.name %></br>
         <%= safe_join(post.caption.split("\n"),tag(:br)) %>
-      </p>
-      <%= link_to '投稿詳細', post_path(post.id) %>
-      <%#= link_to '投稿を編集', edit_post_path(post.id) %>
-      <%#= link_to '投稿を削除', post_path(post.id), :method => :delete, data: {confirm: "削除しますか？"} %>
+    </p>
+    <%= link_to '投稿詳細', post_path(post.id) %>
   <% end %>
 
-
-  <!--作成ボタン-->
-  <!-- 作成してあるページに飛ぶ感じ -->
-  <!-- redirectto create_post-->
-  <%#= button_to "新規作成", controller: 'posts', action: 'create', params: {id: @project.id}, method: "get" %>
+  <% @location.each do |location| %>
+    <%= location[:name] %>
+    <%= location[:lat] %>
+    <%= location[:lng] %>
+  <% end %>
 
 <% end %>

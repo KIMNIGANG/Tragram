@@ -11,7 +11,6 @@
   <body>
     <% flash.each do |type, mes| %>
       <div class="notifications">
-        <!--type = "alert" => 削除できません。-->
         <div class="<%=type%>"><%=mes%></div>
       </div>
     <% end %>
@@ -27,20 +26,22 @@
     />
     <div id="map"></div>
 
-      <button type=button id="place-btn">place list</button>  
-      <div id="place-list">      
+    <button type=button id="place-btn">place list</button>  
 
-      </div>
+    <!-- 位置情報送信用form -->
+    <form id="place-list" action="/posts/<%= @post.id %>/location" method="put">      
+      <input type="submit" value="位置情報を登録する">
+    </form>
 
-      <button type=button id="set-pin">set pin</button>  
-      <button type=button id="clear-pin">clear pin</button>  
-      <br/>
+    <button type=button id="set-pin">set pin</button>  
+    <button type=button id="clear-pin">clear pin</button>  
+    <br/>
 
-    <%= javascript_pack_tag 'map', 'data-turbolinks-track': 'reload'%>
-    <script
-      src="https://maps.googleapis.com/maps/api/js?key=<%=ENV['GOOGLE_MAP_API_KEY']%>&callback=initAutocomplete&libraries=places&v=weekly"
-      defer
-    ></script>
+  <%= javascript_pack_tag 'map', 'data-turbolinks-track': 'reload'%>
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=<%=ENV['GOOGLE_MAP_API_KEY']%>&callback=initAutocomplete&libraries=places&v=weekly"
+    defer
+  ></script>
     
 
 
@@ -61,9 +62,6 @@
   </body>
 </html>
 
-<%= @location_lng %>
-<%= @location_lat %>
-<%= @location_name %>
 
 
 

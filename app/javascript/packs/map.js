@@ -8,13 +8,11 @@ document.getElementById("place-btn").onclick = () => {
   place_geo.forEach((t) => {
     const place_list = document.getElementById("place-list");
     let str = document.createElement("div");
-    // str.innerHTML = `<li id="test" value="${t.lat}">lat: ${t.lat}, lng: ${t.lng}, name: ${t.name}</li>`;
     str.innerHTML = `
-    <a href="/map_post/?lat=${t.lat}&lng=${t.lng}&name=${t.name}">${t.name}</a>
-    `;
-    // <li id="t.lat"">${t.lat}</li>
-    // <li id="t.lng"">${t.lng}</li>
-    // <li id="t.name"">${t.name}</li>
+    <input type="hidden" name="lat" value="${t.lat}">
+    <input type="hidden" name="lng" value="${t.lng}">
+    <input type="hidden" name="name" value="${t.name}">
+    `
     place_list.appendChild(str);
   });
 };
