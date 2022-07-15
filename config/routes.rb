@@ -7,7 +7,6 @@ Rails.application.routes.draw do
   get 'auth/failure', to: redirect('/')
   get 'log_out', to: 'sessions#destroy', as: 'log_out'
 
-
   # is it ok to use the primary key to the url?
   # same as new project. just show
 #  get ':project_id/post_id', to: 'project_id/post_id'
@@ -31,5 +30,4 @@ Rails.application.routes.draw do
   #
   get '/instagram/show_image' => 'instagram_auth#show_image'
   get'/posts/:id/insert_image/', to: 'instagram_auth#insert_image_to_post'
-
 end
