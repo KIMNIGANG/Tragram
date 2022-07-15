@@ -15,7 +15,6 @@ ActiveRecord::Schema.define(version: 2022_07_22_065211) do
 
 
 
-
   create_table "images", force: :cascade do |t|
     t.string "url"
     t.string "media_type"
@@ -65,7 +64,6 @@ ActiveRecord::Schema.define(version: 2022_07_22_065211) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "project_id"
-    t.string "image"
   end
 
   create_table "projects", force: :cascade do |t|
