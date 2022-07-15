@@ -12,7 +12,9 @@
 
 
 
+
 ActiveRecord::Schema.define(version: 2022_07_08_083138) do
+
 
 
 
@@ -55,6 +57,7 @@ ActiveRecord::Schema.define(version: 2022_07_08_083138) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "image"
+
   end
 
   create_table "projects", force: :cascade do |t|
@@ -67,6 +70,13 @@ ActiveRecord::Schema.define(version: 2022_07_08_083138) do
   create_table "user_instagramtokens", force: :cascade do |t|
     t.integer "user_id"
     t.integer "instagramtoken_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "user_posts", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "post_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
