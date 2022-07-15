@@ -1,8 +1,14 @@
+<head>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <%= stylesheet_link_tag 'projects', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+</head>
+
 <!--projectページ-->
 <%if logged_in?%>
   <!--metadata-->
-  <h1 class="project_name"><%= @project.name%></h1>
-  <p class="project_caption"><%= @project.caption%></p>
+  <h1 class="name"><%= @project.name%></h1>
+  <p class="caption"><%= @project.caption%></p>
 
   <div class="project_btns">
   <%= link_to edit_project_path(@project.id), class: "btn" do %>
@@ -14,32 +20,53 @@
   <% end %>
   </div>
 
-  <details>
-    <summary>招待リンクを表示</summary>
-    <p>https://localhost:3001/projects/<%= params[:id] %>/invite</p>
-  </details>
+  <div class="invitation">
+    <details>
+      <summary>招待リンクを表示</summary>
+      <p>https://localhost:3001/projects/<%= params[:id] %>/invite</p>
+    </details>
+  </div>
+
 
 
 
   <br>
   <br>
-  <!--post一覧表示-->
-  <%#= render 'posts/show' %>
 
-  <%= link_to 'Create Post', new_post_path(project_id: params[:id]) %>
+  <div class="create_post">
+    <%= link_to new_post_path(project_id: params[:id]), class: "btn btn-primary create_btn" do %>
+      Create Post
+    <% end %>
+  </div>
+  <br>
+
+  <div class="card-deck">
   <% @posts.each do |post| %>
-      <p class="post_caption">
-        <%= safe_join(post.caption.split("\n"),tag(:br)) %>
-      </p>
-      <%= link_to '投稿詳細', post_path(post.id) %>
-      <%#= link_to '投稿を編集', edit_post_path(post.id) %>
-      <%#= link_to '投稿を削除', post_path(post.id), :method => :delete, data: {confirm: "削除しますか？"} %>
+    <div class="card post_card"  style="width:18rem;">
+      <% media = post.images.first %>
+      <% if media.present?%>
+        <% if media.media_type == 'IMAGE' then %>
+          <img src = <%= media.url %>  class="card-img-top">
+        <% else %>
+          <video controls autoplay name="media" class="card-img-top">
+            <source src=<%= media.url %> type="video/mp4">
+            <source src=<%= media.url %> type="video/webm">
+          </video>
+        <% end %>
+      <% end %>
+      <div class="card-body">
+        <h5 class="card-title">
+          <%= safe_join(post.caption.split("\n"),tag(:br)) %>
+        </h5>
+        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <%= link_to post_path(post.id), class: "btn info_btn" do %>
+          投稿詳細
+        <% end %>
+      </div>
+    </div>
   <% end %>
+  </div>
 
 
-  <!--作成ボタン-->
-  <!-- 作成してあるページに飛ぶ感じ -->
-  <!-- redirectto create_post-->
-  <%#= button_to "新規作成", controller: 'posts', action: 'create', params: {id: @project.id}, method: "get" %>
 
 <% end %>

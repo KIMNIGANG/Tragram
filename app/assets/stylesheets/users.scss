@@ -6,34 +6,61 @@ h1 {
   text-align: center;
 }
 
-div {
-  &.project {
+.project_container {
+  text-align: center;
+}
 
-    border: solid 1px gray;
-    border-radius: 5px;
-    margin: 50px 400px 0px 400px;
-    padding: 10px;
+.project_all {
+  margin: 0 auto;
+  width: 44rem;
+  display: inline-block;
+}
+
+.project {
+  float: left;
+  height: 10rem;
+  margin: 2rem;
+}
+
+.project_name {
+  font-size: 30px;
+
+}
+
+.project_caption {
+  font-size: 15px;
+}
 
 
-    a {
-      &.project_name {
-        font-size: 30px;
-      }
-    }
+.create_form_container {
+  display: block;
+  clear: both;
+  padding-bottom: 2rem;
+}
 
-  }
 
-  &.create_form_container {
-    display: flex;
-    justify-content: center;
-    border: solid 1px gray;
-    border-radius: 5px;
-    margin: 50px 400px 0px 400px;
-    padding: 20px;
+.create_form_child {
+  text-align: center;
+  border: solid 1px gray;
+  border-radius: 5px;
+  padding: 20px;
+  width: 36rem;
+  margin: 0 auto
+}
 
-    .create_form_child {
-      text-align: center;
 
-    }
-  }
+.card-img {
+  height: 10rem;
+  object-fit: cover;
+}
+
+.card-img-overlay {
+  background-color: rgba(#000, 0.3);
+  text-align: left;
+  color: white;
+}
+
+.card-title.project_card_title {
+  color: white;
+  font-size: 25px;
 }

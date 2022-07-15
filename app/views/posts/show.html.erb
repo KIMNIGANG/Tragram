@@ -2,9 +2,9 @@
 
 <% @post.images.each do |media| %>
   <% if media.media_type == 'IMAGE' then %>
-    <img src = <%= media.url %>>
+    <img src = <%= media.url %> class="media">
   <% else %>
-    <video controls autoplay name="media">
+    <video controls autoplay name="media" class="media">
       <source src=<%= media.url %> type="video/mp4">
       <source src=<%= media.url %> type="video/webm">
     </video>
@@ -16,4 +16,3 @@
 
 
 <%= link_to 'get media from instagram', controller: "instagram_auth", action: "show_image", id: @post.id %>
-
