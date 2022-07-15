@@ -28,6 +28,7 @@
     <div id="map"></div>
 
       <button type=button id="place-btn">place list</button>  
+      <button type=button id="t" onclick="clicktest()">click test</button>  
       <ol id="place-list">
 
       </ol>
@@ -37,10 +38,20 @@
       <br/>
 
     <%= javascript_pack_tag 'map', 'data-turbolinks-track': 'reload'%>
+    <script>
+      function clicktest() {
+        let t = document.getElementById("t.lat").textContent;
+        console.log(t);
+        // @location.lng = t;
+      };
+      $('<%= @location.lng %>' = t);
+    </script>
     <script
       src="https://maps.googleapis.com/maps/api/js?key=<%=ENV['GOOGLE_MAP_API_KEY']%>&callback=initAutocomplete&libraries=places&v=weekly"
       defer
-    ></script>
+    >
+    
+    </script>
   </body>
 </html>
 
