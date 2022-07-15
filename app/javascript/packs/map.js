@@ -10,10 +10,11 @@ document.getElementById("place-btn").onclick = () => {
     let str = document.createElement("div");
     // str.innerHTML = `<li id="test" value="${t.lat}">lat: ${t.lat}, lng: ${t.lng}, name: ${t.name}</li>`;
     str.innerHTML = `
-    <li id="t.lat"">${t.lat}</li>
-    <li id="t.lng"">${t.lng}</li>
-    <li id="t.name"">${t.name}</li>
+    <a href="/map_post/?lat=${t.lat}&lng=${t.lng}&name=${t.name}">${t.name}</a>
     `;
+    // <li id="t.lat"">${t.lat}</li>
+    // <li id="t.lng"">${t.lng}</li>
+    // <li id="t.name"">${t.name}</li>
     place_list.appendChild(str);
   });
 };

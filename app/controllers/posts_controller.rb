@@ -65,6 +65,13 @@ class PostsController < ApplicationController
     end
   end
 
+  def get_param
+    @location_name = params[:name]
+    @location_lng = params[:lng]
+    @location_lat = params[:lat]
+    
+  end
+
   def edit()
     if @post = post?(params[:id]) then
     else
