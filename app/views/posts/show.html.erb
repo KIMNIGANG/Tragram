@@ -29,9 +29,15 @@
     <button type=button id="place-btn">place list</button>  
 
     <!-- 位置情報送信用form -->
-    <form id="place-list" action="/posts/<%= @post.id %>/location" method="put">      
-      <input type="submit" value="位置情報を登録する">
-    </form>
+    <%= form_with id: "place-list", url: "/posts/#{@post.id}/location" do |form| %>
+      <% unless @location[0].nil? then %>
+        <%= form.submit value: "位置情報を登録する", data: {confirm: "既に位置情報が登録済みですが、更新しますか？"} %>
+      <% else %>
+        <%= form.submit value: "位置情報を登録する" %>
+      <% end %>
+    <% end %>
+
+
 
     <button type=button id="set-pin">set pin</button>  
     <button type=button id="clear-pin">clear pin</button>  

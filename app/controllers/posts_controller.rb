@@ -55,10 +55,12 @@ class PostsController < ApplicationController
         redirect_to root_path
       end
 
-      if !@post.location.nil? then
-        @location_name = @post.location.name ||= ""
-        @location_lng = @post.location.lng ||= ""
-        @location_lat = @post.location.lat ||= ""
+      @location = []
+      if @post.location then
+        name = @post.location.name ||= ""
+        lng = @post.location.lng ||= ""
+        lat = @post.location.lat ||= ""
+        @location.push({:name => name, :lng => lng, :lat => lat})
       end
     else
       redirect_to root_path and return
@@ -93,7 +95,11 @@ class PostsController < ApplicationController
       name = params[:name]
       lat = params[:lat].to_f
       lng = params[:lng].to_f
-      Location.create(name: name, lat: lat, lng: lng, post_id: post.id) 
+      if post.location then
+        post.location.update(name: name, lat: lat, lng: lng, post_id: post.id)
+      else
+        Location.create(name: name, lat: lat, lng: lng, post_id: post.id)
+      end
       flash[:notice] = '位置情報を登録しました'
       redirect_to "/posts/#{post.id}/"
     end

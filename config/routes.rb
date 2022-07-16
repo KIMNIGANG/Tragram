@@ -29,7 +29,7 @@ Rails.application.routes.draw do
   get '/get_media_test' => 'instagram_auth#get_media_test'
 
   get '/map' => 'google_map#index'
-  get '/posts/:id/location' => 'posts#location_update'
+  post '/posts/:id/location' => 'posts#location_update'
 
   get '/instagram/exchange_token' => 'instagram_auth#token_exchange'
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html

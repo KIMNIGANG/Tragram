@@ -29,12 +29,13 @@
         <%= safe_join(post.caption.split("\n"),tag(:br)) %>
     </p>
     <%= link_to '投稿詳細', post_path(post.id) %>
-  <% end %>
+  <% end %></br>
 
   <% @location.each do |location| %>
     <%= location[:name] %>
     <%= location[:lat] %>
     <%= location[:lng] %>
+    </br>
   <% end %>
 
 <% end %>
