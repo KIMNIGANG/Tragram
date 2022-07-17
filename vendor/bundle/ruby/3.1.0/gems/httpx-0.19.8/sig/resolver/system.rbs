@@ -1,0 +1,15 @@
+module HTTPX
+  module Resolver
+    class System < Resolver
+      RESOLV_ERRORS: Array[singleton(StandardError)] # ResolvError
+
+      @resolver: Resolv::DNS
+
+      def <<: (Connection) -> void
+
+      private
+
+      def initialize: (options options) -> void
+    end
+  end
+end

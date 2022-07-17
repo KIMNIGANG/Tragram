@@ -1,0 +1,35 @@
+module HTTPX
+  type ipaddr = IPAddr | String
+
+  module Resolver
+    extend Registry[Symbol, Class]
+
+    RESOLVE_TIMEOUT: Integer | Float
+
+    @lookup_mutex: Thread::Mutex
+
+    type dns_resource = singleton(Resolv::DNS::Resource)
+
+    type dns_result = { "name" => String, "TTL" => Numeric, "alias" => String }
+                    | { "name" => String, "TTL" => Numeric, "data" => String }
+
+
+    def nolookup_resolve: (String hostname) -> Array[IPAddr]
+
+    def ip_resolve: (String hostname) -> Array[IPAddr]?
+
+    def system_resolve: (String hostname) -> Array[IPAddr]?
+
+    def self?.cached_lookup: (String hostname) -> Array[IPAddr]?
+
+    def self?.cached_lookup_set: (String hostname, ip_family family, Array[dns_result] addresses) -> void
+
+    def self?.lookup: (String hostname, Numeric ttl) -> Array[IPAddr]?
+
+    def self?.generate_id: () -> Integer
+
+    def self?.encode_dns_query: (String hostname, ?type: dns_resource) -> String
+
+    def self?.decode_dns_answer: (String) -> Array[dns_result]
+  end
+end
