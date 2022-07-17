@@ -91,8 +91,7 @@ class PostsController < ApplicationController
     end
     if params[:image]
       img = params[:image]
-      tempfile = img.tempfile
-      upload = Cloudinary::Uploader.upload(tempfile.path, :resource_type => :auto)
+      upload = Cloudinary::Uploader.upload(img.path, :resource_type => :auto)
       img_url = upload['url']
       content_type = img.content_type
     end
