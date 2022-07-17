@@ -4,10 +4,6 @@ class Post < ApplicationRecord
 
   has_many :images, through: :post_images
 
-  mount_uploader :image, ImageUploader
-
-
-
   belongs_to :user
 
 end

@@ -54,15 +54,9 @@ class PostsController < ApplicationController
         puts "no access (post#show)"
         redirect_to root_path
       end
-
-      if !@post.location.nil? then
-        @location_name = @post.location.name ||= ""
-        @location_lng = @post.location.lng ||= ""
-        @location_lat = @post.location.lat ||= ""
-      end
-    else
-      redirect_to root_path and return
     end
+
+
   end
 
   def edit()
@@ -71,7 +65,7 @@ class PostsController < ApplicationController
       flash[:alert] = '投稿がありません'
       redirect_to request.referer
     end
-    
+
     if current_user != @post.user then
       flash[:alert] = '編集権限がありません'
       redirect_to request.referer
@@ -86,6 +80,31 @@ class PostsController < ApplicationController
       redirect_to root_path
     end
     redirect_to controller: :projects, action: :show, id: post.project_id
+  end
+
+  def upload_image
+    post = Post.find(params[:id])
+    Cloudinary.config do |config|
+      config.cloud_name = Rails.application.credentials.cloudinary[:cloud_name]
+      config.api_key = Rails.application.credentials.cloudinary[:api_key]
+      config.api_secret = Rails.application.credentials.cloudinary[:api_secret]
+    end
+    if params[:image]
+      img = params[:image]
+      tempfile = img.tempfile
+      upload = Cloudinary::Uploader.upload(tempfile.path, :resource_type => :auto)
+      img_url = upload['url']
+      content_type = img.content_type
+    end
+    type = content_type.slice(0,5)
+    if type == "image"
+      media_type = "IMAGE"
+    elsif type == "video"
+      media_type  = "VIDEO"
+    end
+    img = Image.create(url: img_url, media_type: media_type)
+    post.images << img
+    redirect_to post_path(id: post.id)
   end
 
   private
@@ -105,12 +124,17 @@ class PostsController < ApplicationController
 
   def post_params
     #悪意あるユーザからの情報を受け取らないように
-
-    params.require(:post).permit(:caption, :image)
+    params.require(:post).permit(:caption, :name)
 
   end
 
   def post_update_params
     params.require(:post).permit(:caption)
   end
+
+  def img_params
+    params.require(:post).permit(:image)
+  end
+
+
 end

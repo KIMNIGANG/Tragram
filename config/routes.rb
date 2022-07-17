@@ -31,4 +31,5 @@ Rails.application.routes.draw do
   #
   get '/instagram/show_image' => 'instagram_auth#show_image'
   get'/posts/:id/insert_image/', to: 'instagram_auth#insert_image_to_post'
+  post '/posts/:id/upload_image/' => 'posts#upload_image'
 end

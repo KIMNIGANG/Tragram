@@ -103,30 +103,14 @@ GEM
     ffi (1.15.5)
     figaro (1.2.0)
       thor (>= 0.14.0, < 2)
-<<<<<<< HEAD
-<<<<<<< HEAD
     font-awesome-sass (6.1.1)
       sassc (~> 2.0)
-=======
-    geocoder (1.8.0)
->>>>>>> bc3a535 (search_bar)
-=======
-    font-awesome-sass (6.1.1)
-      sassc (~> 2.0)
-    geocoder (1.8.0)
->>>>>>> bb74cd5 (mapテストできるように変更)
     globalid (1.0.0)
       activesupport (>= 5.0)
     hashie (5.0.0)
-<<<<<<< HEAD
-    http-2-next (0.5.0)
     http-accept (1.7.0)
     http-cookie (1.0.5)
       domain_name (~> 0.5)
-    httpx (0.19.8)
-      http-2-next (>= 0.4.1)
-=======
->>>>>>> c3a4087 (rebase)
     i18n (1.10.0)
       concurrent-ruby (~> 1.0)
     image_processing (1.12.2)
@@ -311,9 +295,7 @@ DEPENDENCIES
   carrierwave
   cloudinary
   figaro
-
   font-awesome-sass
-  geocoder
   jbuilder (~> 2.7)
   listen (~> 3.3)
   omniauth-google-oauth2
