@@ -1,6 +1,5 @@
 <head>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-  <%= stylesheet_link_tag 'projects', media: 'all', 'data-turbolinks-track': 'reload' %>
   <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
 
 </head>
@@ -47,11 +46,24 @@
     <p class="post_caption">
         <%= post.name %></br>
         <%= safe_join(post.caption.split("\n"),tag(:br)) %>
+<<<<<<< HEAD
       </p>
       <img src="<%= post.image %>">
       <%= link_to '投稿詳細', post_path(post.id) %>
       <%#= link_to '投稿を編集', edit_post_path(post.id) %>
       <%#= link_to '投稿を削除', post_path(post.id), :method => :delete, data: {confirm: "削除しますか？"} %>
+=======
+        </p>
+<<<<<<< HEAD
+
+=======
+>>>>>>> f718a18 (rebase)
+        <%= link_to post_path(post.id), class: "btn info_btn" do %>
+          投稿詳細
+        <% end %>
+      </div>
+    </div>
+>>>>>>> 14fabad (conflict)
   <% end %>
   </div>
 
