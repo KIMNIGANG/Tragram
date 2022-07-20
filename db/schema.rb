@@ -10,7 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+
 ActiveRecord::Schema.define(version: 2022_07_13_050425) do
+
+
 
 
   create_table "images", force: :cascade do |t|
@@ -51,6 +54,11 @@ ActiveRecord::Schema.define(version: 2022_07_13_050425) do
     t.integer "project_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+<<<<<<< HEAD
+=======
+    t.integer "project_id"
+    t.string "image"
+>>>>>>> b5e39a4 (.)
   end
 
   create_table "projects", force: :cascade do |t|
