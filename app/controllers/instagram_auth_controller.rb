@@ -113,7 +113,7 @@ class InstagramAuthController < ApplicationController
 
       current_user.instagramtoken.update(token: long_token, expires_at: expires_at)
       puts "token exchanged--"
-      redirect_to "/instagram/auth"
+      redirect_to "/instagram"
 
     end
 
