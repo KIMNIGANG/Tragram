@@ -236,9 +236,11 @@ class InstagramAuthController < ApplicationController
       end
       puts "get_media start"
       all_media = get_media(token, *ids)
+      puts "end get_media"
 
       all_media.each do |media|
         if media['media_type'] == 'CAROUSEL_ALBUM' then
+          puts "get album"
           @albums.push(get_album(token, media["id"]))
         else
           case media['media_type']
