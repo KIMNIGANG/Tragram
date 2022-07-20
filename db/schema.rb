@@ -31,6 +31,15 @@ ActiveRecord::Schema.define(version: 2022_07_08_083138) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "locations", force: :cascade do |t|
+    t.float "lat"
+    t.float "lng"
+    t.string "name"
+    t.integer "post_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "post_images", force: :cascade do |t|
     t.integer "image_id"
     t.integer "post_id"
