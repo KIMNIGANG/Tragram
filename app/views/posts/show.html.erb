@@ -3,7 +3,7 @@
 <head>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-  <link rel="stylesheet" href="app/assets/stylesheets/posts.css">
+  <%= stylesheet_link_tag 'posts', media: 'all', 'data-turbolinks-track': 'reload' %>
 </head>
 
 <body>
@@ -17,7 +17,6 @@
 
 <div class="header">
 <h1 class="name"><%= @post.name%></h1>
-<p class="caption"><%= @post.caption%></p>
 
   <div class="btns">
   <%= link_to edit_post_path(@post.id), class: "btn" do %>
@@ -52,6 +51,8 @@
     </video>
   <% end %>
 <% end %>
+
+<p class="caption"><%= @post.caption%></p>
 
 <!--location info-->
 <%= @location_lng %>

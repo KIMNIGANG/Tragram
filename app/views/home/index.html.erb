@@ -1,10 +1,16 @@
 <!--ホーム表示 機能説明とか？-->
 <html>
   <head>
+    <%= stylesheet_link_tag 'home', media: 'all', 'data-turbolinks-track': 'reload' %>
   </head>
   <body>
-    <h1>Tragram</h1>
-    <p>Find me in app/views/home/index.html.erb</p>
+    <div class="app_name">
+      <img src="/assets/Tiger_icon.png" class="tiger">
+      <h1>Tragram</h1>
+      <img src="/assets/Tiger_icon.png" class="tiger">
+    </div>
+
+    <p>旅行を写真ベースで記録</p>
     <%= link_to "instagram", controller: 'instagram_auth', action: 'index'%>
   </body>
 </html>
