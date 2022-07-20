@@ -12,6 +12,7 @@
 
 ActiveRecord::Schema.define(version: 2022_07_13_050425) do
 
+
   create_table "images", force: :cascade do |t|
     t.string "url"
     t.string "media_type"
@@ -22,7 +23,7 @@ ActiveRecord::Schema.define(version: 2022_07_13_050425) do
   create_table "instagramtokens", force: :cascade do |t|
     t.integer "user_id"
     t.string "token"
-    t.integer "expires_in"
+    t.datetime "expires_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
