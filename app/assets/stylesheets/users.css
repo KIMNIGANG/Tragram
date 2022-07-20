@@ -52,11 +52,11 @@ h1 {
 }
 
 .card-img-overlay {
-  background-color: rgba(#000, 0.3);
+  background-color: rgba(0, 0, 0, 0.3);
   text-align: left;
   color: white;
   height: 10rem;
-  width: 18rem;
+  width: 17.9rem;
 }
 
 .card-title.project_card_title {
