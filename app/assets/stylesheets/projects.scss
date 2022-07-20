@@ -9,7 +9,7 @@ a {
 }
 
 
-.project_caption {
+.caption {
   text-align: center;
 
 }
@@ -18,4 +18,33 @@ div {
   &.project_btns {
     text-align: center;
   }
+}
+
+.create_post {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.invitation {
+  display: flex;
+  justify-content: center;
+}
+
+.card-img-top {
+  width: 18rem;
+  height: 18rem;
+  object-fit: cover;
+}
+
+.card.post_card {
+  float: left;
+  margin-left: 3rem;
+  margin-bottom: 3rem;
+}
+
+.info_btn,
+.create_btn {
+  background-color: gray;
+  color: white;
 }
