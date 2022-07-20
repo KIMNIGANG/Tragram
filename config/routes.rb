@@ -30,4 +30,7 @@ Rails.application.routes.draw do
   #
   get '/instagram/show_image' => 'instagram_auth#show_image'
   get'/posts/:id/insert_image/', to: 'instagram_auth#insert_image_to_post'
+  get '/get_media_test' => 'instagram_auth#get_media_test'
+
+  get '/map' => 'google_map#map_index'
 end
