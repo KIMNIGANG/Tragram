@@ -23,7 +23,7 @@ Rails.application.routes.draw do
 
 
   #post 'projects/create',as:"projects"
-  get '/instagram/auth' => 'instagram_auth#auth'
+  get '/instagram' => 'instagram_auth#index'
   get '/authpass' => 'instagram_auth#get_token'
   get '/instagram/exchange_token' => 'instagram_auth#token_exchange'
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
