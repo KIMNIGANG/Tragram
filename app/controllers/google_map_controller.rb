@@ -14,10 +14,10 @@ class GoogleMapController < ApplicationController
 
     @response = https.request(request).body
     @response = JSON.parse(@response)
-    @lat = @response["candidates"][0]["geometry"]["location"]["lat"]
-    @lng = @response["candidates"][0]["geometry"]["location"]["lng"]
+    #@lat = @response["candidates"][0]["geometry"]["location"]["lat"]
+    #@lng = @response["candidates"][0]["geometry"]["location"]["lng"]
   end
-  
+
   def map
 
   end
