@@ -11,7 +11,9 @@
 # It's strongly recommended that you check this file into your version control system.
 
 
+
 ActiveRecord::Schema.define(version: 2022_07_08_083138) do
+
 
 
   create_table "images", force: :cascade do |t|
