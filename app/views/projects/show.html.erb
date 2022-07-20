@@ -25,17 +25,22 @@
   <%= link_to 'Create Post', new_post_path(project_id: params[:id]) %>
   <% @posts.each do |post| %>
     <p class="post_caption">
-        <%= post.name %></br>
+        <%= post.name %><br>
         <%= safe_join(post.caption.split("\n"),tag(:br)) %>
     </p>
     <%= link_to '投稿詳細', post_path(post.id) %>
-  <% end %></br>
+  <% end %><br>
 
   <% @location.each do |location| %>
+    <h4>
     <%= location[:name] %>
     <%= location[:lat] %>
     <%= location[:lng] %>
-    </br>
+    <input type="hidden" id="name" value="<%= location[:name] %>">
+    <input type="hidden" id="lat" value="<%= location[:lat] %>">
+    <input type="hidden" id="lng" value="<%= location[:lng] %>">
+    </h4>
+    <br>
   <% end %>
 
 <% end %>
