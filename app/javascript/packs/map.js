@@ -4,19 +4,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 const place_geo = [];
 
-document.getElementById("place-btn").onclick = () => {
-  place_geo.forEach((t) => {
-    const place_list = document.getElementById("place-list");
-    let str = document.createElement("div");
-    str.innerHTML = `
-    <input type="hidden" name="lat" value="${t.lat}">
-    <input type="hidden" name="lng" value="${t.lng}">
-    <input type="hidden" name="name" value="${t.name}">
-    `
-    place_list.appendChild(str);
-  });
-};
-
 function initAutocomplete() {
   const map = new google.maps.Map(document.getElementById("map"), {
     center: { lat: 36.0847492, lng: 140.1037952 },
@@ -93,11 +80,27 @@ function initAutocomplete() {
       }
       // 場所のlat,lngをもらってくる
       console.log(place.geometry["location"].lat());
+
+      const place_ol = document.getElementById("place_ol");
+      let str = document.createElement("li");
+      str.innerHTML = place.name;
+      place_ol.appendChild(str);
+
       place_geo.push({
         lat: place.geometry["location"].lat(),
         lng: place.geometry["location"].lng(),
         name: place.name,
       });
+
+      const place_list = document.getElementById("place-list");
+      let st = document.createElement("div");
+      st.innerHTML = `
+        <input type="hidden" name="lat" value="${place.geometry["location"].lat}">
+        <input type="hidden" name="lng" value="${place.geometry["location"].lng}">
+        <input type="hidden" name="name" value="${place.name}">
+        `;
+      place_list.appendChild(st);
+
       console.log(place.geometry["location"].lng());
     });
     map.fitBounds(bounds);

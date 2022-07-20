@@ -25,8 +25,7 @@
       placeholder="Search Box"
     />
     <div id="map"></div>
-
-    <button type=button id="place-btn">place list</button>  
+    <ol id="place_ol"></ol>
 
     <!-- 位置情報送信用form -->
     <%= form_with id: "place-list", url: "/posts/#{@post.id}/location" do |form| %>
@@ -36,13 +35,8 @@
         <%= form.submit value: "位置情報を登録する" %>
       <% end %>
     <% end %>
-
-
-
-    <button type=button id="set-pin">set pin</button>  
-    <button type=button id="clear-pin">clear pin</button>  
-    <br/>
-
+    <br>
+    
   <%= javascript_pack_tag 'map', 'data-turbolinks-track': 'reload'%>
   <script
     src="https://maps.googleapis.com/maps/api/js?key=<%=ENV['GOOGLE_MAP_API_KEY']%>&callback=initAutocomplete&libraries=places&v=weekly"
