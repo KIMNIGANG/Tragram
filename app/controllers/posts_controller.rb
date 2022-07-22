@@ -97,10 +97,14 @@ class PostsController < ApplicationController
     end
   end
 
-
+  def edit()
+    if @post = post?(params[:id]) then
+    else
       flash[:alert] = '投稿がありません'
       redirect_to request.referer
-    elsif current_user != post.user then
+    end
+
+    if current_user != post.user then
       flash[:alert] = '編集権限がありません'
       redirect_to request.referer
     else
