@@ -117,31 +117,6 @@ class InstagramAuthController < ApplicationController
 
     end
 
-    def get_media(token, *ids)
-      # ------------------
-      # private method
-      # ------------------
-      # input usertoken, media-ids
-      # output response-bodies list
-
-      ret = []
-      ids.each do |id|
-        #th = Thread.new do
-        uri = URI.parse("https://graph.instagram.com/#{id}?fields=id,media_url,media_type&access_token=#{token}")
-        puts "new uri #{uri} in get_media"
-        res = Net::HTTP.get_response(uri)
-        puts "#{res.class}: #{res}"
-        unless res.is_a?(Net::HTTPOK) then
-          puts "http-error in get_media"
-          return redirect_to root_path
-        end
-        body = JSON.parse(res.body)
-        ret.push(body)
-      end
-
-      puts "fin get_media--"
-      return ret
-    end
 
 
     def get_album(token, id)
@@ -171,7 +146,7 @@ class InstagramAuthController < ApplicationController
       album = []
       res = get_media(token, *ids)
       res.each do |media|
-        album.push( { "url" => media['media_url'], "media_type" => media['media_type'] } )
+        album.push( { "url" => media['media_url'], "media_type" => media['media_type'], "id" => media['id'] } )
       end
       return album
     end
@@ -236,9 +211,9 @@ class InstagramAuthController < ApplicationController
         else
           case m['media_type']
           when 'IMAGE' then
-            @albums.push( [{ "url" => m['media_url'], "media_type" => "IMAGE" }] )
+            @albums.push( [{ "url" => m['media_url'], "media_type" => "IMAGE", "id" => m['id'] }] )
           when 'VIDEO' then
-            @albums.push( [{ "url" => m['media_url'], "media_type" => "VIDEO" }] )
+            @albums.push( [{ "url" => m['media_url'], "media_type" => "VIDEO", "id" => m['id'] }] )
           end
         end
       end
@@ -267,7 +242,7 @@ class InstagramAuthController < ApplicationController
 
       params[:media].each do |url_type|
         out = url_type.split(",")
-        img = Image.create(url: out[0], media_type: out[1])
+        img = Image.create(url: out[0], media_type: out[1], instagram_id: out[2].to_i)
         post.images << img
       end
 

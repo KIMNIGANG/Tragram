@@ -85,11 +85,11 @@ class PostsController < ApplicationController
         url = media.url
       end
 
-      @images.push({:media_type => media.media_type, :url => url})
-
+      @images.push({:media_type => media_type, :url => url})
+      puts "images--#{@images}"
     end
-  end
 
+  end
 
   def edit()
     if @post = post?(params[:id]) then
