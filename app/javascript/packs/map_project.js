@@ -20,8 +20,12 @@ function initMap() {
   }
   console.log(place_geo);
   const map = new google.maps.Map(document.getElementById("map"), {
+    center: {
+      lat: parseFloat(place_geo[0].lat),
+      lng: parseFloat(place_geo[0].lng),
+    },
     zoom: 14,
-    center: { lat: 36.0847492, lng: 140.1037952 },
+    mapTypeId: "roadmap",
   });
 
   console.log(place_geo);
