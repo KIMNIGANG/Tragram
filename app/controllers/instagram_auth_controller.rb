@@ -202,6 +202,7 @@ class InstagramAuthController < ApplicationController
         flash[:danger] = 'no media found'
         return redirect_to root_path
       end
+      # get ids from "me" FIN
 
 
       media.each do |m|

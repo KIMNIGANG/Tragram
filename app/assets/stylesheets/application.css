@@ -21,10 +21,22 @@ header {
   position: absolute;
   right: 0;
   padding-right: 20px;
+  color: gray;
 }
 
 .header_btn {
   position: absolute;
   right: 0;
   padding-right: 20px;
+  color: gray;
+}
+
+body {
+  padding: 20px;
+  color: gray;
+
+}
+
+h1 {
+  color: gray;
 }

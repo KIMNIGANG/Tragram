@@ -109,6 +109,8 @@ class PostsController < ApplicationController
       redirect_to request.referer
     else
       post.update(post_update_params)
+    else
+      redirect_to root_path
     end
     redirect_to controller: :projects, action: :show, id: post.project_id
   end
@@ -137,11 +139,31 @@ class PostsController < ApplicationController
     end
   end
 
-
-
-
+  def add_image()
+    if post = post?(params[:id]) then
+      Cloudinary.config do |config|
+        config.cloud_name = Rails.application.credentials.cloudinary[:cloud_name]
+        config.api_key = Rails.application.credentials.cloudinary[:api_key]
+        config.api_secret = Rails.application.credentials.cloudinary[:api_secret]
+      end
+      if params[:image] then
+        img = params[:image]
+        upload = Cloudinary::Uploader.upload(img.path, :resource_type => :auto)
+        img_url = upload['url']
+        if img.content_type.slice(0,5) == "image" then
+          tmpMT = 'IMAGE'
+        elsif img.content_type.slice(0,5) == "video" then
+          tmpMT = 'VIDEO'
+        end
+        imgC = Image.create(url: img_url, media_type: tmpMT)
+        post.images << imgC
+      end
+      redirect_to post_path(id: post.id)
+    end
+  end
 
   private
+
 
   def post?(id)
     post = Post.find_by(id: id)
