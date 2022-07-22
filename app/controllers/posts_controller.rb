@@ -57,7 +57,13 @@ class PostsController < ApplicationController
       puts "no access (post#show)"
       redirect_to root_path
     end
-
+      @location = []
+      if @post.location then
+        name = @post.location.name ||= ""
+        lng = @post.location.lng ||= ""
+        lat = @post.location.lat ||= ""
+        @location.push({:name => name, :lng => lng, :lat => lat})
+      end
     # location info
     if !@post.location.nil? then
       @location_name = @post.location.name ||= ""
@@ -83,6 +89,7 @@ class PostsController < ApplicationController
       # cloudinary
       elsif media.url then
         url = media.url
+
       end
 
       @images.push({:media_type => media.media_type, :url => url})
@@ -91,31 +98,46 @@ class PostsController < ApplicationController
   end
 
 
-  def edit()
-    if @post = post?(params[:id]) then
-    else
       flash[:alert] = '投稿がありません'
       redirect_to request.referer
-    end
-    
-    if current_user != @post.user then
+    elsif current_user != post.user then
       flash[:alert] = '編集権限がありません'
       redirect_to request.referer
-    end
-  end
-
-
-  def update()
-    if post = post?(params[:id]) then
-      post.update(post_update_params)
     else
-      redirect_to root_path
+      post.update(post_update_params)
     end
     redirect_to controller: :projects, action: :show, id: post.project_id
   end
 
-  private
+  def location_update()
+    puts "locationupdate--"
+    unless post = post?(params[:id]) then
+      flash[:alert] = '投稿がありません'
+      redirect_to request.referer
+    end
 
+    if current_user != post.user then
+      flash[:alert] = '編集権限がありません'
+      redirect_to request.referer
+    else
+      name = params[:name]
+      lat = params[:lat].to_f
+      lng = params[:lng].to_f
+      if post.location then
+        post.location.update(name: name, lat: lat, lng: lng, post_id: post.id)
+      else
+        Location.create(name: name, lat: lat, lng: lng, post_id: post.id)
+      end
+      flash[:notice] = '位置情報を登録しました'
+      redirect_to "/posts/#{post.id}/"
+    end
+  end
+
+
+
+
+
+  private
 
   def post?(id)
     post = Post.find_by(id: id)
@@ -133,6 +155,7 @@ class PostsController < ApplicationController
     #悪意あるユーザからの情報を受け取らないように
     params.require(:post).permit(:caption, :name)
   end
+
 
   def post_update_params
     params.require(:post).permit(:caption)

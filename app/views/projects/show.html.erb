@@ -19,28 +19,39 @@
     <p>https://localhost:3001/projects/<%= params[:id] %>/invite</p>
   </details>
 
-
-
-  <br>
-  <br>
   <!--post一覧表示-->
   <%#= render 'posts/show' %>
 
   <%= link_to 'Create Post', new_post_path(project_id: params[:id]) %>
   <% @posts.each do |post| %>
     <p class="post_caption">
-        <%= post.name %></br>
+        <%= post.name %><br>
         <%= safe_join(post.caption.split("\n"),tag(:br)) %>
-      </p>
-      <%= link_to '投稿詳細', post_path(post.id) %>
-      <%#= link_to '投稿を編集', edit_post_path(post.id) %>
-      <%#= link_to '投稿を削除', post_path(post.id), :method => :delete, data: {confirm: "削除しますか？"} %>
+    </p>
+    <%= link_to '投稿詳細', post_path(post.id) %>
+  <% end %><br>
+
+  <div id="map"></div>
+  <script
+  src="https://maps.googleapis.com/maps/api/js?key=<%=ENV['GOOGLE_MAP_API_KEY']%>&callback=initMap&v=weekly"
+  defer></script>
+
+  <ol>
+  <% @location.each do |location| %>
+    <li>
+      <%= location[:name] %>
+      <%= location[:lat] %>
+      <%= location[:lng] %>
+      <input type="hidden" class="name" value="<%= location[:name] %>">
+      <input type="hidden" class="lat" value="<%= location[:lat] %>">
+      <input type="hidden" class="lng" value="<%= location[:lng] %>">
+    </li>
+    <br>
   <% end %>
+  </ol>
 
-
-  <!--作成ボタン-->
-  <!-- 作成してあるページに飛ぶ感じ -->
-  <!-- redirectto create_post-->
-  <%#= button_to "新規作成", controller: 'posts', action: 'create', params: {id: @project.id}, method: "get" %>
+  <div id="test"></div>
 
 <% end %>
+
+  <%= javascript_pack_tag 'map_project', 'data-turbolinks-track': 'reload'%>

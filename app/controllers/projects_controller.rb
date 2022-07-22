@@ -13,6 +13,15 @@ class ProjectsController < ApplicationController
       flash[:caution] = 'project doesnt exist'
       redirect_to request.referer
     end
+    @location = []
+    project.posts.each do |post|
+      if post.location then
+        name = post.location.name ||= nil
+        lat = post.location.lat ||= nil
+        lng = post.location.lng ||= nil
+      end
+      @location.push({:name => name, :lat => lat, :lng => lng})
+    end
   end
 
   # projectのcreate
