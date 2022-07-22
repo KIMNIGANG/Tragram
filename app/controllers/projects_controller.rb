@@ -6,12 +6,37 @@ class ProjectsController < ApplicationController
     # post一覧とメタデータ
     # member確認未実装
     project = Project.find_by(id: params[:id])
-    if project then
-      @project = project
-      @posts = Post.where(project_id: params[:id])
-    else
+
+    unless project then
       flash[:caution] = 'project doesnt exist'
       redirect_to request.referer
+    end
+
+    @project = project
+    @posts = []
+
+    posts = Post.where(project_id: params[:id])
+
+    posts.each do |post|
+      url = ''
+      post.images.each do |image|
+        if image.media_type == 'IMAGE' then
+
+          # instagram
+          if id = image.instagram_id then
+            unless token = current_user.instagramtoken.token then
+              flash[:danger] = 'Instagramの権限が切れています'
+            end
+            url = get_media(token, id)[0]['media_url']
+
+          # cloudinary
+          else
+            url = image.url
+          end
+          break
+        end
+      end
+      @posts.push({:name => post.name, :caption => post.caption, :image => url, :id => post.id})
     end
   end
 
