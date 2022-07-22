@@ -26,18 +26,11 @@
       placeholder="Search Box"
     />
     <div id="map"></div>
-    <ol id="place_ol"></ol>
-    <ol>
-      <li>
+
         <input type="hidden" class="name" value="<%= @location_name %>">
         <input type="hidden" class="lat" value="<%= @location_lat %>">
         <input type="hidden" class="lng" value="<%= @location_lng %>">
-      </li>
-      <br>
-  </ol>
-<%= @location_lng %>
-<%= @location_lat %>
-<%= @location_name %>
+
 
     <!-- 位置情報送信用form -->
     <%= form_with id: "place-list", url: "/posts/#{@post.id}/location" do |form| %>
