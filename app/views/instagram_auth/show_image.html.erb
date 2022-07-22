@@ -5,7 +5,7 @@
 <form method="get" action="/posts/<%= @post_id %>/insert_image">
   <ul><% @albums.each do |album| %>
       <ul id="album"><% album.each do |media| %>
-      <input type="checkbox" name = "media[]" value = <%= media['url'] + "," + media['media_type'] %>>
+      <input type="checkbox" name = "media[]" value = <%= media['url'] + "," + media['media_type'] + "," + media['id'] %>>
       <li><label for="media">
 
       <% if media['media_type'] == 'IMAGE' then %>

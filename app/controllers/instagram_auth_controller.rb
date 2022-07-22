@@ -52,7 +52,7 @@ class InstagramAuthController < ApplicationController
       p = {"grant_type" => "ig_exchange_token", "client_secret" => ENV['INST_CLIENT_SECRET'], "access_token" => short_token}
       uri.query = URI.encode_www_form(p)
       http = Net::HTTP.new(uri.host, uri.port)
-      http.use_ssl = true
+      http.use_ssl= true
       res = Net::HTTP.get_response(uri)
       if res.code != 200 then
         puts "http error--"
@@ -118,58 +118,30 @@ class InstagramAuthController < ApplicationController
 
       current_user.instagramtoken.update(token: long_token, expires_at: expires_at)
       puts "token exchanged--"
-      redirect_to "/instagram/auth"
+      redirect_to "/instagram"
 
     end
 
-    def get_media(token, *ids)
-      # ------------------
-      # private method
-      # ------------------
-      # input usertoken, media-ids
-      # output response-bodies list
-
-      ret = []
-      ids.each do |id|
-        th = Thread.new do
-          uri = URI("https://graph.instagram.com/#{id}?fields=id,media_url,media_type&access_token=#{token}")
-          begin
-            res = Net::HTTP.get_response(uri)
-            if !res.is_a?(Net::HTTPOK) then
-              puts "http-error in get_media"
-              return redirect_to root_path
-            end
-            body = JSON.parse(res.body)
-            ret.push(body)
-          rescue => e
-            puts "rescue in get_media----"
-            puts e
-          end
-        end
-        th.join
-      end
-
-      puts "fin get_media--"
-      return ret
-    end
 
 
     def get_album(token, id)
       # private
       # I token, media_id(of an album)
       # O list of media from a album
+      puts "get_album start ---"
       media_ls = []
-      uri = URI("https://graph.instagram.com/#{id}/children?access_token=#{token}")
-      begin
-        res = Net::HTTP.get_response(uri)
-        if !res.is_a?(Net::HTTPOK) then
-          puts "get_aubum http error---"
-          return redirect_to root_path
-        end
-        body = JSON.parse(res.body)
-      rescue => e
-        puts e
+      uri = URI("https://graph.instagram.com/#{id}/children?fields=media_url,id&access_token=#{token}")
+      res = Net::HTTP.get_response(uri)
+      puts res
+
+      unless res.is_a?(Net::HTTPOK) then
+        puts "get_aubum http error---"
+        flash[:alert] = 'エラー　ホームに戻ります'
+        return redirect_to root_path
       end
+
+      body = JSON.parse(res.body)
+      puts "body: #{body}"
 
       ids = []
       body["data"].each do |media|
@@ -179,12 +151,7 @@ class InstagramAuthController < ApplicationController
       album = []
       res = get_media(token, *ids)
       res.each do |media|
-        case media['media_type']
-        when 'IMAGE' then
-          album.push( { "url" => media['media_url'], "media_type" => "IMAGE" } )
-        when 'VIDEO' then
-          album.push( { "url" => media['media_url'], "media_type" => "VIDEO" } )
-        end
+        album.push( { "url" => media['media_url'], "media_type" => media['media_type'], "id" => media['id'] } )
       end
       return album
     end
@@ -198,54 +165,60 @@ class InstagramAuthController < ApplicationController
       # @albums = [
       #            album [
       #              media { media_type: hoge, url: hoge }]]
-      #
-      if !current_user then
-        flash[:caution] = 'not valid user'
-        redirect_to root_path
+      post_url = "posts/#{@post_id}"
+
+      @post_id = params[:id]
+
+      unless current_user then
+        flash[:alert] = 'ユーザー認識ができません'
+        redirect_to post_url
+      end
+
+      unless current_user.instagramtoken then
+        flash[:alert] = 'instagramアカウントを連携していません'
+        redirect_to '/instagram' and return
       end
 
       token = current_user.instagramtoken.token
-      @post_id = params[:id]
       @albums = []
 
       # get ids from "me"
-      uri = URI("https://graph.instagram.com/me/media?fields=id&access_token=#{token}")
-      puts "fetching from \"me\"....."
+      uri = URI.parse("https://graph.instagram.com/me/media?fields=id,media_url,media_type&access_token=#{token}")
+      puts "fetching from \"me\"..... #{uri}"
+
+      res = Net::HTTP.get_response(uri)
+      unless res.is_a?(Net::HTTPOK) then
+        puts "http error in get_me"
+        redirect_to  and return
+      end
       begin
-        res = Net::HTTP.get_response(uri).body
-        res = JSON.parse(res)
+        res = JSON.parse(res.body)
+        puts "res--"
+        puts res
       rescue => e
         puts e
       end
       media = res["data"]
+      puts "media--"
+      puts media
       # res = {data: [{id: hoge}, {id: foo},,,]}
 
       if media == nil then
         flash[:danger] = 'no media found'
         return redirect_to root_path
       end
-      # get ids from "me" FIN
 
-      # get media urls
 
-      ids = []
-
-      #media.slice(0,4).each do |m|
       media.each do |m|
-        ids.push(m['id'])
-      end
-      puts "get_media start"
-      all_media = get_media(token, *ids)
-
-      all_media.each do |media|
-        if media['media_type'] == 'CAROUSEL_ALBUM' then
-          @albums.push(get_album(token, media["id"]))
+        if m['media_type'] == 'CAROUSEL_ALBUM' then
+          puts "get album"
+          @albums.push(get_album(token, m["id"]))
         else
-          case media['media_type']
+          case m['media_type']
           when 'IMAGE' then
-            @albums.push( [{ "url" => media['media_url'], "media_type" => "IMAGE" }] )
+            @albums.push( [{ "url" => m['media_url'], "media_type" => "IMAGE", "id" => m['id'] }] )
           when 'VIDEO' then
-            @albums.push( [{ "url" => media['media_url'], "media_type" => "VIDEO" }] )
+            @albums.push( [{ "url" => m['media_url'], "media_type" => "VIDEO", "id" => m['id'] }] )
           end
         end
       end
@@ -274,7 +247,7 @@ class InstagramAuthController < ApplicationController
 
       params[:media].each do |url_type|
         out = url_type.split(",")
-        img = Image.create(url: out[0], media_type: out[1])
+        img = Image.create(url: out[0], media_type: out[1], instagram_id: out[2].to_i)
         post.images << img
       end
 

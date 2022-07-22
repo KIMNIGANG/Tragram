@@ -1,5 +1,71 @@
 <!--project内にpostをrender-->
 
+
+
+<html>
+  <head>
+    <title>Places Search Box</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
+    <%= stylesheet_link_tag "map_style.css" %>
+  </head>
+  <body>
+    <% flash.each do |type, mes| %>
+      <div class="notifications">
+        <div class="<%=type%>"><%=mes%></div>
+      </div>
+    <% end %>
+
+    <h2>title <%= @post.name %></h2>
+    <h3>caption <%= @post.caption %></h3>
+
+    <input
+      id="pac-input"
+      class="controls"
+      type="text"
+      placeholder="Search Box"
+    />
+    <div id="map"></div>
+    <ol id="place_ol"></ol>
+
+
+    <!-- 位置情報送信用form -->
+    <%= form_with id: "place-list", url: "/posts/#{@post.id}/location" do |form| %>
+      <% unless @location[0].nil? then %>
+        <%= form.submit value: "位置情報を登録する", data: {confirm: "既に位置情報が登録済みですが、更新しますか？"} %>
+      <% else %>
+        <%= form.submit value: "位置情報を登録する" %>
+      <% end %>
+    <% end %>
+    <br>
+
+  <%= javascript_pack_tag 'map', 'data-turbolinks-track': 'reload'%>
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=<%=ENV['GOOGLE_MAP_API_KEY']%>&callback=initAutocomplete&libraries=places&v=weekly"
+    defer
+  ></script>
+
+
+
+    <% @post.images.each do |media| %>
+      <% if media.media_type == 'IMAGE' then %>
+        <img src = <%= media.url %>>
+      <% else %>
+        <video controls autoplay name="media">
+          <source src=<%= media.url %> type="video/mp4">
+          <source src=<%= media.url %> type="video/webm">
+        </video>
+      <% end %>
+    <% end %>
+
+    <%= link_to '投稿を編集', edit_post_path(@post.id) %>
+    <%= link_to '投稿を削除', post_path(@post.id), :method => :delete, data: {confirm: "削除しますか？"} %>
+    <%= link_to 'get media from instagram', controller: "instagram_auth", action: "show_image", id: @post.id %>
+  </body>
+</html>
+
+
+
 <head>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
@@ -40,16 +106,16 @@
 
 </div>
 
-
-<% @post.images.each do |media| %>
-  <% if media.media_type == 'IMAGE' then %>
-    <img src = <%= media.url %> class="media">
+<% @images.each do |media|%>
+  <% if media[:media_type] == 'IMAGE' then %>
+    <img src = <%= media[:url] %>>
   <% else %>
-    <video controls autoplay name="media" class="media">
-      <source src=<%= media.url %> type="video/mp4">
-      <source src=<%= media.url %> type="video/webm">
+    <video controls autoplay name="media">
+      <source src=<%= media[:url] %> type="video/mp4">
+      <source src=<%= media[:url] %> type="video/webm">
     </video>
   <% end %>
+
 <% end %>
 
 <p class="caption"><%= @post.caption%></p>

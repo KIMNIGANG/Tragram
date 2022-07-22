@@ -24,7 +24,7 @@
 
     <%= javascript_pack_tag 'map', 'data-turbolinks-track': 'reload'%>
     <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBPeJRg78YsYu3-A_PkaV0ovciRzZfRwv0&callback=initAutocomplete&libraries=places&v=weekly"
+      src="https://maps.googleapis.com/maps/api/js?key=<%=ENV['GOOGLE_MAP_API_KEY']%>&callback=initAutocomplete&libraries=places&v=weekly"
       defer
     ></script>
   </body>

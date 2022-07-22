@@ -1,0 +1,58 @@
+module HTTPX
+  module Resolver
+    class Native < Resolver
+      extend Forwardable
+      include _ToIO
+
+      DEFAULTS: Hash[Symbol, untyped]
+      DNS_PORT: Integer
+
+      @family: ip_family
+      @options: Options
+      @ns_index: Integer
+      @nameserver: String
+      @_timeouts: Array[Numeric]
+      @timeouts: Hash[String, Array[Numeric]]
+      @connections: Array[Connection]
+      @read_buffer: String
+      @write_buffer: Buffer
+
+      attr_reader state: Symbol
+
+      def call: () -> void
+
+      def interests: () -> (:r | :w | nil)
+
+      def <<: (Connection) -> void
+
+      def timeout: () -> Numeric?
+
+      private
+
+      def initialize: (ip_family family, options options) -> void
+
+      def calculate_interests: () -> (:r | :w | nil)
+
+      def consume: () -> void
+
+      def do_retry: () -> void
+
+      def dread: (Integer) -> void
+               | () -> void
+
+      def dwrite: () -> void
+
+      def parse: (String) -> void
+
+      def resolve: (?Connection connection, ?String hostname) -> void
+
+      def generate_candidates: (String) -> Array[String]
+
+      def build_socket: () -> void
+
+      def transition: (Symbol nextstate) -> void
+
+      def handle_error: (NativeResolveError | StandardError) -> void
+    end
+  end
+end

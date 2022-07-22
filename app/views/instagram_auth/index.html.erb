@@ -1,4 +1,8 @@
 <h1>instagram auth</h1>
+<% flash.each do |type, m| %>
+  <div class="<%=type%>"><%= m %></div>
+<% end %>
+
 <%= link_to "home", root_path%></br>
 <%if logged_in?%>
   <% if @days_left == nil then%>

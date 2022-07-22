@@ -48,20 +48,52 @@ class PostsController < ApplicationController
 
 
   def show
-    if @post = post?(params[:id]) then
-      # member check
-      if !@post.project.users.include?(current_user) then
-        puts "no access (post#show)"
-        redirect_to root_path
+    unless @post = post?(params[:id]) then
+      redirect_to root_path and return
+    end
+
+    # member check
+    if !@post.project.users.include?(current_user) then
+      puts "no access (post#show)"
+      redirect_to root_path
+    end
+      @location = []
+      if @post.location then
+        name = @post.location.name ||= ""
+        lng = @post.location.lng ||= ""
+        lat = @post.location.lat ||= ""
+        @location.push({:name => name, :lng => lng, :lat => lat})
+      end
+    # location info
+    if !@post.location.nil? then
+      @location_name = @post.location.name ||= ""
+      @location_lng = @post.location.lng ||= ""
+      @location_lat = @post.location.lat ||= ""
+    end
+
+    # image urls
+    @images = []
+    token = current_user.instagramtoken.token if current_user.instagramtoken
+    @post.images.each do |media|
+      url = ''
+      media_type = ''
+
+      # instagram
+      if media.instagram_id then
+        unless token then
+          flash[:alert] = 'Instagramの権限が切れています'
+        end
+        res = get_media(token, media.instagram_id)
+        url = res[0]['media_url']
+
+      # cloudinary
+      elsif media.url then
+        url = media.url
+
       end
 
-      if !@post.location.nil? then
-        @location_name = @post.location.name ||= ""
-        @location_lng = @post.location.lng ||= ""
-        @location_lat = @post.location.lat ||= ""
-      end
-    else
-      redirect_to root_path and return
+      @images.push({:media_type => media.media_type, :url => url})
+
     end
   end
 
@@ -72,24 +104,44 @@ class PostsController < ApplicationController
       redirect_to request.referer
     end
 
-    if current_user != @post.user then
+    if current_user != post.user then
       flash[:alert] = '編集権限がありません'
       redirect_to request.referer
-    end
-  end
-
-
-  def update()
-    if post = post?(params[:id]) then
-      post.update(post_update_params)
     else
-      redirect_to root_path
+      post.update(post_update_params)
     end
     redirect_to controller: :posts, action: :show, id: post.id
   end
 
-  private
+  def location_update()
+    puts "locationupdate--"
+    unless post = post?(params[:id]) then
+      flash[:alert] = '投稿がありません'
+      redirect_to request.referer
+    end
 
+    if current_user != post.user then
+      flash[:alert] = '編集権限がありません'
+      redirect_to request.referer
+    else
+      name = params[:name]
+      lat = params[:lat].to_f
+      lng = params[:lng].to_f
+      if post.location then
+        post.location.update(name: name, lat: lat, lng: lng, post_id: post.id)
+      else
+        Location.create(name: name, lat: lat, lng: lng, post_id: post.id)
+      end
+      flash[:notice] = '位置情報を登録しました'
+      redirect_to "/posts/#{post.id}/"
+    end
+  end
+
+
+
+
+
+  private
 
   def post?(id)
     post = Post.find_by(id: id)
@@ -107,6 +159,7 @@ class PostsController < ApplicationController
     #悪意あるユーザからの情報を受け取らないように
     params.require(:post).permit(:caption, :name)
   end
+
 
   def post_update_params
     params.require(:post).permit(:caption)
