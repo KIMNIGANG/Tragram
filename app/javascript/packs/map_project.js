@@ -24,7 +24,7 @@ function initMap() {
       lat: parseFloat(place_geo[0].lat),
       lng: parseFloat(place_geo[0].lng),
     },
-    zoom: 14,
+    zoom: 12,
     mapTypeId: "roadmap",
   });
 

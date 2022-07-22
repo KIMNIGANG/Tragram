@@ -27,6 +27,15 @@
     <div id="map"></div>
     <ol id="place_ol"></ol>
 
+    <ol>
+      <li>
+        <input type="hidden" class="name" value="<%= @location_show[@post.i--][:name] %>">
+        <input type="hidden" class="lat" value="<%= @location_show[@post.i-1][:lat] %>">
+        <input type="hidden" class="lng" value="<%= @location_show[@post.i-1][:lng] %>">
+      </li>
+      <br>
+    </ol>
+
     <!-- 位置情報送信用form -->
     <%= form_with id: "place-list", url: "/posts/#{@post.id}/location" do |form| %>
       <% unless @location[0].nil? then %>

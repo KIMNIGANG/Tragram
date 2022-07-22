@@ -62,6 +62,17 @@ class PostsController < ApplicationController
         lat = @post.location.lat ||= ""
         @location.push({:name => name, :lng => lng, :lat => lat})
       end
+
+      @location_show = []
+      project = Project.find_by(id: params[:id])
+      project.posts.each do |post|
+        if post.location then
+          name = post.location.name ||= nil
+          lat = post.location.lat ||= nil
+          lng = post.location.lng ||= nil
+        end
+        @location_show.push({:name => name, :lat => lat, :lng => lng})
+      end
     else
       redirect_to root_path and return
     end
