@@ -1,0 +1,44 @@
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+
+const place_geo = [];
+
+// window.onload = function () {};
+
+function initMap() {
+  let names = document.getElementsByClassName("name");
+  let lats = document.getElementsByClassName("lat");
+  let lngs = document.getElementsByClassName("lng");
+
+  for (let i = 0; i < names.length; i++) {
+    place_geo.push({
+      lat: lats[i].value,
+      lng: lngs[i].value,
+      name: names[i].value,
+    });
+  }
+  console.log(place_geo);
+  const map = new google.maps.Map(document.getElementById("map"), {
+    zoom: 14,
+    center: { lat: 36.0847492, lng: 140.1037952 },
+  });
+
+  console.log(place_geo);
+
+  place_geo.forEach(function (t) {
+    const marker = new google.maps.Marker({
+      position: { lat: parseFloat(t.lat), lng: parseFloat(t.lng) },
+      map,
+      name: t.name,
+      // optimized: false,
+    });
+    // Add a click listener for each marker, and set up the info window.
+    // marker.addListener("click", () => {
+    //   infoWindow.close();
+    //   infoWindow.setContent(marker.getTitle());
+    //   infoWindow.open(marker.getMap(), marker);
+    // });
+  });
+}
+window.initMap = initMap;
