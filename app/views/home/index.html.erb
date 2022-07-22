@@ -1,16 +1,20 @@
 <!--ホーム表示 機能説明とか？-->
 <html>
   <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700&display=swap" rel="stylesheet">
     <%= stylesheet_link_tag 'home', media: 'all', 'data-turbolinks-track': 'reload' %>
   </head>
-  <body>
-    <div class="app_name">
+  <body class="home">
+    <div class="home_top">
       <img src="/assets/Tiger_icon.png" class="tiger">
       <h1>Tragram</h1>
       <img src="/assets/Tiger_icon.png" class="tiger">
+      <p class="home_caption">旅行を写真ベースで記録しよう</p>
     </div>
-
-    <p>旅行を写真ベースで記録</p>
+    <div class="home_howto">
+    </div>
     <%= link_to "instagram", controller: 'instagram_auth', action: 'index'%>
   </body>
 </html>

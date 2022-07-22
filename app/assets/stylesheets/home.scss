@@ -2,18 +2,20 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: https://sass-lang.com/
 
-div.app_name {
+div.home_top {
   display: block;
   margin-top: 8rem;
+  padding-top: 90px;
   text-align: center;
+  height: 500px;
 
   h1 {
     font-size: 100px;
     display: inline-block;
     vertical-align: middle;
+    font-family: 'Raleway', sans-serif;
   }
 }
-
 
 .tiger {
   width: 100px;
@@ -22,6 +24,12 @@ div.app_name {
   margin: 0 20px 0 20px;
 }
 
-p {
-  text-align: center;
+p.home_caption {
+  margin-top: 20px;
+  font-size: larger;
+}
+
+div.home_howto {
+  height: 500px;
+  background-color: gray;
 }

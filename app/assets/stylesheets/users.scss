@@ -2,11 +2,11 @@ h1 {
   text-align: center;
 }
 
-.project_container {
+div.project_container {
   text-align: center;
 }
 
-.project_all {
+div.project_all {
   margin: 0 auto;
   width: 44rem;
   display: inline-block;
@@ -28,21 +28,54 @@ h1 {
 }
 
 
-.create_form_container {
+div.create_form_container {
   display: block;
   clear: both;
   padding-bottom: 2rem;
+
+  div.create_form_child {
+    text-align: center;
+    border: solid 1px gray;
+    border-radius: 5px;
+    padding: 20px;
+    width: 36rem;
+    margin: 0 auto
+  }
+
+  form.new_project {
+    margin-top: 1rem;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  input[type="text"],
+  textarea {
+    margin-bottom: 1rem;
+    width: 20rem;
+    border: solid 1px gray;
+    border-radius: 5px;
+    color: gray;
+  }
+
+  input[type="text"] {
+    height: 2.5rem;
+  }
+
+  textarea {
+    height: 5rem;
+  }
+
+  .btn {
+    background-color: gray;
+    color: white;
+  }
+
 }
 
 
-.create_form_child {
-  text-align: center;
-  border: solid 1px gray;
-  border-radius: 5px;
-  padding: 20px;
-  width: 36rem;
-  margin: 0 auto
-}
+
 
 
 .card-img {

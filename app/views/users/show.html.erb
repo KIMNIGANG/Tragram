@@ -45,9 +45,6 @@
   </div>
   </div>
 
-
-
-
   <!--作成フォーム-->
   <div class="create_form_container">
     <div class="create_form_child">
@@ -58,12 +55,9 @@
           <%= f.text_field :name, autofocus: true %>
           <p>旅行の説明を入力</p>
           <%= f.text_area :caption, autofocus: true %><br>
-        <!-- メンバーの追加はここでやる？ -->
-        <%= f.submit "ページを作成" %>
+        <%= f.submit "旅行ページを作成" , class: "btn"%>
       <% end %>
       </details>
     </div>
   </div>
-<%else%>
-  <h4 style="text-align: center;">ログインしてください</h4>
 <% end %>
