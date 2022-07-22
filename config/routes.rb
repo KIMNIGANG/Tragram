@@ -23,7 +23,7 @@ Rails.application.routes.draw do
 
 
   #post 'projects/create',as:"projects"
-  get '/instagram/auth' => 'instagram_auth#auth'
+  get '/instagram' => 'instagram_auth#index'
   get '/authpass' => 'instagram_auth#get_token'
 
   get '/get_media_test' => 'instagram_auth#get_media_test'

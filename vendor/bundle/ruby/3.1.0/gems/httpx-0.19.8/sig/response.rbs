@@ -1,0 +1,113 @@
+module HTTPX
+  interface _Response
+    def raise_for_status: () -> self
+
+    def error: () -> StandardError?
+  end
+
+  class Response
+    extend Forwardable
+
+    include _Response
+    include _ToS
+    include _Reader
+
+    attr_reader status: Integer
+    attr_reader headers: Headers
+    attr_reader body: Body
+    attr_reader version: String
+
+    @options: Options
+    @request: Request
+    @content_type: ContentType
+
+    def copy_to: (_ToPath | _Writer destination) -> void
+    def close: () -> void
+    def uri: () -> URI::Generic
+
+    def merge_headers: (_Each[[String, headers_value]]) -> void
+    def bodyless?: () -> bool
+    def content_type: () -> ContentType
+    def complete?: () -> bool
+
+    def json: (?json_options opts) -> untyped
+
+    def form: () -> Hash[String, untyped]
+
+    private
+
+    def initialize: (Request request, String | Integer status, String version, headers?) -> untyped
+    def no_data?: () -> bool
+
+    def decode:(String format, ?untyped options) -> untyped
+
+    class Body
+      include _Reader
+      include _ToS
+      include _ToStr
+
+      @response: Response
+      @headers: Headers
+      @options: Options
+      @state: :idle | :memory | :buffer | :closed
+      @threshold_size: Integer
+      @window_size: Integer
+      @encoding: String
+      @length: Integer
+      @buffer: StringIO | Tempfile | nil
+
+      def write:(String chunk) -> Integer?
+
+      def each: () { (String) -> void } -> void
+              | () -> Enumerable[String]
+
+      def bytesize: () -> Numeric
+      def empty?: () -> bool
+      def copy_to: (String | File | _Writer destination) -> void
+      def close: () -> void
+      def closed?: () -> bool
+
+      private
+
+      def initialize: (Response, Options) -> untyped
+      def rewind: () -> void
+      def transition: () -> void
+      def _with_same_buffer_pos: [A] () { () -> A } -> A
+    end
+  end
+
+  class ContentType
+    MIME_TYPE_RE: Regexp
+    CHARSET_RE: Regexp
+
+    @header_value: String?
+    @mime_type: String?
+    @charset: String?
+
+    def mime_type: () -> String?
+
+    def charset: () -> String?
+
+    private
+
+    def initialize: (String? header_value) -> void
+  end
+
+  class ErrorResponse
+    include _Response
+    include Loggable
+
+    @options: Options
+    @error: Exception
+
+    attr_reader request: Request
+
+    def status: () -> (Integer | _ToS)
+
+    private
+
+    def initialize: (Request, Exception, options) -> untyped
+  end
+
+  type response = Response | ErrorResponse
+end

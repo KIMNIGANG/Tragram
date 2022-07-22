@@ -4,20 +4,24 @@ class InstagramAuthController < ApplicationController
     require 'yaml'
     require 'time'
 
-    def auth
+    # /instagram get
+    def index
       # /oauth/へのurlをuserに踏ませる
       # token持ってない時は、
       if !current_user then
         flash[:caution] = 'user doesnt exist'
         redirect_to root_path
       end
-      token = current_user.instagramtoken
-      if token != nil then
-        @expires_in = token.expires_in / (60 * 60 * 24)
+      token = current_user.instagramtoken ||= nil
+      if token then
+        @days_left = (token.expires_at - Time.now)/(60*60*24)
       end
-      @redirect_uri = ENV['INST_REDIRECT_URI']
-      @client_id = ENV['INST_CLIENT_ID']
-
+      redirect_uri = ENV['INST_REDIRECT_URI']
+      client_id = ENV['INST_CLIENT_ID']
+      link = URI.parse("https://api.instagram.com/oauth/authorize")
+      params = { "client_id" => client_id, "redirect_uri" => redirect_uri, "scope" => "user_profile,user_media", "response_type" => "code"}
+      link.query = URI.encode_www_form(params)
+      @link = link.to_s
       # instagram -> get_tokenへとリダイレクトされる
     end
 
@@ -29,7 +33,8 @@ class InstagramAuthController < ApplicationController
       # short term
       uri = URI.parse('https://api.instagram.com/oauth/access_token')
       res = Net::HTTP.post_form(uri,
-      { "client_id" => ENV['INST_CLIENT_ID'],
+      { 
+        "client_id" => ENV['INST_CLIENT_ID'],
         "client_secret" => ENV['INST_CLIENT_SECRET'],
         "grant_type" => "authorization_code",
         "redirect_uri" => ENV['INST_REDIRECT_URI'],
@@ -38,6 +43,7 @@ class InstagramAuthController < ApplicationController
 
       res = JSON.parse(res.body)
       short_token = res["access_token"]
+
 
       
       # long term
@@ -55,18 +61,23 @@ class InstagramAuthController < ApplicationController
       end
       res = JSON.parse(res.body)
       expires_in = res['expires_in']
+      puts "in---"
+      puts expires_in
+      expires_at = Time.now + expires_in
+      puts expires_at
       long_token = res["access_token"]
       puts "--long term token fetched--"
+
 
 
       # user tokenの書き換え
       if !current_user.instagramtoken then
         puts "create new instagramtoken instance=========="
-        token_instance = Instagramtoken.create(token: long_token, expires_in: expires_in)
+        token_instance = Instagramtoken.create(token: long_token, expires_at: expires_at)
         current_user.instagramtoken = token_instance
-      else
-        puts "update instagramtoken instance===="
-        current_user.instagramtoken.update(token: long_token, expires_in: expires_in)
+      #else
+      #  puts "update instagramtoken instance===="
+      #  current_user.instagramtoken.update(token: long_token, expires_at: expires_at)
       end
 
       print "-- gettoken fin -"
@@ -95,12 +106,14 @@ class InstagramAuthController < ApplicationController
       end
       res = JSON.parse(res.body)
       expires_in = res['expires_in']
+      expires_at = Time.now + expires_in
+
       long_token = res["access_token"]
       puts "--long term token fetched--"
 
-      current_user.instagramtoken.update(token: long_token, expires_in: expires_in)
+      current_user.instagramtoken.update(token: long_token, expires_at: expires_at)
       puts "token exchanged--"
-      redirect_to "/instagram/auth"
+      redirect_to "/instagram"
 
     end
 
@@ -184,6 +197,11 @@ class InstagramAuthController < ApplicationController
       if !current_user then
         flash[:caution] = 'not valid user'
         redirect_to root_path
+      end
+
+      if !current_user.instagramtoken then
+        flash[:alert] = 'instagramアカウントを連携していません'
+        redirect_to '/instagram' and return
       end
 
       token = current_user.instagramtoken.token
