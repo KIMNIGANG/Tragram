@@ -38,7 +38,10 @@
     <%= form.submit %>
   <% end %>
   </div>
-
+  <%= form_with url: {controller: 'posts', action: 'add_image', id: @post.id } do |form| %>
+    <%= form.file_field :image %>
+    <%= form.submit %>
+  <% end %>
 </div>
 
 <% @images.each do |media|%>
