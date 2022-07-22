@@ -19,10 +19,6 @@
     <p>https://localhost:3001/projects/<%= params[:id] %>/invite</p>
   </details>
 
-
-
-  <br>
-  <br>
   <!--post一覧表示-->
   <%#= render 'posts/show' %>
 
@@ -34,8 +30,30 @@
         <%= safe_join(post[:caption].split("\n"),tag(:br)) %>
     </p>
     <%= link_to '投稿詳細', post_path(post[:id]) %>
+  <% end %><br>
+
+  <div id="map"></div>
+  <script
+  src="https://maps.googleapis.com/maps/api/js?key=<%=ENV['GOOGLE_MAP_API_KEY']%>&callback=initMap&v=weekly"
+  defer></script>
+
+  <ol>
+  <% @location.each do |location| %>
+    <li>
+      <%= location[:name] %>
+      <%= location[:lat] %>
+      <%= location[:lng] %>
+      <input type="hidden" class="name" value="<%= location[:name] %>">
+      <input type="hidden" class="lat" value="<%= location[:lat] %>">
+      <input type="hidden" class="lng" value="<%= location[:lng] %>">
+    </li>
+    <br>
   <% end %>
+  </ol>
 
 
+  <div id="test"></div>
 
 <% end %>
+
+  <%= javascript_pack_tag 'map_project', 'data-turbolinks-track': 'reload'%>

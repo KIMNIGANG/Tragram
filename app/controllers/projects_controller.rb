@@ -38,6 +38,16 @@ class ProjectsController < ApplicationController
       end
       @posts.push({:name => post.name, :caption => post.caption, :image => url, :id => post.id})
     end
+
+    @location = []
+    project.posts.each do |post|
+      if post.location then
+        name = post.location.name ||= nil
+        lat = post.location.lat ||= nil
+        lng = post.location.lng ||= nil
+      end
+      @location.push({:name => name, :lat => lat, :lng => lng})
+    end
   end
 
   # projectのcreate
