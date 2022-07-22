@@ -1,5 +1,7 @@
 class ApplicationController < ActionController::Base
   include SessionsHelper
+  include InstagramAuthHelper
+
   before_action :check_logged_in
 
   def check_logged_in
