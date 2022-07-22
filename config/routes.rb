@@ -33,4 +33,6 @@ Rails.application.routes.draw do
   get '/get_media_test' => 'instagram_auth#get_media_test'
 
   get '/map' => 'google_map#index'
+
+  post '/posts/:id/add_image/' => 'posts#add_image'
 end

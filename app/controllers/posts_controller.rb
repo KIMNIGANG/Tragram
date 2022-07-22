@@ -89,11 +89,25 @@ class PostsController < ApplicationController
   end
 
   def add_image()
-    post = Post.find(params[:id])
-    Cloudinary.config do |config|
-      config.cloud_name = Rails.application.credentials.cloudinary[:cloud_name]
-      config.api_key = Rails.application.credentials.cloudinary[:api_key]
-      config.api_secret = Rails.application.credentials.cloudinary[:api_secret]
+    if post = post?(params[:id]) then
+      Cloudinary.config do |config|
+        config.cloud_name = Rails.application.credentials.cloudinary[:cloud_name]
+        config.api_key = Rails.application.credentials.cloudinary[:api_key]
+        config.api_secret = Rails.application.credentials.cloudinary[:api_secret]
+      end
+      if params[:image] then
+        img = params[:image]
+        upload = Cloudinary::Uploader.upload(img.path, :resource_type => :auto)
+        img_url = upload['url']
+        if img.content_type.slice(0,5) == "image" then
+          tmpMT = 'IMAGE'
+        elsif img.content_type.slice(0,5) == "video" then
+          tmpMT = 'VIDEO'
+        end
+        imgC = Image.create(url: img_url, media_type: tmpMT)
+        post.images << imgC
+      end
+      redirect_to post_path(id: post.id)
     end
   end
 
@@ -114,11 +128,7 @@ class PostsController < ApplicationController
 
   def post_params
     #悪意あるユーザからの情報を受け取らないように
-<<<<<<< HEAD
-    params.require(:post).permit(:caption, :image)
-=======
     params.require(:post).permit(:caption, :name)
->>>>>>> ede59b0 (title追加. userとpostの関係性add)
   end
 
   def post_update_params
