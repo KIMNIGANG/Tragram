@@ -71,4 +71,3 @@ gem 'font-awesome-sass'
 
 #cloudinary
 gem 'cloudinary'
-gem 'carrierwave'
