@@ -48,22 +48,48 @@ class PostsController < ApplicationController
 
 
   def show
-    if @post = post?(params[:id]) then
-      # member check
-      if !@post.project.users.include?(current_user) then
-        puts "no access (post#show)"
-        redirect_to root_path
-      end
-
-      if !@post.location.nil? then
-        @location_name = @post.location.name ||= ""
-        @location_lng = @post.location.lng ||= ""
-        @location_lat = @post.location.lat ||= ""
-      end
-    else
+    unless @post = post?(params[:id]) then
       redirect_to root_path and return
     end
+
+    # member check
+    if !@post.project.users.include?(current_user) then
+      puts "no access (post#show)"
+      redirect_to root_path
+    end
+
+    # location info
+    if !@post.location.nil? then
+      @location_name = @post.location.name ||= ""
+      @location_lng = @post.location.lng ||= ""
+      @location_lat = @post.location.lat ||= ""
+    end
+
+    # image urls
+    @images = []
+    token = current_user.instagramtoken.token if current_user.instagramtoken
+    @post.images.each do |media|
+      url = ''
+      media_type = ''
+
+      # instagram
+      if media.instagram_id then
+        unless token then
+          flash[:alert] = 'Instagramの権限が切れています'
+        end
+        res = get_media(token, media.instagram_id)
+        url = res[0]['media_url']
+
+      # cloudinary
+      elsif media.url then
+        url = media.url
+      end
+
+      @images.push({:media_type => media.media_type, :url => url})
+
+    end
   end
+
 
   def edit()
     if @post = post?(params[:id]) then

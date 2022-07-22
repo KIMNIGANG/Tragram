@@ -14,15 +14,27 @@
 <h2>title <%= @post.name %></h2>
 <h3>caption <%= @post.caption %></h3>
 
-<% @post.images.each do |media| %>
-  <% if media.media_type == 'IMAGE' then %>
-    <img src = <%= media.url %>>
+<%# @post.images.each do |media| %>
+  <%# if media.media_type == 'IMAGE' then %>
+  <!--<img src = <%#= media.url %>>-->
+  <%# else %>
+  <!--<video controls autoplay name="media">-->
+  <!--<source src=<%#= media.url %> type="video/mp4">-->
+  <!--<source src=<%#= media.url %> type="video/webm">-->
+  <!--</video>-->
+  <%# end %>
+<%# end %>
+
+<% @images.each do |media|%>
+  <% if media[:media_type] == 'IMAGE' then %>
+    <img src = <%= media[:url] %>>
   <% else %>
     <video controls autoplay name="media">
-      <source src=<%= media.url %> type="video/mp4">
-      <source src=<%= media.url %> type="video/webm">
+      <source src=<%= media[:url] %> type="video/mp4">
+      <source src=<%= media[:url] %> type="video/webm">
     </video>
   <% end %>
+
 <% end %>
 
 <!--location info-->
