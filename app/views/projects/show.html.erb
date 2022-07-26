@@ -42,26 +42,15 @@
   <div class="card-deck">
   <% @posts.each do |post| %>
     <div class="card post_card"  style="width:18rem;">
-      <% media = post.images.first %>
-      <% if media.present?%>
-        <% if media.media_type == 'IMAGE' then %>
-          <img src = <%= media.url %>  class="card-img-top">
-        <% else %>
-          <video controls autoplay name="media" class="card-img-top">
-            <source src=<%= media.url %> type="video/mp4">
-            <source src=<%= media.url %> type="video/webm">
-          </video>
-        <% end %>
-      <% end %>
       <img src="<%= post[:image] %>">
       <div class="card-body">
         <h5 class="card-title">
         <%= post[:name] %>
         </h5>
         <p class="card-text text-truncate" style="max-height: 100px;">
-        <%= safe_join(post.caption.split("\n"),tag(:br)) %>
+        <%= safe_join(post[:caption].split("\n"),tag(:br)) %>
         </p>
-        <%= link_to post_path(post.id), class: "btn info_btn" do %>
+        <%= link_to post_path(post[:id]), class: "btn info_btn" do %>
           投稿詳細
         <% end %>
       </div>
@@ -71,8 +60,7 @@
 
   <div id="map"></div>
   <script
-  src="https://maps.googleapis.com/maps/api/js?key=<%=ENV['GOOGLE_MAP_API_KEY']%>&callback=initMap&v=weekly"
-  defer></script>
+  src="https://maps.googleapis.com/maps/api/js?key=<%=ENV['GOOGLE_MAP_API_KEY']%>&callback=initMap&v=weekly" defer></script>
 
   <ol>
   <% @location.each do |location| %>

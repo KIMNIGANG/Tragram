@@ -23,7 +23,17 @@
 
       <% if media.present?%>
         <% if media.media_type == 'IMAGE' then %>
-          <img src = <%= media.url %>  class="card-img">
+          <!-- instagram -->
+          <% if id = media.instagram_id then %>
+            <% unless token = current_user.instagramtoken.token then %>
+              <% flash[:danger] = 'Instagramの権限が切れています' %>
+            <% end %>
+            <% url = get_media(token, id)[0]['media_url'] %>
+          <!-- cloudinary -->
+          <% else %>
+            <% url = image.url %>
+          <% end %>
+          <img src = <%= url %>  class="card-img">
         <% else %>
           <video controls autoplay name="media" class="card-img">
             <source src=<%= media.url %> type="video/mp4">
@@ -31,6 +41,7 @@
           </video>
         <% end %>
       <% end %>
+
       <div class="card-img-overlay">
         <h5 class="card-title project_name">
           <%= user_project.project.name %>
