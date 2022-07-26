@@ -53,9 +53,10 @@
           </video>
         <% end %>
       <% end %>
+      <img src="<%= post[:image] %>">
       <div class="card-body">
         <h5 class="card-title">
-        <%= post.name %>
+        <%= post[:name] %>
         </h5>
         <p class="card-text text-truncate" style="max-height: 100px;">
         <%= safe_join(post.caption.split("\n"),tag(:br)) %>
@@ -86,6 +87,7 @@
     <br>
   <% end %>
   </ol>
+
 
   <div id="test"></div>
 
