@@ -1,4 +1,6 @@
 <!--projectページ-->
+<%= javascript_pack_tag 'map_project', 'data-turbolinks-track': 'reload'%>
+
 <%if logged_in?%>
   <!--metadata-->
   <h1 class="project_name"><%= @project.name%></h1>
@@ -40,8 +42,8 @@
   <% @location.each do |location| %>
     <li>
       <%= location[:name] %>
-      <%= location[:lat] %>
-      <%= location[:lng] %>
+      <%# <%= location[:lat] %> 
+      <%# <%= location[:lng] %> 
       <input type="hidden" class="name" value="<%= location[:name] %>">
       <input type="hidden" class="lat" value="<%= location[:lat] %>">
       <input type="hidden" class="lng" value="<%= location[:lng] %>">
@@ -54,4 +56,3 @@
 
 <% end %>
 
-  <%= javascript_pack_tag 'map_project', 'data-turbolinks-track': 'reload'%>
