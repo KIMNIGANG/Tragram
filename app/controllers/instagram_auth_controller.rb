@@ -33,7 +33,7 @@ class InstagramAuthController < ApplicationController
       # short term
       uri = URI.parse('https://api.instagram.com/oauth/access_token')
       res = Net::HTTP.post_form(uri,
-      { 
+      {
         "client_id" => ENV['INST_CLIENT_ID'],
         "client_secret" => ENV['INST_CLIENT_SECRET'],
         "grant_type" => "authorization_code",
@@ -45,7 +45,7 @@ class InstagramAuthController < ApplicationController
       short_token = res["access_token"]
 
 
-      
+
       # long term
       puts "--long term start--"
       uri = URI.parse("https://graph.instagram.com/access_token")
@@ -81,7 +81,12 @@ class InstagramAuthController < ApplicationController
       end
 
       print "-- gettoken fin -"
-      redirect_to root_path
+      if session[:post_url].present?
+        redirect_to session[:post_url]
+        session.delete(:post_url)
+      else
+        redirect_to root_path
+      end
 
     end
 
@@ -184,7 +189,7 @@ class InstagramAuthController < ApplicationController
       res = Net::HTTP.get_response(uri)
       unless res.is_a?(Net::HTTPOK) then
         puts "http error in get_me"
-        redirect_to  and return 
+        redirect_to  and return
       end
       begin
         res = JSON.parse(res.body)

@@ -1,39 +1,94 @@
-// Place all the styles related to the Users controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: https://sass-lang.com/
-
 h1 {
   text-align: center;
 }
 
-div {
-  &.project {
+div.project_container {
+  text-align: center;
+}
 
+div.project_all {
+  margin: 0 auto;
+  width: 44rem;
+  display: inline-block;
+}
+
+.project {
+  float: left;
+  height: 10rem;
+  margin: 2rem;
+}
+
+.project_name {
+  font-size: 30px;
+
+}
+
+.project_caption {
+  font-size: 15px;
+}
+
+
+div.create_form_container {
+  display: block;
+  clear: both;
+  padding-bottom: 2rem;
+
+  div.create_form_child {
+    text-align: center;
     border: solid 1px gray;
     border-radius: 5px;
-    margin: 50px 400px 0px 400px;
-    padding: 10px;
-
-
-    a {
-      &.project_name {
-        font-size: 30px;
-      }
-    }
-
-  }
-
-  &.create_form_container {
-    display: flex;
-    justify-content: center;
-    border: solid 1px gray;
-    border-radius: 5px;
-    margin: 50px 400px 0px 400px;
     padding: 20px;
-
-    .create_form_child {
-      text-align: center;
-
-    }
+    width: 36rem;
+    margin: 0 auto
   }
+
+  form.new_project {
+    margin-top: 1rem;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  input[type="text"],
+  textarea {
+    margin-bottom: 1rem;
+    width: 20rem;
+    border: solid 1px gray;
+    border-radius: 5px;
+    color: gray;
+  }
+
+  input[type="text"] {
+    height: 2.5rem;
+  }
+
+  textarea {
+    height: 5rem;
+  }
+
+  .btn {
+    background-color: gray;
+    color: white;
+  }
+
+}
+
+.card-img {
+  height: 10rem;
+  width: 18rem;
+  object-fit: cover;
+}
+
+.card-img-overlay {
+  background-color: rgba(0, 0, 0, 0.3);
+  text-align: left;
+  color: white;
+  height: 10rem;
+  width: 17.9rem;
+}
+
+.card-title.project_card_title {
+  color: white;
+  font-size: 25px;
 }

@@ -110,7 +110,7 @@ class PostsController < ApplicationController
     else
       post.update(post_update_params)
     end
-    redirect_to controller: :projects, action: :show, id: post.project_id
+    redirect_to controller: :posts, action: :show, id: post.id
   end
 
   def location_update()

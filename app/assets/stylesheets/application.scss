@@ -13,18 +13,33 @@
  *= require_tree .
  *= require_self
  */
-@import 'font-awesome-sprockets';
-@import 'font-awesome';
+$fa-font-path: "@fortawesome/fontawesome-free/webfonts";
 @import "@fortawesome/fontawesome-free/scss/fontawesome";
+@import "@fortawesome/fontawesome-free/scss/solid";
+@import "@fortawesome/fontawesome-free/scss/regular";
+@import "@fortawesome/fontawesome-free/scss/brands";
+@import "@fortawesome/fontawesome-free/scss/v4-shims";
 
 header {
   position: absolute;
   right: 0;
   padding-right: 20px;
+  color: gray;
 }
 
 .header_btn {
   position: absolute;
   right: 0;
   padding-right: 20px;
+  color: gray;
+}
+
+body {
+  padding-top: 20px;
+  color: gray;
+  background-color: rgb(249, 247, 238);
+}
+
+h1 {
+  color: gray;
 }

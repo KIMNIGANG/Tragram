@@ -7,9 +7,9 @@ const place_geo = [];
 // window.onload = function () {};
 
 function initMap() {
-  let names = document.getElementsByClassName("name");
-  let lats = document.getElementsByClassName("lat");
-  let lngs = document.getElementsByClassName("lng");
+  let names = document.getElementsByClassName("loc_name");
+  let lats = document.getElementsByClassName("loc_lat");
+  let lngs = document.getElementsByClassName("loc_lng");
 
   for (let i = 0; i < names.length; i++) {
     place_geo.push({
@@ -24,7 +24,7 @@ function initMap() {
       lat: parseFloat(place_geo[0].lat),
       lng: parseFloat(place_geo[0].lng),
     },
-    zoom: 14,
+    zoom: 13,
     mapTypeId: "roadmap",
   });
 
