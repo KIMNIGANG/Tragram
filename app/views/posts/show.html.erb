@@ -32,6 +32,11 @@
       <i class="fab fa-instagram"></i>Instagramから写真を取得する
     <% end %>
   <% end %>
+
+  <%= form_with url: {controller: 'posts', action: 'add_image', id: @post.id } do |form| %>
+    <%= form.file_field :image %>
+    <%= form.submit %>
+  <% end %>
   </div>
 
 </div>
@@ -70,10 +75,11 @@
       placeholder="Search Box"
     />
     <div id="map"></div>
-
-        <input type="hidden" class="name" value="<%= @location_name %>">
-        <input type="hidden" class="lat" value="<%= @location_lat %>">
-        <input type="hidden" class="lng" value="<%= @location_lng %>">
+    <p><i class="fa-solid fa-location-dot"></i><%= @location_name %></p>
+    <ol id="place_ol"></ol>
+    <input type="hidden" class="name" value="<%= @location_name %>">
+    <input type="hidden" class="lat" value="<%= @location_lat %>">
+    <input type="hidden" class="lng" value="<%= @location_lng %>">
 
 
     <!-- 位置情報送信用form -->
