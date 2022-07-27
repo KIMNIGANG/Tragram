@@ -11,14 +11,24 @@ function initMap() {
   let lats = document.getElementsByClassName("loc_lat");
   let lngs = document.getElementsByClassName("loc_lng");
 
-  for (let i = 0; i < names.length; i++) {
+  console.log(lats[0].value);
+
+  if (lats[0].value == false) {
     place_geo.push({
-      lat: lats[i].value,
-      lng: lngs[i].value,
-      name: names[i].value,
+      lat: 36.0927275,
+      lng: 140.0967544,
+      name: "tsukuba",
     });
+  } else {
+    for (let i = 0; i < names.length; i++) {
+      place_geo.push({
+        lat: lats[i].value,
+        lng: lngs[i].value,
+        name: names[i].value,
+      });
+    }
   }
-  // console.log(place_geo);
+
   const map = new google.maps.Map(document.getElementById("map"), {
     center: {
       lat: parseFloat(place_geo[0].lat),
