@@ -24,7 +24,6 @@ function initAutocomplete() {
     mapTypeId: "roadmap",
   });
 
-
   const input = document.getElementById("pac-input");
   const searchBox = new google.maps.places.SearchBox(input);
   map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
@@ -45,6 +44,12 @@ function initAutocomplete() {
     })
   );
   searchBox.addListener("places_changed", function () {
+    document.getElementById("clear-pin").addEventListener("click", () => {
+      // Clear out the old markers.
+      markers.forEach(function (marker) {
+        marker.setMap(null);
+      });
+    });
     var places = searchBox.getPlaces();
     if (places.length == 0) {
       return;
