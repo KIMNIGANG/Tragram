@@ -45,7 +45,6 @@ class InstagramAuthController < ApplicationController
       short_token = res["access_token"]
 
 
-
       # long term
       puts "--long term start--"
       uri = URI.parse("https://graph.instagram.com/access_token")
