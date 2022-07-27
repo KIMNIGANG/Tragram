@@ -47,6 +47,7 @@
 ></script>
 
   <ol>
+    <!--locationないときは0, 0 座標-->
     <% if @location.present? %>
       <% @location.each do |location| %>
       <li>
