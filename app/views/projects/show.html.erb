@@ -47,17 +47,35 @@
 ></script>
 
   <ol>
-  <% @location.each do |location| %>
+  <% if @location.present? %>
+    <% @location.each do |location| %>
+      <li>
+        <% if location[:name].present? %>
+          <i class="fa-solid fa-location-dot"></i>
+          <%= location[:name] %>
+
+          <%# <%= location[:lat] %>
+          <%# <%= location[:lng] %>
+          <input type="hidden" class="loc_name" value="<%= location[:name] %>">
+          <input type="hidden" class="loc_lat" value="<%= location[:lat] %>">
+          <input type="hidden" class="loc_lng" value="<%= location[:lng] %>">
+        <% end %>
+      </li>
+      <br>
+    <% end %>
+  <% else %>
     <li>
-      <i class="fa-solid fa-location-dot"></i>
-      <%= location[:name] %>
-      <%# <%= location[:lat] %>
-      <%# <%= location[:lng] %>
-      <input type="hidden" class="loc_name" value="<%= location[:name] %>">
-      <input type="hidden" class="loc_lat" value="<%= location[:lat] %>">
-      <input type="hidden" class="loc_lng" value="<%= location[:lng] %>">
-    </li>
-    <br>
+        <% if location[:name].present? %>
+          <i class="fa-solid fa-location-dot"></i>
+          <%= location[:name] %>
+
+          <%# <%= location[:lat] %>
+          <%# <%= location[:lng] %>
+          <input type="hidden" class="loc_name" value="0">
+          <input type="hidden" class="loc_lat" value="0">
+          <input type="hidden" class="loc_lng" value="0">
+        <% end %>
+      </li>
   <% end %>
   </ol>
 </div>
@@ -67,13 +85,18 @@
   <div class="card-deck">
   <% @posts.each do |post| %>
     <div class="card post_card"  style="width:18rem;">
-      <img src="<%= post[:image] %>">
+      <% if post[:image].present? %>
+        <img src="<%= post[:image] %>" class="card-img-top">
+      <% end %>
       <div class="card-body">
         <h5 class="card-title">
         <%= post[:name] %>
         </h5>
         <p class="card-text text-truncate" style="max-height: 100px;">
-        <%= safe_join(post[:caption].split("\n"),tag(:br)) %>
+        <% if @location[@posts.index(post)][:name].present? %>
+          <i class="fa-solid fa-location-dot"></i>
+          <%= @location[@posts.index(post)][:name] %>
+        <% end %>
         </p>
         <%= link_to post_path(post[:id]), class: "btn info_btn" do %>
           投稿詳細
