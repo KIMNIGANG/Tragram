@@ -107,9 +107,13 @@ class PostsController < ApplicationController
     if current_user != @post.user then
       flash[:alert] = '編集権限がありません'
       redirect_to request.referer
-    else
-      @post.update(post_update_params)
     end
+
+  end
+
+  def update
+    post = Post.find(params[:id])
+    post.update(post_update_params)
     redirect_to controller: :posts, action: :show, id: post.id
   end
 
@@ -182,6 +186,6 @@ class PostsController < ApplicationController
 
 
   def post_update_params
-    params.require(:post).permit(:caption)
+    params.require(:post).permit(:caption, :name)
   end
 end

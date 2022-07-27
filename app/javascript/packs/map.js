@@ -49,7 +49,6 @@ function initAutocomplete() {
       animation: google.maps.Animation.DROP,
     })
   );
-
   searchBox.addListener("places_changed", function () {
     var places = searchBox.getPlaces();
     if (places.length == 0) {
