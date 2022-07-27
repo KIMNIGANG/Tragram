@@ -73,7 +73,3 @@ gem 'font-awesome-sass'
 
 #cloudinary
 gem 'cloudinary'
-<<<<<<< HEAD
-=======
-gem 'carrierwave'
->>>>>>> 4a5cfbc (first commit)
