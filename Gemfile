@@ -71,5 +71,5 @@ gem 'geocoder'
 #fontawesomeの使用
 gem 'font-awesome-sass'
 
-
-
+#cloudinary
+gem 'cloudinary'

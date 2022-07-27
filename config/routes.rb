@@ -38,4 +38,5 @@ Rails.application.routes.draw do
   get'/posts/:id/insert_image/', to: 'instagram_auth#insert_image_to_post'
 
   get '/map_post' => 'posts#get_param'
+  post '/posts/:id/add_image/' => 'posts#add_image'
 end
