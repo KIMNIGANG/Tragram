@@ -23,6 +23,7 @@ function initAutocomplete() {
     zoom: 14,
     mapTypeId: "roadmap",
   });
+
   const input = document.getElementById("pac-input");
   const searchBox = new google.maps.places.SearchBox(input);
   map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
@@ -97,18 +98,18 @@ function initAutocomplete() {
         name: place.name,
       });
 
-      const place_list = document.getElementById("place-list");
-      let st = document.createElement("div");
-      st.innerHTML = `
-        <input type="hidden" name="lat" value="${place.geometry[
-          "location"
-        ].lat()}">
-        <input type="hidden" name="lng" value="${place.geometry[
-          "location"
-        ].lng()}">
-        <input type="hidden" name="name" value="${place.name}">
-        `;
-      place_list.appendChild(st);
+      // const place_list = document.getElementById("place-list");
+      // let st = document.createElement("div");
+      // st.innerHTML = `
+      //   <input type="hidden" name="lat" value="${place.geometry[
+      //     "location"
+      //   ].lat()}">
+      //   <input type="hidden" name="lng" value="${place.geometry[
+      //     "location"
+      //   ].lng()}">
+      //   <input type="hidden" name="name" value="${place.name}">
+      //   `;
+      // place_list.appendChild(st);
 
       //console.log(place.geometry["location"].lng());
     });
