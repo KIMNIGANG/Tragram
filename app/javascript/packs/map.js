@@ -98,7 +98,7 @@ function initAutocomplete() {
         name: place.name,
       });
 
-      const place_list = document.getElementById("place-list");
+      /* const place_list = document.getElementById("place-list");
       let st = document.createElement("div");
       st.innerHTML = `
         <input type="hidden" name="lat" value="${place.geometry[
@@ -109,7 +109,7 @@ function initAutocomplete() {
         ].lng()}">
         <input type="hidden" name="name" value="${place.name}">
         `;
-      place_list.appendChild(st);
+      place_list.appendChild(st); */
 
       //console.log(place.geometry["location"].lng());
     });

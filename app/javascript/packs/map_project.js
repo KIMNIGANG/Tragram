@@ -28,11 +28,7 @@ function initMap() {
     mapTypeId: "roadmap",
   });
 
-<<<<<<< HEAD
   //console.log(place_geo);
-=======
-  // console.log(place_geo);
->>>>>>> e95260c (rebase)
 
   place_geo.forEach(function (t, i) {
     const marker = new google.maps.Marker({
