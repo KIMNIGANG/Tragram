@@ -5,26 +5,25 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const place_geo = [];
 
 function initAutocomplete() {
+  let name = document.getElementsByClassName("name");
+  let lat = document.getElementsByClassName("lat");
+  let lng = document.getElementsByClassName("lng");
+
+  const place_geo_show = {
+    lat: lat[0].value,
+    name: name[0].value,
+    lng: lng[0].value,
+  };
+
   const map = new google.maps.Map(document.getElementById("map"), {
-    center: { lat: 36.0847492, lng: 140.1037952 },
+    center: {
+      lat: parseFloat(place_geo_show.lat),
+      lng: parseFloat(place_geo_show.lng),
+    },
     zoom: 14,
     mapTypeId: "roadmap",
   });
 
-  // document.getElementById("set-pin").addEventListener("click", () => {
-  //   place_geo.forEach(function (t) {
-  //     console.log(t.lat);
-  //     markers.push(
-  //       new google.maps.Marker({
-  //         map: map,
-  //         icon: "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png",
-  //         title: t.name,
-  //         position: { lat: t.lat, lng: t.lng },
-  //         animation: google.maps.Animation.DROP,
-  //       })
-  //     );
-  //   });
-  // });
 
   const input = document.getElementById("pac-input");
   const searchBox = new google.maps.places.SearchBox(input);
@@ -34,15 +33,18 @@ function initAutocomplete() {
     searchBox.setBounds(map.getBounds());
   });
   let markers = [];
-  // Listen for the event fired when the user selects a prediction and retrieve
-  // more details for that place.
+  markers.push(
+    new google.maps.Marker({
+      map: map,
+      name: place_geo_show.name,
+      position: {
+        lat: parseFloat(place_geo_show.lat),
+        lng: parseFloat(place_geo_show.lng),
+      },
+      animation: google.maps.Animation.DROP,
+    })
+  );
   searchBox.addListener("places_changed", function () {
-    // document.getElementById("clear-pin").addEventListener("click", () => {
-    //   // Clear out the old markers.
-    //   markers.forEach(function (marker) {
-    //     marker.setMap(null);
-    //   });
-    // });
     var places = searchBox.getPlaces();
     if (places.length == 0) {
       return;
@@ -56,7 +58,6 @@ function initAutocomplete() {
         return;
       }
       var icon = {
-        url: "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png", //ここをinstagramの写真のurlに交換することで、写真をピンとして使える
         size: new google.maps.Size(71, 71),
         origin: new google.maps.Point(0, 0),
         anchor: new google.maps.Point(17, 34),
@@ -92,7 +93,7 @@ function initAutocomplete() {
         name: place.name,
       });
 
-      const place_list = document.getElementById("place-list");
+      /* const place_list = document.getElementById("place-list");
       let st = document.createElement("div");
       st.innerHTML = `
         <input type="hidden" name="lat" value="${place.geometry[
@@ -103,9 +104,9 @@ function initAutocomplete() {
         ].lng()}">
         <input type="hidden" name="name" value="${place.name}">
         `;
-      place_list.appendChild(st);
+      place_list.appendChild(st); */
 
-      console.log(place.geometry["location"].lng());
+      //console.log(place.geometry["location"].lng());
     });
     map.fitBounds(bounds);
 

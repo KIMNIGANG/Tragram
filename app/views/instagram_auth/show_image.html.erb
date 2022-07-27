@@ -11,7 +11,7 @@
       <% if media['media_type'] == 'IMAGE' then %>
         <img src=<%= media['url'] %> height="200">
       <% else %>
-        <video controls autoplay name="media" height="200">
+        <video controls name="media" height="200">
         <source src=<%= media['url'] %> type="video/mp4">
         </video>
       <% end %>
@@ -37,4 +37,3 @@
 
 
 <% end %>
-
