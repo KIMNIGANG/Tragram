@@ -1,6 +1,7 @@
-// Place all the styles related to the Projects controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: https://sass-lang.com/
+.header {
+  padding: 20px 10rem 0 10rem;
+  margin-bottom: 3rem;
+}
 
 a {
   color: gray;
@@ -14,10 +15,8 @@ a {
 
 }
 
-div {
-  &.project_btns {
-    text-align: center;
-  }
+.project_btns {
+  text-align: center;
 }
 
 .create_post {
@@ -47,4 +46,18 @@ div {
 .create_btn {
   background-color: gray;
   color: white;
+}
+
+label {
+  display: block;
+}
+
+.project_name_edit {
+  width: 300px;
+  height: 40px;
+}
+
+#map {
+  margin: 0 auto;
+  height: 20rem;
 }
