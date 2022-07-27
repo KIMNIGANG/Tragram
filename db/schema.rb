@@ -11,7 +11,13 @@
 # It's strongly recommended that you check this file into your version control system.
 
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 2022_07_22_065211) do
+=======
+
+ActiveRecord::Schema.define(version: 2022_07_08_083138) do
+>>>>>>> 22e1059 (conflict)
+
 
 
   create_table "images", force: :cascade do |t|
