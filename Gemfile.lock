@@ -294,7 +294,6 @@ DEPENDENCIES
   cloudinary
   figaro
   font-awesome-sass
-  geocoder
   jbuilder (~> 2.7)
   listen (~> 3.3)
   omniauth-google-oauth2
