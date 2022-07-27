@@ -15,62 +15,55 @@ a {
 
 }
 
-<<<<<<< HEAD .project_btns {
+.project_btns {
   text-align: center;
+}
 
-  =======div {
-    &.project_btns {
-      text-align: center;
-    }
+.create_post {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
 
-    >>>>>>>910d7fd (conflict)
-  }
+.invitation {
+  display: flex;
+  justify-content: center;
+}
 
-  .create_post {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-  }
+.card-img-top {
+  width: 18rem;
+  height: 18rem;
+  object-fit: cover;
+}
 
-  .invitation {
-    display: flex;
-    justify-content: center;
-  }
+.card.post_card {
+  float: left;
+  margin-left: 3rem;
+  margin-bottom: 3rem;
+}
 
-  .card-img-top {
-    width: 18rem;
-    height: 18rem;
-    object-fit: cover;
-  }
+.info_btn,
+.create_btn {
+  background-color: gray;
+  color: white;
+}
 
-  .card.post_card {
-    float: left;
-    margin-left: 3rem;
-    margin-bottom: 3rem;
-  }
+label {
+  display: block;
+}
 
-  .info_btn,
-  .create_btn {
-    background-color: gray;
-    color: white;
-  }
+.project_name_edit {
+  width: 300px;
+  height: 40px;
+}
 
-  label {
-    display: block;
-  }
+#map {
+  margin: 0 auto;
+  height: 20rem;
+}
 
-  .project_name_edit {
-    width: 300px;
-    height: 40px;
-  }
-
-  #map {
-    margin: 0 auto;
-    height: 20rem;
-  }
-
-  ol {
-    list-style-type: none;
-    padding-left: 0;
-    text-align: center;
-  }
+ol {
+  list-style-type: none;
+  padding-left: 0;
+  text-align: center;
+}
