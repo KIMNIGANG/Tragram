@@ -13,4 +13,4 @@ Turbolinks.start()
 ActiveStorage.start()
 
 //font - awesome - railsの導入
-require("@fortawesome/fontawesome-free/js/all")
+import '@fortawesome/fontawesome-free/js/all';

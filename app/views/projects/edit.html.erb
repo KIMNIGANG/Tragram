@@ -1,6 +1,10 @@
 <!-- 編集 -->
+<h1>EDIT</h1>
   <%= form_for(@project, :url => {:controller => :projects, :action => :update }) do |f| %>
-    <%= f.text_field :name %>
-    <%= f.text_field :caption %>
+    <%= f.label :旅行名, html: { class: "project_edit_label" } %>
+    <%= f.text_field :name, html: { class: "project_name_edit" } %>
+
+    <%= f.label :説明 %>
+    <%= f.text_area :caption, html: { class: "project_caption_edit" } %>
     <%=  f.submit %>
   <% end %>
