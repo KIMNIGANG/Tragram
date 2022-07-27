@@ -47,36 +47,33 @@
 ></script>
 
   <ol>
-  <% if @location.present? %>
-    <% @location.each do |location| %>
+    <% if @location.present? %>
+      <% @location.each do |location| %>
       <li>
         <% if location[:name].present? %>
           <i class="fa-solid fa-location-dot"></i>
           <%= location[:name] %>
-
           <%# <%= location[:lat] %>
           <%# <%= location[:lng] %>
           <input type="hidden" class="loc_name" value="<%= location[:name] %>">
           <input type="hidden" class="loc_lat" value="<%= location[:lat] %>">
           <input type="hidden" class="loc_lng" value="<%= location[:lng] %>">
+        <% else %>
+          <li>
+            <input type="hidden" class="loc_name" value="0">
+            <input type="hidden" class="loc_lat" value="0">
+            <input type="hidden" class="loc_lng" value="0">
+          </li>
         <% end %>
+      <% end %>
       </li>
-      <br>
+    <% else %>
+      <li>
+        <input type="hidden" class="loc_name" value="0">
+        <input type="hidden" class="loc_lat" value="0">
+        <input type="hidden" class="loc_lng" value="0">
+      </li>
     <% end %>
-  <% else %>
-    <li>
-        <% if location[:name].present? %>
-          <i class="fa-solid fa-location-dot"></i>
-          <%= location[:name] %>
-
-          <%# <%= location[:lat] %>
-          <%# <%= location[:lng] %>
-          <input type="hidden" class="loc_name" value="0">
-          <input type="hidden" class="loc_lat" value="0">
-          <input type="hidden" class="loc_lng" value="0">
-        <% end %>
-      </li>
-  <% end %>
   </ol>
 </div>
 
