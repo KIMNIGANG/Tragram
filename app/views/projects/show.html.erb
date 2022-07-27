@@ -52,8 +52,8 @@
   <% @location.each do |location| %>
     <li>
       <%= location[:name] %>
-      <%# <%= location[:lat] %>  %>
-      <%# <%= location[:lng] %>  %>
+      <%# <%= location[:lat] %>  
+      <%# <%= location[:lng] %>  
       <input type="hidden" class="loc_name" value="<%= location[:name] %>">
       <input type="hidden" class="loc_lat" value="<%= location[:lat] %>">
       <input type="hidden" class="loc_lng" value="<%= location[:lng] %>">
