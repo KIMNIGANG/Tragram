@@ -7,9 +7,9 @@ const place_geo = [];
 // window.onload = function () {};
 
 function initMap() {
-  let names = document.getElementsByClassName("name");
-  let lats = document.getElementsByClassName("lat");
-  let lngs = document.getElementsByClassName("lng");
+  let names = document.getElementsByClassName("loc_name");
+  let lats = document.getElementsByClassName("loc_lat");
+  let lngs = document.getElementsByClassName("loc_lng");
 
   for (let i = 0; i < names.length; i++) {
     place_geo.push({
@@ -18,17 +18,17 @@ function initMap() {
       name: names[i].value,
     });
   }
-  console.log(place_geo);
+  // console.log(place_geo);
   const map = new google.maps.Map(document.getElementById("map"), {
     center: {
       lat: parseFloat(place_geo[0].lat),
       lng: parseFloat(place_geo[0].lng),
     },
-    zoom: 12,
+    zoom: 13,
     mapTypeId: "roadmap",
   });
 
-  console.log(place_geo);
+  // console.log(place_geo);
 
   place_geo.forEach(function (t, i) {
     const marker = new google.maps.Marker({

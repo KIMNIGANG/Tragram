@@ -70,7 +70,10 @@
       placeholder="Search Box"
     />
     <div id="map"></div>
-    <ol id="place_ol"></ol>
+
+        <input type="hidden" class="name" value="<%= @location_name %>">
+        <input type="hidden" class="lat" value="<%= @location_lat %>">
+        <input type="hidden" class="lng" value="<%= @location_lng %>">
 
 
     <!-- 位置情報送信用form -->
