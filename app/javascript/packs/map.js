@@ -8,7 +8,7 @@ function initAutocomplete() {
   let lng = parseFloat(document.getElementById("loc_lng").value);
 
   if (name == "") {
-    name = "tsukuba";
+    name = "Sample marker";
     lat = 36.0927275;
     lng = 140.0967544;
   }
@@ -26,7 +26,7 @@ function initAutocomplete() {
       lat: place_geo_show.lat,
       lng: place_geo_show.lng,
     },
-    zoom: 14,
+    zoom: 10,
     mapTypeId: "roadmap",
   });
 
@@ -38,24 +38,35 @@ function initAutocomplete() {
     searchBox.setBounds(map.getBounds());
   });
   let markers = [];
-  markers.push(
-    new google.maps.Marker({
-      map: map,
-      name: place_geo_show.name,
-      position: {
-        lat: parseFloat(place_geo_show.lat),
-        lng: parseFloat(place_geo_show.lng),
-      },
-      animation: google.maps.Animation.DROP,
-    })
-  );
+
+  if (place_geo_show.name == "sample marker") {
+    markers.push(
+      new google.maps.Marker({
+        map: map,
+        visible: false,
+        name: place_geo_show.name,
+        position: {
+          lat: parseFloat(place_geo_show.lat),
+          lng: parseFloat(place_geo_show.lng),
+        },
+        animation: google.maps.Animation.DROP,
+      })
+    );
+  } else {
+    markers.push(
+      new google.maps.Marker({
+        map: map,
+        name: place_geo_show.name,
+        position: {
+          lat: parseFloat(place_geo_show.lat),
+          lng: parseFloat(place_geo_show.lng),
+        },
+        animation: google.maps.Animation.DROP,
+      })
+    );
+  }
+
   searchBox.addListener("places_changed", function () {
-    document.getElementById("clear-pin").addEventListener("click", () => {
-      // Clear out the old markers.
-      markers.forEach(function (marker) {
-        marker.setMap(null);
-      });
-    });
     var places = searchBox.getPlaces();
     if (places.length == 0) {
       return;
