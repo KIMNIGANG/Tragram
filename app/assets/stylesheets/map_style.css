@@ -90,3 +90,7 @@ body {
 #target {
   width: 345px;
 }
+
+.map_loc_name {
+  text-align: center;
+}

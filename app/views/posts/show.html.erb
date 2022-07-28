@@ -14,7 +14,7 @@
 <body>
 
 <div class="header">
-<h1 class="name"><%= @post.name%></h1>
+  <h1 class="name"><%= @post.name%></h1>
 
   <div class="btns">
   <%= link_to edit_post_path(@post.id), class: "btn" do %>
@@ -39,25 +39,12 @@
     <%= form.file_field :image %>
     <%= form.submit %>
   <% end %>
-</div>
 
-<% @images.each do |media|%>
-  <% if media[:media_type] == 'IMAGE' then %>
-    <img src = <%= media[:url] %> class="img">
-  <% else %>
-    <video controls autoplay name="media">
-      <source src=<%= media[:url] %> type="video/mp4">
-      <source src=<%= media[:url] %> type="video/webm">
-    </video>
+  <%= link_to class: "btn", controller: "projects", action: "show", id: @post.project_id do %>
+      旅行ページに戻る
   <% end %>
-
-<% end %>
-
-<!--location info-->
-<!--ここ何？？？？？-->
-<!--<#%= @location_lng %>-->
-<!--<#%= @location_lat %>-->
-<!--<#%= @location_name %>-->
+  </div>
+</div>
 
 <% flash.each do |type, mes| %>
   <div class="notifications">
@@ -73,27 +60,40 @@
       placeholder="Search Box"
     />
     <div id="map"></div>
-    <p><i class="fa-solid fa-location-dot"></i><%= @location_name %></p>
+    <% if  @location_name.present? %>
+      <p class="map_loc_name"><i class="fa-solid fa-location-dot"></i><%= @location_name %></p>
+    <% else %>
+      <p class="map_loc_name"><i class="fa-solid fa-location-dot"></i>位置情報を登録できます</p>
+    <% end %>
     <ol id="place_ol"></ol>
-  <input type="hidden" id="loc_name" value="<%= @location_name %>">
-  <input type="hidden" id="loc_lat" value="<%= @location_lat %>">
-  <input type="hidden" id="loc_lng" value="<%= @location_lng %>">
-
+    <input type="hidden" id="loc_name" value="<%= @location_name %>">
+    <input type="hidden" id="loc_lat" value="<%= @location_lat %>">
+    <input type="hidden" id="loc_lng" value="<%= @location_lng %>">
 
     <!-- 位置情報送信用form -->
     <%= form_with id: "place-list", url: "/posts/#{@post.id}/location" do |form| %>
       <% unless @location[0].nil? then %>
-        <%= form.submit value: "位置情報を登録する", data: {confirm: "既に位置情報が登録済みですが、更新しますか？"} %>
+        <%= form.submit value: "位置情報を更新する", data: {confirm: "既に位置情報が登録済みですが、更新しますか？"} %>
       <% else %>
         <%= form.submit value: "位置情報を登録する" %>
       <% end %>
     <% end %>
     <br>
-
   <script
     src="https://maps.googleapis.com/maps/api/js?key=<%=ENV['GOOGLE_MAP_API_KEY']%>&callback=initAutocomplete&libraries=places&v=weekly"
     defer
   ></script>
+
+<% @images.each do |media|%>
+  <% if media[:media_type] == 'IMAGE' then %>
+    <img src = <%= media[:url] %> class="img">
+  <% else %>
+    <video controls autoplay name="media">
+      <source src=<%= media[:url] %> type="video/mp4">
+      <source src=<%= media[:url] %> type="video/webm">
+    </video>
+  <% end %>
+<% end %>
 
 </body>
 </html>
