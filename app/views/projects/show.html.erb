@@ -47,25 +47,34 @@
 ></script>
 
   <ol>
-    <% @location.each do |location| %>
+    <% @posts.each do |post| %>
       <li>
-        <% if location[:name].present? %>
-          <i class="fa-solid fa-location-dot"></i>
-          <%= location[:name] %>
+        <% if @location[@posts.index(post)][:name].present? %>
+          <%= link_to post_path(post[:id]) do %>
+            <%= post[:name] %>
+            <i class="fa-solid fa-location-dot"></i>
+            <%= @location[@posts.index(post)][:name] %>
+          <% end %>
           <%# <%= location[:lat] %>
           <%# <%= location[:lng] %>
-          <input type="hidden" class="loc_name" value="<%= location[:name] %>">
-          <input type="hidden" class="loc_lat" value="<%= location[:lat] %>">
-          <input type="hidden" class="loc_lng" value="<%= location[:lng] %>">
+          <input type="hidden" class="loc_name" value="<%= @location[@posts.index(post)][:name] %>">
+          <input type="hidden" class="loc_lat" value="<%= @location[@posts.index(post)][:lat] %>">
+          <input type="hidden" class="loc_lng" value="<%= @location[@posts.index(post)][:lng] %>">
         <% else %>
-            <p>位置情報を登録しましょう</p>
-            <input type="hidden" class="loc_name" value="0">
-            <input type="hidden" class="loc_lat" value="0">
-            <input type="hidden" class="loc_lng" value="0">
+          <%= link_to post_path(post[:id]) do %>
+            <%= post[:name] %>
+            <i class="fa-solid fa-location-dot"></i>
+            位置情報を登録できます
+          <% end %>
+          <input type="hidden" class="loc_name" value="0">
+          <input type="hidden" class="loc_lat" value="0">
+          <input type="hidden" class="loc_lng" value="0">
         <% end %>
       </li>
     <% end %>
   </ol>
+
+
 </div>
 
   <div id="test"></div>

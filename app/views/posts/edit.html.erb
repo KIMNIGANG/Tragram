@@ -1,11 +1,10 @@
 <!-- post編集フォーム -->
   <%= form_for(@post, :url => {:controller => :posts, :action => :update }) do |f| %>
-    <%= f.text_area :caption %>
+    <%= f.label :タイトル, html: { class: "post_edit_label" } %>
+    <%= f.text_field :name, html: { class: "post_name_edit" } %>
+
+    <%= f.label :説明 %>
+    <%= f.text_area :caption, html: { class: "post_caption_edit" } %>
+
     <%= f.submit %>
   <% end %>
-  <!--
-    <%# @post.images.each do |image| %>
-      <img src=<%#= image['url'] %> height="300">
-    <%# end %>
-  -->
-    <%= link_to "get media from instagram", controller: "instagram_auth", action: "show_image", id: @post.id %>

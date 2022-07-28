@@ -14,3 +14,17 @@
 .img {
   width: 500px;
 }
+
+.notifications {
+  text-align: center;
+}
+
+#place-list {
+  text-align: center;
+
+  .loc_set {
+    background-color: gray;
+    color: white;
+    margin: 0 auto;
+  }
+}

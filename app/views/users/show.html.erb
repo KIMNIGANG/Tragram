@@ -9,57 +9,50 @@
 <% if logged_in? %>
   <!-- 一覧表示 -->
   <div class="project_container">
-  <div class="project_all">
-    <% @current_user.user_projects.each do |user_project| %>
-    <div class="project card text-white" style="width:18rem;">
-      <a class="project_name" href="/projects/<%= user_project.project.id %>">
+    <div class="project_all">
+      <% @current_user.user_projects.each do |user_project| %>
+        <div class="project card text-white" style="width:18rem;">
+          <a class="project_name" href="/projects/<%= user_project.project.id %>">
 
-      <% first_post = user_project.project.posts.first %>
-      <% if first_post.present? %>
-        <% media = first_post.images.first %>
-      <% else %>
-        <% media = nil %>
-      <% end %>
-
-      <% if media.present?%>
-        <% if media.media_type == 'IMAGE' then %>
-          <!-- instagram -->
-          <% if id = media.instagram_id then %>
-            <% unless token = current_user.instagramtoken.token then %>
-              <% flash[:danger] = 'Instagramの権限が切れています' %>
+            <% first_post = user_project.project.posts.first %>
+            <% if first_post.present? %>
+              <% media = first_post.images.first %>
+            <% else %>
+              <% media = nil %>
             <% end %>
-            <% url = get_media(token, id)[0]['media_url'] %>
-          <!-- cloudinary -->
-          <% else %>
-            <% url = media.url %>
-          <% end %>
-          <img src = <%= url %>  class="card-img">
-        <% else %>
-          <video controls autoplay name="media" class="card-img">
-            <source src=<%= media.url %> type="video/mp4">
-            <source src=<%= media.url %> type="video/webm">
-          </video>
-        <% end %>
+
+            <% if media.present?%>
+              <% if media.media_type == 'IMAGE' then %>
+                <!-- instagram -->
+                <% if id = media.instagram_id then %>
+                  <% unless token = current_user.instagramtoken.token then %>
+                    <% flash[:danger] = 'Instagramの権限が切れています' %>
+                  <% end %>
+                  <% url = get_media(token, id)[0]['media_url'] %>
+                <!-- cloudinary -->
+                <% else %>
+                  <% url = media.url %>
+                <% end %>
+                <img src = <%= url %>  class="card-img">
+              <% else %>
+                <video controls autoplay name="media" class="card-img">
+                  <source src=<%= media.url %> type="video/mp4">
+                  <source src=<%= media.url %> type="video/webm">
+                </video>
+              <% end %>
+            <% end %>
+            <div class="card-img-overlay" style="width:18rem;">
+              <h5 class="card-title project_name">
+                <%= user_project.project.name %>
+              </h5>
+              <p class="card-text project_caption text-truncate" style="max-width: 10rem;">
+                <%= safe_join(user_project.project.caption.split("\n"),tag(:br)) %>
+              </p>
+            </div>
+          </a>
+        </div>
       <% end %>
-      <div class="card-img-overlay" style="width:18rem;">
-        <h5 class="card-title project_name">
-          <%= user_project.project.name %>
-        </h5>
-        <p class="card-text project_caption text-truncate" style="max-width: 10rem;">
-          <%= safe_join(user_project.project.caption.split("\n"),tag(:br)) %>
-        </p>
-      <div class="card-img-overlay">
-        <h5 class="card-title project_name">
-          <%= user_project.project.name %>
-        </h5>
-        <p class="card-text project_caption text-truncate" style="max-width: 10rem;">
-          <%= safe_join(user_project.project.caption.split("\n"),tag(:br)) %>
-        </p>
-      </div>
-    </a>
     </div>
-    <% end %>
-  </div>
   </div>
 
   <!--作成フォーム-->

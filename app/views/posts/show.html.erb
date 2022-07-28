@@ -27,8 +27,9 @@
   <br>
   <% if current_user.instagramtoken.nil? %>
     <% session[:post_url] = request.fullpath %>
-    <%= link_to "Instagramアカウントを認証する", "/instagram" %>
-
+    <%= link_to '/instagram', class: 'btn' do %>
+      <i class="fab fa-instagram"></i>Instagramアカウントを認証する
+    <% end %>
   <% else %>
     <%= link_to class: "btn", controller: "instagram_auth", action: "show_image", id: @post.id do %>
       <i class="fab fa-instagram"></i>Instagramから写真を取得する
@@ -40,18 +41,12 @@
     <%= form.submit %>
   <% end %>
 
-  <%= link_to class: "btn", controller: "projects", action: "show", id: @post.project_id do %>
+  <%= link_to project_path(@post.project_id), class: "btn" do %>
       旅行ページに戻る
   <% end %>
+
   </div>
 </div>
-
-<% flash.each do |type, mes| %>
-  <div class="notifications">
-    <!--type = "alert" => 削除できません。-->
-    <div class="<%=type%>"><%=mes%></div>
-  </div>
-<% end %>
 
     <input
       id="pac-input"
@@ -60,6 +55,14 @@
       placeholder="Search Box"
     />
     <div id="map"></div>
+
+    <% flash.each do |type, mes| %>
+      <div class="notifications">
+        <!--type = "alert" => 削除できません。-->
+        <div class="<%=type%>"><%=mes%></div>
+      </div>
+    <% end %>
+
     <% if  @location_name.present? %>
       <p class="map_loc_name"><i class="fa-solid fa-location-dot"></i><%= @location_name %></p>
     <% else %>
@@ -73,9 +76,9 @@
     <!-- 位置情報送信用form -->
     <%= form_with id: "place-list", url: "/posts/#{@post.id}/location" do |form| %>
       <% unless @location[0].nil? then %>
-        <%= form.submit value: "位置情報を更新する", data: {confirm: "既に位置情報が登録済みですが、更新しますか？"} %>
+        <%= form.submit value: "位置情報を更新する", data: {confirm: "既に位置情報が登録済みですが、更新しますか？"}, class: "btn loc_set" %>
       <% else %>
-        <%= form.submit value: "位置情報を登録する" %>
+        <%= form.submit value: "位置情報を登録する", class: "btn loc_set" %>
       <% end %>
     <% end %>
     <br>
@@ -84,16 +87,18 @@
     defer
   ></script>
 
-<% @images.each do |media|%>
-  <% if media[:media_type] == 'IMAGE' then %>
-    <img src = <%= media[:url] %> class="img">
-  <% else %>
-    <video controls autoplay name="media">
-      <source src=<%= media[:url] %> type="video/mp4">
-      <source src=<%= media[:url] %> type="video/webm">
-    </video>
+  <% @images.each do |media|%>
+    <% if media[:media_type] == 'IMAGE' then %>
+      <img src = <%= media[:url] %> class="img">
+    <% else %>
+      <video controls autoplay name="media">
+        <source src=<%= media[:url] %> type="video/mp4">
+        <source src=<%= media[:url] %> type="video/webm">
+      </video>
+    <% end %>
   <% end %>
-<% end %>
+
+  <p><%= @post.caption %></p>
 
 </body>
 </html>
