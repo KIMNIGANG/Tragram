@@ -38,7 +38,9 @@ function initMap() {
     mapTypeId: "roadmap",
   });
 
+
   // console.log(place_geo);
+
 
   place_geo.forEach(function (t, i) {
     const marker = new google.maps.Marker({
