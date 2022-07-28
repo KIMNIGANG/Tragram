@@ -18,7 +18,9 @@ function initMap() {
       name: names[i].value,
     });
   }
-  //console.log(place_geo);
+
+  // console.log(place_geo);
+
   const map = new google.maps.Map(document.getElementById("map"), {
     center: {
       lat: parseFloat(place_geo[0].lat),
@@ -28,7 +30,9 @@ function initMap() {
     mapTypeId: "roadmap",
   });
 
-  //console.log(place_geo);
+
+  // console.log(place_geo);
+
 
   place_geo.forEach(function (t, i) {
     const marker = new google.maps.Marker({

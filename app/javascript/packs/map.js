@@ -111,7 +111,7 @@ function initAutocomplete() {
         `;
       place_list.appendChild(st);
 
-      //console.log(place.geometry["location"].lng());
+      // console.log(place.geometry["location"].lng());
     });
     map.fitBounds(bounds);
 

@@ -39,4 +39,5 @@ Rails.application.routes.draw do
   post '/posts/:id/add_image/' => 'posts#add_image'
 
   get '/map_post' => 'posts#get_param'
+  post '/posts/:id/add_image/' => 'posts#add_image'
 end
