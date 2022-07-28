@@ -44,6 +44,12 @@ function initAutocomplete() {
     })
   );
   searchBox.addListener("places_changed", function () {
+    document.getElementById("clear-pin").addEventListener("click", () => {
+      // Clear out the old markers.
+      markers.forEach(function (marker) {
+        marker.setMap(null);
+      });
+    });
     var places = searchBox.getPlaces();
     if (places.length == 0) {
       return;
