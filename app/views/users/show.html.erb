@@ -31,7 +31,7 @@
             <% url = get_media(token, id)[0]['media_url'] %>
           <!-- cloudinary -->
           <% else %>
-            <% url = image.url %>
+            <% url = media.url %>
           <% end %>
           <img src = <%= url %>  class="card-img">
         <% else %>
