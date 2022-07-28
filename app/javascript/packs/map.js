@@ -2,23 +2,29 @@
 
 Object.defineProperty(exports, "__esModule", { value: true });
 
-const place_geo = [];
-
 function initAutocomplete() {
-  let name = document.getElementsByClassName("name");
-  let lat = document.getElementsByClassName("lat");
-  let lng = document.getElementsByClassName("lng");
+  let name = document.getElementById("loc_name").value;
+  let lat = parseFloat(document.getElementById("loc_lat").value);
+  let lng = parseFloat(document.getElementById("loc_lng").value);
+
+  if (name == "") {
+    name = "tsukuba";
+    lat = 36.0927275;
+    lng = 140.0967544;
+  }
+
+  console.log(lat);
 
   const place_geo_show = {
-    lat: lat[0].value,
-    name: name[0].value,
-    lng: lng[0].value,
+    lat: lat,
+    name: name,
+    lng: lng,
   };
 
   const map = new google.maps.Map(document.getElementById("map"), {
     center: {
-      lat: parseFloat(place_geo_show.lat),
-      lng: parseFloat(place_geo_show.lng),
+      lat: place_geo_show.lat,
+      lng: place_geo_show.lng,
     },
     zoom: 14,
     mapTypeId: "roadmap",
@@ -54,7 +60,7 @@ function initAutocomplete() {
     if (places.length == 0) {
       return;
     }
-    markers = [];
+    markers[0].setMap(null);
     // For each place, get the icon, name and location.
     var bounds = new google.maps.LatLngBounds();
     places.forEach(function (place) {
@@ -87,17 +93,6 @@ function initAutocomplete() {
       // 場所のlat,lngをもらってくる
       console.log(place.geometry["location"].lat());
 
-      const place_ol = document.getElementById("place_ol");
-      let str = document.createElement("li");
-      str.innerHTML = place.name;
-      place_ol.appendChild(str);
-
-      place_geo.push({
-        lat: place.geometry["location"].lat(),
-        lng: place.geometry["location"].lng(),
-        name: place.name,
-      });
-
       const place_list = document.getElementById("place-list");
       let st = document.createElement("div");
       st.innerHTML = `
@@ -110,8 +105,6 @@ function initAutocomplete() {
         <input type="hidden" name="name" value="${place.name}">
         `;
       place_list.appendChild(st);
-
-      // console.log(place.geometry["location"].lng());
     });
     map.fitBounds(bounds);
 
