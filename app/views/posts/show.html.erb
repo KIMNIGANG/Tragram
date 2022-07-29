@@ -68,7 +68,7 @@
     <% else %>
       <p class="map_loc_name"><i class="fa-solid fa-location-dot"></i>位置情報を登録できます</p>
     <% end %>
-    <ol id="place_ol"></ol>
+    <!--<ol id="place_ol"></ol>-->
     <input type="hidden" id="loc_name" value="<%= @location_name %>">
     <input type="hidden" id="loc_lat" value="<%= @location_lat %>">
     <input type="hidden" id="loc_lng" value="<%= @location_lng %>">
@@ -87,18 +87,23 @@
     defer
   ></script>
 
-  <% @images.each do |media|%>
-    <% if media[:media_type] == 'IMAGE' then %>
-      <img src = <%= media[:url] %> class="img">
-    <% else %>
-      <video controls autoplay name="media">
-        <source src=<%= media[:url] %> type="video/mp4">
-        <source src=<%= media[:url] %> type="video/webm">
-      </video>
+  <div class="post_body">
+    <div class="post_image">
+      <% @images.each do |media|%>
+      <% if media[:media_type] == 'IMAGE' then %>
+        <img src = <%= media[:url] %> class="img">
+      <% else %>
+        <video controls autoplay name="media">
+          <source src=<%= media[:url] %> type="video/mp4">
+          <source src=<%= media[:url] %> type="video/webm">
+        </video>
+      <% end %>
     <% end %>
-  <% end %>
+    </div>
 
-  <p><%= @post.caption %></p>
+    <p><%= safe_join(@post.caption.split("\n"),tag(:br)) %></p>
+  </div>
+
 
 </body>
 </html>

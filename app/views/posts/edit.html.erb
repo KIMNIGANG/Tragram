@@ -1,10 +1,10 @@
 <!-- post編集フォーム -->
-  <%= form_for(@post, :url => {:controller => :posts, :action => :update }) do |f| %>
-    <%= f.label :タイトル, html: { class: "post_edit_label" } %>
+  <%= form_for(@post, :url => {:controller => :posts, :action => :update }, html: { class: "post_edit_form" }) do |f| %>
+    <b><%= f.label :タイトル, html: { class: "post_edit_label" } %></b>
     <%= f.text_field :name, html: { class: "post_name_edit" } %>
 
-    <%= f.label :説明 %>
+    <b><%= f.label :説明 %></b>
     <%= f.text_area :caption, html: { class: "post_caption_edit" } %>
-
-    <%= f.submit %>
+    <br>
+    <%= f.submit "投稿を更新する" , class: "btn" %>
   <% end %>

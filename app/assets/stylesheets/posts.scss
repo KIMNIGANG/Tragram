@@ -28,3 +28,41 @@
     margin: 0 auto;
   }
 }
+
+div.post_body {
+  width: 70%;
+  margin: 0 auto;
+
+  div.post_image {
+    margin-bottom: 20px;
+  }
+
+  img {
+    width: 20rem;
+    margin: 10px 0;
+  }
+}
+
+.post_edit_form {
+  text-align: center;
+  margin-top: 30px;
+
+  label {
+    margin-top: 2rem;
+  }
+
+  input[type="text"],
+  textarea {
+    width: 50rem;
+  }
+
+  textarea {
+    height: 30rem;
+    margin-bottom: 1rem;
+  }
+
+  .btn {
+    background-color: gray;
+    color: white;
+  }
+}

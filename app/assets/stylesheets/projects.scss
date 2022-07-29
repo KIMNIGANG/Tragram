@@ -68,3 +68,32 @@ ol {
   text-align: center;
   margin-bottom: 50px;
 }
+
+.members {
+  text-align: center;
+  margin: 0;
+}
+
+.project_edit_form {
+  text-align: center;
+  margin-top: 30px;
+
+  label {
+    margin-top: 2rem;
+  }
+
+  input[type="text"],
+  textarea {
+    width: 50rem;
+  }
+
+  textarea {
+    height: 10rem;
+    margin-bottom: 1rem;
+  }
+
+  .btn {
+    background-color: gray;
+    color: white;
+  }
+}

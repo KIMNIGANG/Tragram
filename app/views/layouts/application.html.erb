@@ -18,6 +18,10 @@
       <% if current_user %>
         こんにちは、<%= current_user.name %>さん
         <br>
+        <%= link_to root_path, class: "btn header_btn" do %>
+          <i class="fa-solid fa-house"></i> Home page
+        <% end %>
+        <br>
         <%= link_to user_path(@current_user), class: "btn header_btn" do %>
           <i class="fa-solid fa-circle-user"></i> My page
         <% end %>

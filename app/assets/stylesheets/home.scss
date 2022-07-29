@@ -32,4 +32,16 @@ p.home_caption {
 div.home_howto {
   height: 500px;
   background-color: gray;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.howto_caption {
+  color: white;
+  text-align: center;
+
+  p {
+    margin: 50px 0;
+  }
 }

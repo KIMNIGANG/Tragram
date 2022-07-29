@@ -12,6 +12,7 @@
     <h1 class="name"><%= @project.name%></h1>
     <p class="caption"><%= @project.caption%></p>
     <!-- users --->
+    <p class="members"><i class="fa-solid fa-users"></i>チームメンバー</p>
     <% @members.each do |username| %>
       <p class="members"><%= username %><p>
     <% end %>
