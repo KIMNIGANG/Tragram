@@ -14,6 +14,10 @@ class ProjectsController < ApplicationController
 
     @project = project
     @posts = []
+    @members = []
+    project.users.each do |u|
+      @members.push(u.name)
+    end
 
     posts = Post.where(project_id: params[:id])
 
